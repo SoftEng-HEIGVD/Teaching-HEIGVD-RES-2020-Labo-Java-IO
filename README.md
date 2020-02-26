@@ -1,4 +1,8 @@
-# Teaching-HEIGVD-RES-2019-Labo-Java-IO
+# Teaching-HEIGVD-RES-2020-Labo-Java-IO
+
+### About the 2020 version of this lab
+
+We did not change the 2019 version. However, read the paragraph below to be aware of some differences between the project structure in the webcasts and what you will see this year in your IDE.
 
 ### About the 2019 version of this lab
 
