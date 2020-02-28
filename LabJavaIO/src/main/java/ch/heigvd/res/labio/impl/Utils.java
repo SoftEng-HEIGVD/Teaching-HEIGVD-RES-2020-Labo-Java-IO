@@ -23,7 +23,7 @@ public class Utils {
     String[] elements = new String[2];
     boolean endFound = false;
     int i = 0;
-    while(!endFound){
+    while(!endFound && i < lines.length()){
       if(lines.charAt(i) == '\r' || lines.charAt(i) == '\n'){
           endFound = true;
           if(i + 1 >= lines.length()) {
@@ -45,7 +45,6 @@ public class Utils {
               elements[1] = lines.substring(i + 1);
             }
           }
-
       }
       i++;
     }
