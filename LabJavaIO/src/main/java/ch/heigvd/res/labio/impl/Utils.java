@@ -23,6 +23,7 @@ public class Utils {
     String[] elements = new String[2];
     boolean endFound = false;
     int i = 0;
+
     while(!endFound && i < lines.length()){
       if(lines.charAt(i) == '\r' || lines.charAt(i) == '\n'){
           endFound = true;
@@ -48,6 +49,7 @@ public class Utils {
       }
       i++;
     }
+
     if(elements[0] == null){
       elements[0] = "";
       elements[1] = lines;
