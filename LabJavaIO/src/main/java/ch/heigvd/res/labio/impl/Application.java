@@ -21,6 +21,7 @@ import java.util.List;
 /**
  *
  * @author Olivier Liechti
+ * @author Quentin Saucy
  */
 public class Application implements IApplication {
 
@@ -151,7 +152,7 @@ public class Application implements IApplication {
       @Override
       public void visit(File file) {
         try {
-          writer.append(file.getPath()+"\n");
+          writer.append(file.getPath()+ System.lineSeparator());
 
         }catch (IOException e){
           System.out.println(e);
