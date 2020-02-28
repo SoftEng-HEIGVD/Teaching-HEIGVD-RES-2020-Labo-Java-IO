@@ -16,7 +16,7 @@ import java.util.logging.Logger;
 import org.apache.commons.io.FileUtils;
 
 /**
- *
+ * Maurice Lehmann : Test comment for first commit
  * @author Olivier Liechti
  */
 public class Application implements IApplication {
