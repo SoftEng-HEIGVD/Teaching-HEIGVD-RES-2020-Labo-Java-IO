@@ -7,13 +7,13 @@ import ch.heigvd.res.labio.interfaces.IFileExplorer;
 import ch.heigvd.res.labio.interfaces.IFileVisitor;
 import ch.heigvd.res.labio.quotes.QuoteClient;
 import ch.heigvd.res.labio.quotes.Quote;
-import java.io.File;
-import java.io.IOException;
-import java.io.StringWriter;
-import java.io.Writer;
+
+import java.io.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.commons.io.FileUtils;
+
+import javax.swing.plaf.FileChooserUI;
 
 /**
  *
@@ -85,6 +85,7 @@ public class Application implements IApplication {
     QuoteClient client = new QuoteClient();
     for (int i = 0; i < numberOfQuotes; i++) {
       Quote quote = client.fetchQuote();
+      storeQuote(quote,"quote-" + i);
       /* There is a missing piece here!
        * As you can see, this method handles the first part of the lab. It uses the web service
        * client to fetch quotes. We have removed a single line from this method. It is a call to
@@ -124,7 +125,18 @@ public class Application implements IApplication {
    * @throws IOException 
    */
   void storeQuote(Quote quote, String filename) throws IOException {
-    throw new UnsupportedOperationException("The student has not implemented this method yet.");
+
+    String dir = WORKSPACE_DIRECTORY;
+    for(String tag : quote.getTags()){
+      dir += '/' + tag;
+    }
+    dir += '/' + filename + ".utf8";
+
+    File file = new File(dir);
+    file.mkdirs();
+
+    FileWriter writer = new FileWriter(dir);
+    writer.write(quote.getQuote());
   }
   
   /**
