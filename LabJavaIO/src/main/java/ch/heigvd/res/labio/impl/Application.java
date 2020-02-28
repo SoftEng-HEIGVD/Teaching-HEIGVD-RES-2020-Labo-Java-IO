@@ -49,7 +49,7 @@ public class Application implements IApplication {
         
     Application app = new Application();
     try {
-      /*
+      /* Some changes for first pull request
        * Step 1 : clear the output directory
        */
       app.clearOutputDirectory();
