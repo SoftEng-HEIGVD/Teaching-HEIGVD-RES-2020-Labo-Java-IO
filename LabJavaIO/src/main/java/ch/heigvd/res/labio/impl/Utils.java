@@ -2,6 +2,8 @@ package ch.heigvd.res.labio.impl;
 
 import java.util.logging.Logger;
 
+import static java.lang.Integer.min;
+
 /**
  *
  * @author Olivier Liechti
@@ -20,7 +22,21 @@ public class Utils {
    * contain any line separator, then the first element is an empty string.
    */
   public static String[] getNextLine(String lines) {
-    throw new UnsupportedOperationException("The student has not implemented this method yet.");
+    int posR = lines.indexOf("\r");
+    int posN = lines.indexOf("\n");
+    int pos;
+
+    if (posN == -1)
+      pos = posR + 1;
+    else if (posR == -1 || posR + 1 == posN)
+      pos = posN + 1;
+    else
+      pos = min(posN, posR) + 1;
+
+    return new String[] {
+            lines.substring(0, pos),
+            lines.substring(pos)
+    };
   }
 
 }
