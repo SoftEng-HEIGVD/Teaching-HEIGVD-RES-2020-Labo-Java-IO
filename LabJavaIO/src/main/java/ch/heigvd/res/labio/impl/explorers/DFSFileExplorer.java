@@ -10,7 +10,7 @@ import java.io.File;
  * node (file and directory). When the explorer reaches a directory, it visits all
  * files in the directory and then moves into the subdirectories.
  * 
- * @author Olivier Liechti
+ * @author Olivier Liechti, Robin Demarta
  */
 public class DFSFileExplorer implements IFileExplorer {
 
