@@ -18,7 +18,7 @@ public class DFSFileExplorer implements IFileExplorer {
   public void explore(File rootDirectory, IFileVisitor vistor) {
     // get list of all files and directories present in root
     File[] listOfFilesAndDirectory = rootDirectory.listFiles();
-
+    vistor.visit(rootDirectory);
     // listFiles() returns non-null array if root denotes a directory
     if (listOfFilesAndDirectory != null)
     {
