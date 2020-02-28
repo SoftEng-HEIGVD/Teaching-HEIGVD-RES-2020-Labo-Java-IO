@@ -90,7 +90,7 @@ public class Application implements IApplication {
        * one method provided by this class, which is responsible for storing the content of the
        * quote in a text file (and for generating the directories based on the tags).
        */
-      client.storeQuote(quote, WORKSPACE_DIRECTORY);
+      storeQuote(quote, WORKSPACE_DIRECTORY);
       LOG.info("Received a new joke with " + quote.getTags().size() + " tags.");
       for (String tag : quote.getTags()) {
         LOG.info("> " + tag);
@@ -124,6 +124,7 @@ public class Application implements IApplication {
    * @throws IOException 
    */
   void storeQuote(Quote quote, String filename) throws IOException {
+
     throw new UnsupportedOperationException("The student has not implemented this method yet.");
   }
   
