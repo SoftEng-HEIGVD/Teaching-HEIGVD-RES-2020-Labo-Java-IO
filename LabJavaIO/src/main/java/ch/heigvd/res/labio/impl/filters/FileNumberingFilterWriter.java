@@ -32,7 +32,7 @@ public class FileNumberingFilterWriter extends FilterWriter {
         } else {
             StringBuilder buffer = new StringBuilder();
 
-            if(isFirst) {
+            if (isFirst) {
                 buffer.append(++counter);
                 buffer.append('\t');
                 isFirst = false;
@@ -40,7 +40,7 @@ public class FileNumberingFilterWriter extends FilterWriter {
 
             for (int i = off; i < off + len; i++) {
                 buffer.append(str.charAt(i));
-                if (str.charAt(i) == '\n' || (str.charAt(i) == '\r' && str.charAt(i+1) != '\n')) {
+                if (str.charAt(i) == '\n' || (str.charAt(i) == '\r' && str.charAt(i + 1) != '\n')) {
                     buffer.append(++counter);
                     buffer.append('\t');
                 }
@@ -56,7 +56,7 @@ public class FileNumberingFilterWriter extends FilterWriter {
         } else {
             StringBuilder buffer = new StringBuilder();
 
-            if(isFirst) {
+            if (isFirst) {
                 buffer.append(++counter);
                 buffer.append('\t');
                 isFirst = false;
@@ -64,7 +64,7 @@ public class FileNumberingFilterWriter extends FilterWriter {
 
             for (int i = off; i < off + len; i++) {
                 buffer.append(cbuf[i]);
-                if (cbuf[i] == '\n') {
+                if (cbuf[i] == '\n' || (cbuf[i] == '\r' && cbuf[i + 1] != '\n')) {
                     buffer.append(++counter);
                     buffer.append('\t');
                 }
