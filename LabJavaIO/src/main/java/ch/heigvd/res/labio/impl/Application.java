@@ -9,7 +9,6 @@ import ch.heigvd.res.labio.quotes.QuoteClient;
 import ch.heigvd.res.labio.quotes.Quote;
 
 import java.io.*;
-import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.commons.io.FileUtils;
@@ -125,8 +124,6 @@ public class Application implements IApplication {
    * @throws IOException 
    */
   void storeQuote(Quote quote, String filename) throws IOException {
-    //throw new UnsupportedOperationException("The student has not implemented this method yet.");
-    //we will store this quote in a file
 
     //generate the path of the file
     StringBuilder pathName = new StringBuilder("./quotes/");
@@ -135,15 +132,12 @@ public class Application implements IApplication {
       pathName.append(tag).append("/");
 
     //generate the folder
-
     File path = new File(pathName.toString());
     path.mkdirs();
-    //throw new UnsupportedOperationException("the folder tree cannot be created!");
 
     File QuoteFile = new File(path,filename + ".utf8");
 
     //open the Streams
-
     ByteArrayInputStream ais = new ByteArrayInputStream(quote.getQuote().getBytes());
     FileOutputStream os = new FileOutputStream(QuoteFile);
 
@@ -156,10 +150,8 @@ public class Application implements IApplication {
     }
 
     //we close our streams
-
     ais.close();
     os.close();
-
   }
   
   /**
