@@ -7,10 +7,8 @@ import ch.heigvd.res.labio.interfaces.IFileExplorer;
 import ch.heigvd.res.labio.interfaces.IFileVisitor;
 import ch.heigvd.res.labio.quotes.QuoteClient;
 import ch.heigvd.res.labio.quotes.Quote;
-import java.io.File;
-import java.io.IOException;
-import java.io.StringWriter;
-import java.io.Writer;
+
+import java.io.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.commons.io.FileUtils;
@@ -82,6 +80,7 @@ public class Application implements IApplication {
   public void fetchAndStoreQuotes(int numberOfQuotes) throws IOException {
     clearOutputDirectory();
     QuoteClient client = new QuoteClient();
+    new File(WORKSPACE_DIRECTORY).mkdirs();
     for (int i = 0; i < numberOfQuotes; i++) {
       Quote quote = client.fetchQuote();
       /* There is a missing piece here!
@@ -94,6 +93,8 @@ public class Application implements IApplication {
       for (String tag : quote.getTags()) {
         LOG.info("> " + tag);
       }
+      storeQuote(quote, "quote-"+(i+1)+".utf8");
+
     }
   }
   
@@ -123,7 +124,16 @@ public class Application implements IApplication {
    * @throws IOException 
    */
   void storeQuote(Quote quote, String filename) throws IOException {
-    throw new UnsupportedOperationException("The student has not implemented this method yet.");
+    StringBuilder directoryPath = new StringBuilder(WORKSPACE_DIRECTORY);
+    for(String tag: quote.getTags()){
+      directoryPath.append("/").append(tag);
+    }
+    File dir = new File(directoryPath.toString());
+    dir.mkdirs();
+    File file = new File(dir +"/" +filename);
+    file.createNewFile();
+    FileWriter writer = new FileWriter(file);
+    writer.write(quote.getQuote());
   }
   
   /**
