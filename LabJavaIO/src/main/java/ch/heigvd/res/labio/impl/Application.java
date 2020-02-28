@@ -122,8 +122,9 @@ public class Application implements IApplication {
    * @param filename the name of the file to create and where to store the quote text
    * @throws IOException 
    */
-  void storeQuote(Quote quote, String filename) throws IOException {
-    throw new UnsupportedOperationException("The student has not implemented this method yet.");
+  void storeQuote(Quote quote, String filename) {
+    //quote.getTags(); for each tag create a sub folder
+    // quote.getQuote(); store the quote in the path we just defined
   }
   
   /**
