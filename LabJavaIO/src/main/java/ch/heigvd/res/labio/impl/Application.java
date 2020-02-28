@@ -7,10 +7,9 @@ import ch.heigvd.res.labio.interfaces.IFileExplorer;
 import ch.heigvd.res.labio.interfaces.IFileVisitor;
 import ch.heigvd.res.labio.quotes.QuoteClient;
 import ch.heigvd.res.labio.quotes.Quote;
-import java.io.File;
-import java.io.IOException;
-import java.io.StringWriter;
-import java.io.Writer;
+
+import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.commons.io.FileUtils;
@@ -126,11 +125,8 @@ public class Application implements IApplication {
    * @throws IOException 
    */
   void storeQuote(Quote quote, String filename) throws IOException {
-    //throw new UnsupportedOperationException("The student has not implemented this method yet.");
-    //LOG.info("in storeQuote : " + filename);
-    System.out.println(quote.getTags());
-    String path = WORKSPACE_DIRECTORY;
 
+    String path = WORKSPACE_DIRECTORY;
     for(String tag : quote.getTags()){
       path += "/" + tag;
       //Check if the directory exists
@@ -138,6 +134,14 @@ public class Application implements IApplication {
       //If the directory do not exists, we create it
       if(!directory.exists())
         directory.mkdirs();
+    }
+
+    //Since we have the path from the tags, we can create a new file
+    File quoteFile = new File(path + "/" + filename + ".utf8");
+
+    try (OutputStreamWriter writer =
+                 new OutputStreamWriter(new FileOutputStream(quoteFile), StandardCharsets.UTF_8)){
+        writer.write(quote.getQuote());
     }
   }
   
