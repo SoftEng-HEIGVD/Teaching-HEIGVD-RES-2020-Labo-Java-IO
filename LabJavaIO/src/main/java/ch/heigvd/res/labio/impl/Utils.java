@@ -7,6 +7,7 @@ import static java.lang.Integer.min;
 /**
  *
  * @author Olivier Liechti
+ * @author Gabriel Roch
  */
 public class Utils {
 
