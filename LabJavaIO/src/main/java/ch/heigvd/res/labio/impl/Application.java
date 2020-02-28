@@ -7,10 +7,9 @@ import ch.heigvd.res.labio.interfaces.IFileExplorer;
 import ch.heigvd.res.labio.interfaces.IFileVisitor;
 import ch.heigvd.res.labio.quotes.QuoteClient;
 import ch.heigvd.res.labio.quotes.Quote;
-import java.io.File;
-import java.io.IOException;
-import java.io.StringWriter;
-import java.io.Writer;
+
+import java.io.*;
+import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.commons.io.FileUtils;
@@ -90,6 +89,9 @@ public class Application implements IApplication {
        * one method provided by this class, which is responsible for storing the content of the
        * quote in a text file (and for generating the directories based on the tags).
        */
+      //here we add the storage of the quote
+      this.storeQuote(quote,"quotes-" + i);
+
       LOG.info("Received a new joke with " + quote.getTags().size() + " tags.");
       for (String tag : quote.getTags()) {
         LOG.info("> " + tag);
@@ -123,7 +125,41 @@ public class Application implements IApplication {
    * @throws IOException 
    */
   void storeQuote(Quote quote, String filename) throws IOException {
-    throw new UnsupportedOperationException("The student has not implemented this method yet.");
+    //throw new UnsupportedOperationException("The student has not implemented this method yet.");
+    //we will store this quote in a file
+
+    //generate the path of the file
+    StringBuilder pathName = new StringBuilder("./quotes/");
+
+    for (String tag : quote.getTags())
+      pathName.append(tag).append("/");
+
+    //generate the folder
+
+    File path = new File(pathName.toString());
+    path.mkdirs();
+    //throw new UnsupportedOperationException("the folder tree cannot be created!");
+
+    File QuoteFile = new File(path,filename + ".utf8");
+
+    //open the Streams
+
+    ByteArrayInputStream ais = new ByteArrayInputStream(quote.getQuote().getBytes());
+    FileOutputStream os = new FileOutputStream(QuoteFile);
+
+    //write operation
+
+    int b;
+    // we read each bytes
+    while ((b = ais.read()) != -1){
+      os.write(b);
+    }
+
+    //we close our streams
+
+    ais.close();
+    os.close();
+
   }
   
   /**
