@@ -5,15 +5,14 @@ import ch.heigvd.res.labio.impl.transformers.CompleteFileTransformer;
 import ch.heigvd.res.labio.interfaces.IApplication;
 import ch.heigvd.res.labio.interfaces.IFileExplorer;
 import ch.heigvd.res.labio.interfaces.IFileVisitor;
-import ch.heigvd.res.labio.quotes.QuoteClient;
 import ch.heigvd.res.labio.quotes.Quote;
-import java.io.File;
-import java.io.IOException;
-import java.io.StringWriter;
-import java.io.Writer;
+import ch.heigvd.res.labio.quotes.QuoteClient;
+import org.apache.commons.io.FileUtils;
+
+import java.io.*;
+import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.apache.commons.io.FileUtils;
 
 /**
  *
@@ -84,12 +83,7 @@ public class Application implements IApplication {
     QuoteClient client = new QuoteClient();
     for (int i = 0; i < numberOfQuotes; i++) {
       Quote quote = client.fetchQuote();
-      /* There is a missing piece here!
-       * As you can see, this method handles the first part of the lab. It uses the web service
-       * client to fetch quotes. We have removed a single line from this method. It is a call to
-       * one method provided by this class, which is responsible for storing the content of the
-       * quote in a text file (and for generating the directories based on the tags).
-       */
+      storeQuote(quote, String.format("quote-%d.utf8", i + 1));
       LOG.info("Received a new joke with " + quote.getTags().size() + " tags.");
       for (String tag : quote.getTags()) {
         LOG.info("> " + tag);
@@ -123,7 +117,31 @@ public class Application implements IApplication {
    * @throws IOException 
    */
   void storeQuote(Quote quote, String filename) throws IOException {
-    throw new UnsupportedOperationException("The student has not implemented this method yet.");
+    File folder = new File(Application.WORKSPACE_DIRECTORY);
+
+    for (String tag : quote.getTags()) {
+      if (!folder.exists() && !folder.mkdir()) {
+        throw new IOException("Could not create the directory.");
+      }
+      folder = new File(folder, tag);
+    }
+
+    if (!folder.exists() && !folder.mkdir()) {
+      throw new IOException("Could not create the directory.");
+    }
+
+    File quoteFile = new File(folder, filename);
+
+    if (!quoteFile.exists() && !quoteFile.createNewFile()) {
+      throw new IOException("Could not create the file.");
+    }
+
+    // On Java 11+, we would use FileWriter(..., StandardCharsets.UTF_8).
+    Writer writer = new BufferedWriter(new FileWriter(quoteFile));
+
+    writer.write(quote.getQuote());
+    writer.flush();
+    writer.close();
   }
   
   /**
