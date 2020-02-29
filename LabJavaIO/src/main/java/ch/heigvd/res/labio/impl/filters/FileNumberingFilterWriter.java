@@ -20,6 +20,7 @@ public class FileNumberingFilterWriter extends FilterWriter {
     private static final Logger LOG = Logger.getLogger(FileNumberingFilterWriter.class.getName());
     private int counter = 0;
     private boolean isFirst = true;
+    private char lastChar;
 
     public FileNumberingFilterWriter(Writer out) {
         super(out);
@@ -75,14 +76,20 @@ public class FileNumberingFilterWriter extends FilterWriter {
 
     @Override
     public void write(int c) throws IOException {
-        if ((char) c == '\n') {
-            out.write('\n' + Integer.toString(++counter) + '\t');
+        char ch = (char) c;
+        if (lastChar == '\r' && ch == '\n') {
+            out.write("\r\n" + (++counter) + "\t");
+        } else if (lastChar != '\r' && ch == '\n') {
+            out.write("\n" + (++counter) + "\t");
+        } else if (lastChar == '\r') {
+            out.write("\r" + (++counter) + "\t" + ch);
         } else if (isFirst) {
-            out.write(Integer.toString(++counter) + '\t' + (char) c);
+            out.write((++counter) + "\t" + ch);
             isFirst = false;
-        } else {
-            out.write((char) c);
+        } else if(ch != '\r') {
+            out.write(ch);
         }
+        lastChar = ch;
     }
 
 }
