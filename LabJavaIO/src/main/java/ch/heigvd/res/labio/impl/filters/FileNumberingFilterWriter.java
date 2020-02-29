@@ -14,28 +14,60 @@ import java.util.logging.Logger;
  * Hello\n\World -> 1\Hello\n2\tWorld
  *
  * @author Olivier Liechti
+ * @author Gabriel Roch
  */
 public class FileNumberingFilterWriter extends FilterWriter {
 
   private static final Logger LOG = Logger.getLogger(FileNumberingFilterWriter.class.getName());
+
+  private int line = 0;
+  private int lastChar = -1;
 
   public FileNumberingFilterWriter(Writer out) {
     super(out);
   }
 
   @Override
+  public void flush() throws IOException {
+
+    if (lastChar == '\r') {
+      String toSend = ++line + "\t";
+      super.write(toSend, 0, toSend.length());
+    }
+    super.flush();
+  }
+
+  @Override
   public void write(String str, int off, int len) throws IOException {
-    throw new UnsupportedOperationException("The student has not implemented this method yet.");
+    for (int i = off; i < off + len; i++) {
+      write(str.charAt(i));
+    }
   }
 
   @Override
   public void write(char[] cbuf, int off, int len) throws IOException {
-    throw new UnsupportedOperationException("The student has not implemented this method yet.");
+    for (int i = off; i < off + len; i++) {
+      write(cbuf[i]);
+    }
   }
 
   @Override
   public void write(int c) throws IOException {
-    throw new UnsupportedOperationException("The student has not implemented this method yet.");
+    String toSend = "";
+    if (line == 0)
+      toSend += ++line + "\t";
+
+    if (c == '\n') {
+      toSend += "\n" + ++line + "\t";
+    } else {
+      if (lastChar == '\r') {
+        toSend += ++line + "\t";
+      }
+      toSend += (char) c;
+    }
+    lastChar = c;
+
+    super.write(toSend, 0, toSend.length());
   }
 
 }
