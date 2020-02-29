@@ -6,7 +6,7 @@ import java.io.Writer;
 
 /**
  *
- * @author Olivier Liechti
+ * @author Olivier Liechti, Robin Cuenoud
  */
 public class UpperCaseFilterWriter extends FilterWriter {
   
@@ -16,17 +16,21 @@ public class UpperCaseFilterWriter extends FilterWriter {
 
   @Override
   public void write(String str, int off, int len) throws IOException {
-    throw new UnsupportedOperationException("The student has not implemented this method yet.");
+    out.write(str.toUpperCase(),off,len);
   }
 
   @Override
   public void write(char[] cbuf, int off, int len) throws IOException {
-    throw new UnsupportedOperationException("The student has not implemented this method yet.");
+    // char[] tempBuf = new char[len]; TODO determine if better to use a tempBuffer check exception (off + len > size)
+    for(int i = off; i < len + off; ++i) {
+      cbuf[i] = Character.toUpperCase(cbuf[i]);
+    }
+    out.write(cbuf,off,len);
   }
 
   @Override
   public void write(int c) throws IOException {
-    throw new UnsupportedOperationException("The student has not implemented this method yet.");
+    out.write(Character.toUpperCase(c));
   }
 
 }
