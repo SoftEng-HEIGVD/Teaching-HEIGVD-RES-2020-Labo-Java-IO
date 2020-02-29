@@ -7,10 +7,8 @@ import ch.heigvd.res.labio.interfaces.IFileExplorer;
 import ch.heigvd.res.labio.interfaces.IFileVisitor;
 import ch.heigvd.res.labio.quotes.QuoteClient;
 import ch.heigvd.res.labio.quotes.Quote;
-import java.io.File;
-import java.io.IOException;
-import java.io.StringWriter;
-import java.io.Writer;
+
+import java.io.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.commons.io.FileUtils;
@@ -90,10 +88,12 @@ public class Application implements IApplication {
        * one method provided by this class, which is responsible for storing the content of the
        * quote in a text file (and for generating the directories based on the tags).
        */
+
       LOG.info("Received a new joke with " + quote.getTags().size() + " tags.");
       for (String tag : quote.getTags()) {
         LOG.info("> " + tag);
       }
+      storeQuote(quote,"quote-"+i+1);
     }
   }
   
@@ -123,7 +123,48 @@ public class Application implements IApplication {
    * @throws IOException 
    */
   void storeQuote(Quote quote, String filename) throws IOException {
-    throw new UnsupportedOperationException("The student has not implemented this method yet.");
+    String path = WORKSPACE_DIRECTORY + "/";
+    int nbrTag=0;
+    for (String tag:quote.getTags()) {
+      path += tag+"/";
+      nbrTag++;
+    }
+
+    try {
+      //Directories creation part
+      //Checking if there is tags to create directories with their names
+      if(  nbrTag > 0) {
+        File dir = new File(path);
+
+        //Checking if directory exists already and if directory making is successful
+        if (!dir.exists() && dir.mkdirs()) {
+          LOG.info("Directory " + path + " created");
+        } else {
+          throw new IOException("Directory already exists | Directory creation failed.");
+        }
+      }
+      //File creation part
+      //Adding filename+utf8 extension to path
+      path+=filename+".utf8";
+      File file = new File(path);
+      //Checking if file exists and if file making is successful
+      if (!file.exists() && file.createNewFile()) {
+        LOG.info("File" + path + " created");
+      }
+      //Throws @IOException  in case failure
+      else {
+        throw  new IOException("File already exists | File creation error");
+      }
+    }
+    catch (IOException ex){
+        LOG.info("Error in file creation");
+    }
+
+
+
+    FileWriter fw = new FileWriter(path);
+    fw.write(quote.getQuote());
+    //throw new UnsupportedOperationException("The student has not implemented this method yet.");
   }
   
   /**
