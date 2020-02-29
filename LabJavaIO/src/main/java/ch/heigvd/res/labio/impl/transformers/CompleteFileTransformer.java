@@ -1,7 +1,7 @@
 package ch.heigvd.res.labio.impl.transformers;
 
 import java.io.Writer;
-
+import ch.heigvd.res.labio.impl.filters.*;
 /**
  * This class returns a writer decorated with two filters: an instance of
  * the UpperCaseFilterWriter and an instance of the FileNumberingFilterWriter.
@@ -15,7 +15,7 @@ public class CompleteFileTransformer extends FileTransformer {
 
   @Override
   public Writer decorateWithFilters(Writer writer) {
-    if (true) {
+    if (false) {
       throw new UnsupportedOperationException("The student has not implemented this method yet.");
     }
     /*

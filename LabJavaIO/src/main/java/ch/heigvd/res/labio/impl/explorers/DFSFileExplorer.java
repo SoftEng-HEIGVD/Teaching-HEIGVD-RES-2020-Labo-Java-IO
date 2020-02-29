@@ -3,6 +3,7 @@ package ch.heigvd.res.labio.impl.explorers;
 import ch.heigvd.res.labio.interfaces.IFileExplorer;
 import ch.heigvd.res.labio.interfaces.IFileVisitor;
 import java.io.File;
+import java.util.Objects;
 
 /**
  * This implementation of the IFileExplorer interface performs a depth-first
@@ -15,9 +16,20 @@ import java.io.File;
 public class DFSFileExplorer implements IFileExplorer {
 
   @Override
-  public void explore(File rootDirectory, IFileVisitor vistor) {
+  public void explore(File rootDirectory, IFileVisitor visitor) {
     // time to fixe this
-    throw new UnsupportedOperationException("The student has not implemented this method yet.");
+    // throw new UnsupportedOperationException("The student has not implemented this method yet.");
+
+    // the DFS algorithm recursive version
+    // TODO implement iterative version of DFS
+
+    for (File childFile : Objects.requireNonNull(rootDirectory.listFiles())) {
+      if (!childFile.isFile())
+        explore(childFile, visitor);
+      visitor.visit(childFile);
+    }
+
+
   }
 
 }

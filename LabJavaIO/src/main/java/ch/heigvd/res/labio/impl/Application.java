@@ -2,6 +2,7 @@ package ch.heigvd.res.labio.impl;
 
 import ch.heigvd.res.labio.impl.explorers.DFSFileExplorer;
 import ch.heigvd.res.labio.impl.transformers.CompleteFileTransformer;
+import ch.heigvd.res.labio.impl.transformers.NoOpFileTransformer;
 import ch.heigvd.res.labio.interfaces.IApplication;
 import ch.heigvd.res.labio.interfaces.IFileExplorer;
 import ch.heigvd.res.labio.interfaces.IFileVisitor;
@@ -126,7 +127,7 @@ public class Application implements IApplication {
   void storeQuote(Quote quote, String filename) throws IOException {
 
     //generate the path of the file
-    StringBuilder pathName = new StringBuilder("./quotes/");
+    StringBuilder pathName = new StringBuilder(WORKSPACE_DIRECTORY + "/");
 
     for (String tag : quote.getTags())
       pathName.append(tag).append("/");
@@ -144,7 +145,7 @@ public class Application implements IApplication {
     //write operation
 
     int b;
-    // we read each bytes
+    // we read and write bytes after bytes
     while ((b = ais.read()) != -1){
       os.write(b);
     }
@@ -168,6 +169,13 @@ public class Application implements IApplication {
          * of the the IFileVisitor interface inline. You just have to add the body of the visit method, which should
          * be pretty easy (we want to write the filename, including the path, to the writer passed in argument).
          */
+        try {
+          writer.write(file.getPath());
+        }catch (IOException ex){
+          LOG.info("something went wrong with : " + ex);
+          LOG.log(Level.SEVERE,null,ex);
+        }
+
       }
     });
   }
@@ -175,7 +183,7 @@ public class Application implements IApplication {
   @Override
   public void processQuoteFiles() throws IOException {
     IFileExplorer explorer = new DFSFileExplorer();
-    explorer.explore(new File(WORKSPACE_DIRECTORY), new CompleteFileTransformer());    
+    explorer.explore(new File(WORKSPACE_DIRECTORY), new NoOpFileTransformer()/*new CompleteFileTransformer*/);
   }
 
 }
