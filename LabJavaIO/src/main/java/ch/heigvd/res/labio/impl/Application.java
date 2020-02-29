@@ -90,7 +90,7 @@ public class Application implements IApplication {
        * quote in a text file (and for generating the directories based on the tags).
        */
       //here we add the storage of the quote
-      this.storeQuote(quote,"quotes-" + i);
+      this.storeQuote(quote,"quote-" + i);
 
       LOG.info("Received a new joke with " + quote.getTags().size() + " tags.");
       for (String tag : quote.getTags()) {
