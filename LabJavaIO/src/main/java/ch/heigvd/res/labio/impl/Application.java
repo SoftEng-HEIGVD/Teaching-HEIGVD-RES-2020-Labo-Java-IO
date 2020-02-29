@@ -7,10 +7,10 @@ import ch.heigvd.res.labio.interfaces.IFileExplorer;
 import ch.heigvd.res.labio.interfaces.IFileVisitor;
 import ch.heigvd.res.labio.quotes.QuoteClient;
 import ch.heigvd.res.labio.quotes.Quote;
-import java.io.File;
-import java.io.IOException;
-import java.io.StringWriter;
-import java.io.Writer;
+
+import java.io.*;
+import java.util.Comparator;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.commons.io.FileUtils;
@@ -18,7 +18,6 @@ import org.apache.commons.io.FileUtils;
 /**
  *
  * @author Olivier Liechti
- * //first commit
  */
 public class Application implements IApplication {
 
@@ -91,6 +90,7 @@ public class Application implements IApplication {
        * one method provided by this class, which is responsible for storing the content of the
        * quote in a text file (and for generating the directories based on the tags).
        */
+      storeQuote(quote, "quote-" + (i+1));
       LOG.info("Received a new joke with " + quote.getTags().size() + " tags.");
       for (String tag : quote.getTags()) {
         LOG.info("> " + tag);
@@ -124,7 +124,29 @@ public class Application implements IApplication {
    * @throws IOException 
    */
   void storeQuote(Quote quote, String filename) throws IOException {
-    throw new UnsupportedOperationException("The student has not implemented this method yet.");
+    String text = quote.getQuote();
+    List<String> tags = quote.getTags();
+
+    // https://stackoverflow.com/questions/708698/how-can-i-sort-a-list-alphabetically
+    tags.sort(Comparator.naturalOrder()); // tri la liste dans l'ordre alphabétique (java 8)
+
+    StringBuilder quotePath = new StringBuilder(WORKSPACE_DIRECTORY);
+
+    for (String tag : tags){
+      quotePath.append("/").append(tag);
+    }
+
+    File dir = new File(String.valueOf(quotePath));
+    dir.mkdirs();
+
+    //https://stackoverflow.com/questions/2885173/how-do-i-create-a-file-and-write-to-it-in-java
+    PrintWriter writer = new PrintWriter(quotePath + "/" + filename + ".utf8");
+    writer.println(text);
+    writer.close();
+
+    System.out.println(quotePath);
+
+    //throw new UnsupportedOperationException("The student has not implemented this method yet.");
   }
   
   /**
