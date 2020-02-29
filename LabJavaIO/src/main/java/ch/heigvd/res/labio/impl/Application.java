@@ -120,13 +120,13 @@ public class Application implements IApplication {
     File folder = new File(Application.WORKSPACE_DIRECTORY);
 
     for (String tag : quote.getTags()) {
-      if (!folder.exists() && !folder.mkdir()) {
+      if (!folder.exists() && !folder.mkdirs()) {
         throw new IOException("Could not create the directory.");
       }
       folder = new File(folder, tag);
     }
 
-    if (!folder.exists() && !folder.mkdir()) {
+    if (!folder.exists() && !folder.mkdirs()) {
       throw new IOException("Could not create the directory.");
     }
 
