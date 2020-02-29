@@ -18,8 +18,9 @@ import java.util.logging.Logger;
 public class FileNumberingFilterWriter extends FilterWriter {
 
   private static final Logger LOG = Logger.getLogger(FileNumberingFilterWriter.class.getName());
-  private int counter = 1;
+  private int counter = 0;
   private boolean isFirstLine = true;
+  private char lastChar;
   public FileNumberingFilterWriter(Writer out) {
     super(out);
   }
@@ -27,29 +28,25 @@ public class FileNumberingFilterWriter extends FilterWriter {
   //Return a string with line number and tab character after new line chars
   private String fileNumbering(String str, int off, int len){
     StringBuilder transformedStr = new StringBuilder();
+
     if(isFirstLine){
-      transformedStr.append(counter + "\t");
+      transformedStr.append(++counter + "\t");
       isFirstLine = false;
     }
-    if(str.contains("\n")){//Unix or Windows
-      for (int i = off; i < off + len; ++i) {
-        transformedStr.append(str.charAt(i));
-        if (str.charAt(i) == '\n') {
-          counter++;
-          transformedStr.append(counter + "\t");
-        }
-      }
 
-    }else{ //IOS9
-      for (int i = off; i < off + len; ++i) {
-        transformedStr.append(str.charAt(i));
-        if(str.charAt(i) == '\r'){
-          counter++;
-          transformedStr.append(counter + "\t");
+    for(int i = off; i < off + len;++i){
+      if(str.charAt(i) == '\n' && lastChar != '\r'){
+        transformedStr.append("\n" + ++counter + "\t");
+      }else if(str.charAt(i) == '\n'){
+        transformedStr.append("\r\n" + ++counter + "\t");
+      }else if(str.charAt(i) != '\r'){
+        if(lastChar == '\r'){
+          transformedStr.append("\r" + ++counter + "\t");
         }
+        transformedStr.append(str.charAt(i));
       }
+      lastChar = str.charAt(i);
     }
-
     return transformedStr.toString();
   }
 
@@ -66,7 +63,7 @@ public class FileNumberingFilterWriter extends FilterWriter {
 
   @Override
   public void write(int c) throws IOException {
-    String str = String.valueOf((char)c);
+    String str = Character.toString((char)c);
     this.out.write(fileNumbering(str,0,1));
   }
 
