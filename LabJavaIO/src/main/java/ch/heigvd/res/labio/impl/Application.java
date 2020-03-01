@@ -81,7 +81,7 @@ public class Application implements IApplication {
   public void fetchAndStoreQuotes(int numberOfQuotes) throws IOException {
     clearOutputDirectory();
     QuoteClient client = new QuoteClient();
-    for (int i = 0; i < numberOfQuotes; i++) {
+    for (int i = 1; i <= numberOfQuotes; i++) {
       Quote quote = client.fetchQuote();
       String filename = "quote-" + i + ".utf8";
       storeQuote(quote, filename);
