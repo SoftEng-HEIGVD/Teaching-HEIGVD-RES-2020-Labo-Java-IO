@@ -190,10 +190,12 @@ public class Application implements IApplication {
          * be pretty easy (we want to write the filename, including the path, to the writer passed in argument).
          */
         try {
-          //Extraction file pathname
+          LOG.info("extracting paths and filenames.... \n");
+          //Extracting file pathname
           String pathname=file.getCanonicalPath();
           //Writing pathname to writer passed as argument
           writer.write(pathname);
+          LOG.info("File read : "+pathname);
         } catch (IOException exP) {
           LOG.info(exP.getMessage());
         }
