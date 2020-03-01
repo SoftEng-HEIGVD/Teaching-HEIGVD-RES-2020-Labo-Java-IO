@@ -139,6 +139,7 @@ public class Application implements IApplication {
     //Since we have the path from the tags, we can create a new file
     File quoteFile = new File(path + "/" + filename + ".utf8");
 
+    //Creating the file with the utf-8 encoding
     try (OutputStreamWriter writer =
                  new OutputStreamWriter(new FileOutputStream(quoteFile), StandardCharsets.UTF_8)){
         writer.write(quote.getQuote());
@@ -159,8 +160,13 @@ public class Application implements IApplication {
          * of the the IFileVisitor interface inline. You just have to add the body of the visit method, which should
          * be pretty easy (we want to write the filename, including the path, to the writer passed in argument).
          */
-        //String fileName = String.format("%s",file.getPath())
-        LOG.info(file.getPath());
+        try {
+          writer.write("\n" + file.getPath());
+          writer.flush();
+        }catch(IOException exception){
+          System.out.println("Enable to write path of the file");
+        }
+
       }
     });
   }
