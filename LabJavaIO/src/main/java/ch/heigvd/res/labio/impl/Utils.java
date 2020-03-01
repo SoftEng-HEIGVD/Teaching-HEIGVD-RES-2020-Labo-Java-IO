@@ -9,8 +9,8 @@ public class Utils {
 
     private static final Logger LOG = Logger.getLogger(Utils.class.getName());
     public static final String WINDOWS_SEPARATOR = "\r\n";
-    public static final String UNIX_SEPARATOR = "\n";
-    public static final String MACOS_SEPARATOR = "\r";
+    public static final char UNIX_SEPARATOR = '\n';
+    public static final char MACOS_SEPARATOR = '\r';
 
     /**
      * This method looks for the next new line separators (\r, \n, \r\n) to extract
@@ -27,12 +27,12 @@ public class Utils {
         if (lines.contains(WINDOWS_SEPARATOR)) { // Contains /r/n
             result[0] = lines.substring(0, lines.indexOf(WINDOWS_SEPARATOR) + WINDOWS_SEPARATOR.length());
             result[1] = lines.substring(lines.indexOf(WINDOWS_SEPARATOR) + WINDOWS_SEPARATOR.length());
-        } else if (lines.contains(UNIX_SEPARATOR) ) { // Contains /n
-            result[0] = lines.substring(0, lines.indexOf(UNIX_SEPARATOR) + UNIX_SEPARATOR.length());
-            result[1] = lines.substring(lines.indexOf(UNIX_SEPARATOR) + UNIX_SEPARATOR.length());
-        } else if (lines.contains(MACOS_SEPARATOR)) { // Contains /r
-            result[0] = lines.substring(0, lines.indexOf(MACOS_SEPARATOR) + MACOS_SEPARATOR.length());
-            result[1] = lines.substring(lines.indexOf(MACOS_SEPARATOR) + MACOS_SEPARATOR.length());
+        } else if (lines.contains(String.valueOf(UNIX_SEPARATOR)) ) { // Contains /n
+            result[0] = lines.substring(0, lines.indexOf(UNIX_SEPARATOR) + 1);
+            result[1] = lines.substring(lines.indexOf(UNIX_SEPARATOR) + 1);
+        } else if (lines.contains(String.valueOf(MACOS_SEPARATOR))) { // Contains /r
+            result[0] = lines.substring(0, lines.indexOf(MACOS_SEPARATOR) + 1);
+            result[1] = lines.substring(lines.indexOf(MACOS_SEPARATOR) + 1);
         } else {
             result[1] = lines;
         }
