@@ -170,7 +170,7 @@ public class Application implements IApplication {
          * be pretty easy (we want to write the filename, including the path, to the writer passed in argument).
          */
         try {
-          writer.write(file.getPath());
+          writer.write(file.getPath() + "\n");
         }catch (IOException ex){
           LOG.info("something went wrong with : " + ex);
           LOG.log(Level.SEVERE,null,ex);
@@ -183,7 +183,7 @@ public class Application implements IApplication {
   @Override
   public void processQuoteFiles() throws IOException {
     IFileExplorer explorer = new DFSFileExplorer();
-    explorer.explore(new File(WORKSPACE_DIRECTORY), new NoOpFileTransformer()/*new CompleteFileTransformer*/);
+    explorer.explore(new File(WORKSPACE_DIRECTORY), new CompleteFileTransformer());
   }
 
 }
