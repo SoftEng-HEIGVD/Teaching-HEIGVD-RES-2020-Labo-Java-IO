@@ -14,35 +14,31 @@ import java.util.*;
  * exploration of the file system and invokes the visitor for every encountered
  * node (file and directory). When the explorer reaches a directory, it visits all
  * files in the directory and then moves into the subdirectories.
- * 
+ *
  * @author Olivier Liechti
  */
 public class DFSFileExplorer implements IFileExplorer {
 
-  @Override
-  public void explore(File rootDirectory, IFileVisitor visitor) {
-    //In order to pass the first test we need to check if a root directory is existing or empty
-    try {
-      if (!rootDirectory.exists()) {
+    @Override
+    public void explore(File rootDirectory, IFileVisitor visitor) {
         visitor.visit(rootDirectory);
-        throw new IOException("Directory is empty or not existing");
-      }
-    } catch (IOException exDFS) {
-      exDFS.getMessage();
-    }
+       if (!rootDirectory.exists()) {
+            return;
+        }
 
-    File[] listOfFilesAndDirs = rootDirectory.listFiles();
-    if (listOfFilesAndDirs != null) { //List of files and dirs is not empty
-      for (File file : listOfFilesAndDirs) {
-        //If file is directory we need to go inside the hierarchy (Recursive call of explore)
-        if (file.isDirectory()) {
-          explore(file, visitor);
+        //File[] listOfFilesAndDirs = rootDirectory.listFiles();
+        for (File file : rootDirectory.listFiles()) {
+            //If file is file
+            if (file.isFile()) {
+                visitor.visit(file);
+            }
         }
-        //If file is file
-        else {
-          visitor.visit(file);
+        for (File dir : rootDirectory.listFiles()) {
+
+            //If file is directory
+            if (dir.isDirectory()) {
+                explore(dir, visitor);
+            }
         }
-      }
     }
-  }
 }

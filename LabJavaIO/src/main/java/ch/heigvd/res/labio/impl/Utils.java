@@ -7,35 +7,36 @@ import java.util.logging.Logger;
  * @author Olivier Liechti
  */
 public class Utils {
-
-  private static final Logger LOG = Logger.getLogger(Utils.class.getName());
+  public static final String WINDOWS = "\r\n";
+  public static final String UNIX = "\n";
+  public static final String MACOS = "\r";
 
   /**
    * This method looks for the next new line separators (\r, \n, \r\n) to extract
-   * the next line in the string passed in arguments. 
-   * 
+   * the next line in the string passed in arguments.
+   *
    * @param lines a string that may contain 0, 1 or more lines
    * @return an array with 2 elements; the first element is the next line with
    * the line separator, the second element is the remaining text. If the argument does not
    * contain any line separator, then the first element is an empty string.
    */
   public static String[] getNextLine(String lines) {
-    //Breakline char
-    char breakline;
-    //Position of the cursor (or Where to write)
-    int cursorPositoion = 1;
-    //
-    for (int i = 0; i < lines.length(); ++i) {
-      breakline = lines.charAt(i);
-      if (breakline == '\r' || breakline == '\n') {
-        // adjust cursorPosition if the next char is a breakline
-        if (i+1 < lines.length() && lines.charAt(i+1) == '\n') {
-          ++cursorPositoion;
-        }
-        return new String[] {lines.substring(0, i+cursorPositoion), lines.substring(i+cursorPositoion)};
-      }
+    String[] newLines = {"", ""};
+
+    if (lines.contains(UNIX) && !lines.contains(WINDOWS)) { //UNIX
+      newLines[0] = lines.substring(0, lines.indexOf(UNIX) + UNIX.length());
+      newLines[1] = lines.substring(lines.indexOf(UNIX) + UNIX.length());
+    } else if (lines.contains(MACOS) && !lines.contains(WINDOWS)) { //MACOS
+      newLines[0] = lines.substring(0, lines.indexOf(MACOS) + MACOS.length());
+      newLines[1] = lines.substring(lines.indexOf(MACOS) + MACOS.length());
+    } else if (lines.contains(WINDOWS)) { //Windows
+      newLines[0] = lines.substring(0, lines.indexOf(WINDOWS) + WINDOWS.length());
+      newLines[1] = lines.substring(lines.indexOf(WINDOWS) + WINDOWS.length());
+    } else {
+      newLines[1] = lines;
     }
-    return new String[] {"", lines};
+
+    return newLines;
   }
 
 }
