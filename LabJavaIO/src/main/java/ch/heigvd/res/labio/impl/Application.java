@@ -94,7 +94,7 @@ public class Application implements IApplication {
             for (String tag : quote.getTags()) {
                 LOG.info("> " + tag);
             }
-            storeQuote(quote, "quote-" + i + 1);
+            storeQuote(quote, "quote-" + i );
         }
     }
 
@@ -124,35 +124,20 @@ public class Application implements IApplication {
      * @throws IOException
      */
     void storeQuote(Quote quote, String filename) throws IOException {
-      StringBuilder path = new StringBuilder(WORKSPACE_DIRECTORY + "/");
-      int nbrTag = 0;
-      for (String tag : quote.getTags()) {
-        path.append(tag).append("/");
-        nbrTag++;
-      }
-      //Hierarchy creation part
-      //Directories creation part
-      //Checking if there is tags to create directories with their names
-      if (nbrTag > 0) {
-        File dir = new File(path.toString());
-        //Checking if directory exists already and if directory making is successful
-        if (!dir.exists() && dir.mkdirs()) {
-          LOG.info("Directory " + path + " created");
+        String path = WORKSPACE_DIRECTORY;
+        for (String tag : quote.getTags()) {
+            path += "/" + tag;
         }
-        //File creation part
-        //Adding filename to path
-        path.append(filename);
-        File file = new File(path.toString());
-        //Writing content of file
-        Writer outputWriter = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), StandardCharsets.UTF_8));
-        try {
-          outputWriter.write(quote.getQuote());
-        } catch (IOException ex) {
-          LOG.info(ex.getMessage());
-        }
-        outputWriter.close();
-      }
+        new File(path).mkdirs();
+        //adding filename to path
+        path+="/"+filename;
+        File file = new File(path);
+        Writer output = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), StandardCharsets.UTF_8));
+        output.write(quote.getQuote());
+        output.close();
     }
+
+
 
         /**
          * This method uses a IFileExplorer to explore the file system and prints the name of each
@@ -168,16 +153,16 @@ public class Application implements IApplication {
                      * of the the IFileVisitor interface inline. You just have to add the body of the visit method, which should
                      * be pretty easy (we want to write the filename, including the path, to the writer passed in argument).
                      */
-                    LOG.info("extracting paths and filenames.... \n");
+                 //   LOG.info("extracting paths and filenames.... \n");
                     //Extracting file pathname
                     String pathname = file.getPath();
                     //Writing pathname to writer passed as argument
                     try {
                         writer.write(pathname + "\n");
                     } catch (IOException e) {
-                        e.printStackTrace();
+                        e.getMessage();
                     }
-                    LOG.info("File read : " + pathname);
+                   // LOG.info("File read : " + pathname);
 
                 }
             });

@@ -39,7 +39,7 @@ public class FileNumberingFilterWriter extends FilterWriter {
       if((pChar + currentChar).equalsIgnoreCase(Utils.WINDOWS)){
         super.out.write(pChar + currentChar);
         pChar = "";
-      } else if(String.valueOf(currentChar).equalsIgnoreCase(Utils.UNIX)){
+      } else if(String.valueOf(currentChar).equalsIgnoreCase(Utils.UNXSUBSYS)){
         super.out.write(currentChar);
         pChar = "";
       } else if (String.valueOf(currentChar).equalsIgnoreCase(Utils.MACOS)) {

@@ -1,14 +1,12 @@
 package ch.heigvd.res.labio.impl;
 
-import java.util.logging.Logger;
-
 /**
  *
  * @author Olivier Liechti
  */
 public class Utils {
   public static final String WINDOWS = "\r\n";
-  public static final String UNIX = "\n";
+  public static final String UNXSUBSYS = "\n";
   public static final String MACOS = "\r";
 
   /**
@@ -23,9 +21,9 @@ public class Utils {
   public static String[] getNextLine(String lines) {
     String[] newLines = {"", ""};
 
-    if (lines.contains(UNIX) && !lines.contains(WINDOWS)) { //UNIX
-      newLines[0] = lines.substring(0, lines.indexOf(UNIX) + UNIX.length());
-      newLines[1] = lines.substring(lines.indexOf(UNIX) + UNIX.length());
+    if (lines.contains(UNXSUBSYS) && !lines.contains(WINDOWS)) { //UNIX
+      newLines[0] = lines.substring(0, lines.indexOf(UNXSUBSYS) + UNXSUBSYS.length());
+      newLines[1] = lines.substring(lines.indexOf(UNXSUBSYS) + UNXSUBSYS.length());
     } else if (lines.contains(MACOS) && !lines.contains(WINDOWS)) { //MACOS
       newLines[0] = lines.substring(0, lines.indexOf(MACOS) + MACOS.length());
       newLines[1] = lines.substring(lines.indexOf(MACOS) + MACOS.length());

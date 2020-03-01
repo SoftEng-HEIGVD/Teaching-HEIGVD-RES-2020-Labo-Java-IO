@@ -20,25 +20,32 @@ import java.util.*;
 public class DFSFileExplorer implements IFileExplorer {
 
     @Override
-    public void explore(File rootDirectory, IFileVisitor visitor) {
-        visitor.visit(rootDirectory);
-       if (!rootDirectory.exists()) {
-            return;
-        }
-
-        //File[] listOfFilesAndDirs = rootDirectory.listFiles();
-        for (File file : rootDirectory.listFiles()) {
-            //If file is file
-            if (file.isFile()) {
-                visitor.visit(file);
+    public void explore(File rootDirectory, IFileVisitor vistor) {
+            vistor.visit(rootDirectory);
+            if (rootDirectory.isDirectory()) {
+                if (rootDirectory.list().length > 0) {
+                    dfs(rootDirectory, vistor);
+                }
             }
         }
-        for (File dir : rootDirectory.listFiles()) {
 
-            //If file is directory
-            if (dir.isDirectory()) {
-                explore(dir, visitor);
+        public void dfs(File rootDirectory, IFileVisitor vistor) {
+            File[] directories = rootDirectory.listFiles(File::isDirectory);
+            File[] files = rootDirectory.listFiles(File::isFile);
+
+            if (directories != null) {
+                Arrays.sort(directories);
+            }
+            if (files != null) {
+                Arrays.sort(files);
+            }
+
+            for (File directory : directories) {
+                vistor.visit(directory);
+                dfs(directory, vistor);
+            }
+            for (File file : files) {
+                vistor.visit(file);
             }
         }
     }
-}
