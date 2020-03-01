@@ -129,7 +129,7 @@ public class Application implements IApplication {
       path += tag+"/";
       nbrTag++;
     }
-
+    //Hierarchy creation part
     try {
       //Directories creation part
       //Checking if there is tags to create directories with their names
@@ -157,14 +157,22 @@ public class Application implements IApplication {
       }
     }
     catch (IOException ex){
-        LOG.info("Error in file creation");
+        LOG.info(ex.getMessage());
     }
 
 
-
-    FileWriter fw = new FileWriter(path);
-    fw.write(quote.getQuote());
-    //throw new UnsupportedOperationException("The student has not implemented this method yet.");
+    //Writing content to output file
+    try {
+      //Using an instance of FileWriter
+      FileWriter fw = new FileWriter(path);
+      fw.write(quote.getQuote());
+      LOG.info("Write is sucessfull in "+filename+".utf8");
+      //Closing the stream
+      fw.close();
+    }
+    catch (IOException exW){
+        LOG.info(exW.getMessage());
+    }
   }
   
   /**
@@ -181,6 +189,14 @@ public class Application implements IApplication {
          * of the the IFileVisitor interface inline. You just have to add the body of the visit method, which should
          * be pretty easy (we want to write the filename, including the path, to the writer passed in argument).
          */
+        try {
+          //Extraction file pathname
+          String pathname=file.getCanonicalPath();
+          //Writing pathname to writer passed as argument
+          writer.write(pathname);
+        } catch (IOException exP) {
+          LOG.info(exP.getMessage());
+        }
       }
     });
   }
