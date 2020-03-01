@@ -127,7 +127,6 @@ public class Application implements IApplication {
     String text = quote.getQuote();
     List<String> tags = quote.getTags();
 
-    // https://stackoverflow.com/questions/708698/how-can-i-sort-a-list-alphabetically
     tags.sort(Comparator.naturalOrder()); // tri la liste dans l'ordre alphabétique (java 8)
 
     StringBuilder quotePath = new StringBuilder(WORKSPACE_DIRECTORY);
@@ -139,7 +138,7 @@ public class Application implements IApplication {
     File dir = new File(String.valueOf(quotePath));
     dir.mkdirs();
 
-    //https://stackoverflow.com/questions/2885173/how-do-i-create-a-file-and-write-to-it-in-java
+    // create a file and write into it
     PrintWriter writer = new PrintWriter(quotePath + "/" + filename + ".utf8");
     writer.println(text);
     writer.close();
@@ -163,6 +162,12 @@ public class Application implements IApplication {
          * of the the IFileVisitor interface inline. You just have to add the body of the visit method, which should
          * be pretty easy (we want to write the filename, including the path, to the writer passed in argument).
          */
+        //System.out.println(file);
+        try {
+          writer.write(file.getPath());
+        } catch (IOException e) {
+          e.printStackTrace();
+        }
       }
     });
   }
