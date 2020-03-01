@@ -33,7 +33,7 @@ public class FileNumberingFilterWriter extends FilterWriter {
         sb.insert(i,count++);
     }
 
-    super.write(sb.toString());
+    super.out.write(sb.toString());
 
   }
 
@@ -47,13 +47,13 @@ public class FileNumberingFilterWriter extends FilterWriter {
       sb.append(c);
     }
 
-    super.write(sb.toString().toCharArray(),off,len);
+    super.out.write(sb.toString().toCharArray(),off,len);
   }
 
   @Override
   public void write(int c) throws IOException {
     //throw new UnsupportedOperationException("The student has not implemented this method yet.");
-    super.write(c);
+    super.out.write(c);
   }
 
 }
