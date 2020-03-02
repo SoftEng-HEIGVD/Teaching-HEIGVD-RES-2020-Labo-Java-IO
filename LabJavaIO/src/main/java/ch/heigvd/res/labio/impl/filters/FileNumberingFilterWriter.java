@@ -1,5 +1,7 @@
 package ch.heigvd.res.labio.impl.filters;
 
+import ch.heigvd.res.labio.impl.Utils;
+
 import java.io.FilterWriter;
 import java.io.IOException;
 import java.io.Writer;
@@ -16,7 +18,8 @@ import java.util.logging.Logger;
  * @author Olivier Liechti
  */
 public class FileNumberingFilterWriter extends FilterWriter {
-
+  private int nbLine=1;
+  private String pChar="";
   private static final Logger LOG = Logger.getLogger(FileNumberingFilterWriter.class.getName());
 
   public FileNumberingFilterWriter(Writer out) {
@@ -25,17 +28,53 @@ public class FileNumberingFilterWriter extends FilterWriter {
 
   @Override
   public void write(String str, int off, int len) throws IOException {
-    throw new UnsupportedOperationException("The student has not implemented this method yet.");
+      str = str.substring(off,off+len);
+
+    for (char currentChar: str.toCharArray() ) {
+      if (pChar.isEmpty()) {
+        super.out.write(nbLine + "\t");
+        pChar = nbLine + "ŧ";
+        nbLine++;
+      }
+      if ((pChar + currentChar).equalsIgnoreCase(Utils.WIN)) {
+        super.out.write(pChar + currentChar);
+        pChar = "";
+      } else if (String.valueOf(currentChar).equalsIgnoreCase(Utils.UNIX_SEPARATOR)) {
+        super.out.write(currentChar);
+        pChar = "";
+      } else if (String.valueOf(currentChar).equalsIgnoreCase(Utils.MACOS_SEPARATOR)) {
+        pChar = String.valueOf(currentChar);
+      } else if (pChar.equalsIgnoreCase(Utils.MACOS_SEPARATOR)) {
+        super.out.write(pChar);
+
+        super.out.write(nbLine + "\t");
+        pChar = nbLine + "\t";
+        nbLine++;
+
+        super.out.write(currentChar);
+        pChar = String.valueOf(currentChar);
+      }
+      else {
+        super.out.write(currentChar);
+        pChar = String.valueOf(currentChar);
+      }
+    }
+
+    if(pChar.isEmpty()){
+      super.out.write(nbLine + "\t");
+      pChar = nbLine + "\t";
+      nbLine++;
+    }
   }
 
   @Override
   public void write(char[] cbuf, int off, int len) throws IOException {
-    throw new UnsupportedOperationException("The student has not implemented this method yet.");
+    write(String.copyValueOf(cbuf), off, len);
   }
 
   @Override
   public void write(int c) throws IOException {
-    throw new UnsupportedOperationException("The student has not implemented this method yet.");
+    write(String.valueOf((char) c), 0, 1);
   }
 
 }
