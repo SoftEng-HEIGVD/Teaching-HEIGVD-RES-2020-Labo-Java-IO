@@ -1,15 +1,8 @@
 package ch.heigvd.res.labio.impl.transformers;
 
 import ch.heigvd.res.labio.interfaces.IFileVisitor;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.FilterWriter;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.io.Reader;
-import java.io.Writer;
+
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -58,6 +51,13 @@ public abstract class FileTransformer implements IFileVisitor {
        * writer has been decorated by the concrete subclass!). You need to write a loop to read the
        * characters and write them to the writer.
        */
+
+      int b = reader.read();
+
+      while(b != -1){
+        writer.write(b);
+        b = reader.read();
+      }
       
       reader.close();
       writer.flush();
