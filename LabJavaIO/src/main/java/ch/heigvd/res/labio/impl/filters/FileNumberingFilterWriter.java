@@ -1,7 +1,10 @@
 package ch.heigvd.res.labio.impl.filters;
 
+import ch.heigvd.res.labio.impl.Utils;
+
 import java.io.FilterWriter;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 import java.util.logging.Logger;
 
@@ -18,24 +21,49 @@ import java.util.logging.Logger;
 public class FileNumberingFilterWriter extends FilterWriter {
 
   private static final Logger LOG = Logger.getLogger(FileNumberingFilterWriter.class.getName());
+  private int numCounter;
 
   public FileNumberingFilterWriter(Writer out) {
     super(out);
+    this.numCounter = 0;
+  }
+
+  private static boolean isABreakLine(char c){
+    switch (c){
+      case '\n':
+      case '\r':
+        return true;
+      default:
+        return false;
+    }
   }
 
   @Override
   public void write(String str, int off, int len) throws IOException {
-    throw new UnsupportedOperationException("The student has not implemented this method yet.");
+    String strToProcess = str.substring(off, len + off);
+    String[] reading = Utils.getNextLine(strToProcess);
+
+    if(numCounter == 0)
+      this.out.write(String.format("%d\t", ++numCounter));
+
+    while(!reading[0].isEmpty()){
+      this.out.write(reading[0]);
+      strToProcess = reading[1];
+      reading = Utils.getNextLine(strToProcess);
+      this.out.write(String.format("%d\t", ++numCounter));
+    }
+
+    this.out.write(reading[1]);
   }
 
   @Override
   public void write(char[] cbuf, int off, int len) throws IOException {
-    throw new UnsupportedOperationException("The student has not implemented this method yet.");
+    this.write(new String(cbuf), off, len);
   }
 
   @Override
   public void write(int c) throws IOException {
-    throw new UnsupportedOperationException("The student has not implemented this method yet.");
+    // TODO : je vois pas comment le faire
   }
 
 }
