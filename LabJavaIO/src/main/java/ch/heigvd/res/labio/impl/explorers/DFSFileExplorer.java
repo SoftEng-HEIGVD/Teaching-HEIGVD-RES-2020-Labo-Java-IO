@@ -20,15 +20,19 @@ public class DFSFileExplorer implements IFileExplorer {
 
   @Override
   public void explore(File rootDirectory, IFileVisitor visitor) {
-    // No file, visit root and exit
-    if(!rootDirectory.exists()) {
-      visitor.visit(rootDirectory);
-      return;
-    }
-
-    // Visit children elements
-    Collection<File> children = FileUtils.listFilesAndDirs(rootDirectory, TrueFileFilter.TRUE, TrueFileFilter.TRUE);
-    for(File file : children)
-      visitor.visit(file);
+    visitor.visit(rootDirectory); // Explore root element
+    exploreRecursive(rootDirectory, visitor);
   }
+
+  private void exploreRecursive(File rootDirectory, IFileVisitor visitor) {
+    // Explore children elements
+    File[] elements = rootDirectory.listFiles();
+    if(elements != null) {
+      for(File element : elements) {
+        visitor.visit(element);
+        exploreRecursive(element, visitor);
+      }
+    }
+  }
+
 }
