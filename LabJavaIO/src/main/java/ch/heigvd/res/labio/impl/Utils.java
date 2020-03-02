@@ -49,7 +49,6 @@ public class Utils {
       }
       i++;
     }
-
     if(elements[0] == null){
       elements[0] = "";
       elements[1] = lines;

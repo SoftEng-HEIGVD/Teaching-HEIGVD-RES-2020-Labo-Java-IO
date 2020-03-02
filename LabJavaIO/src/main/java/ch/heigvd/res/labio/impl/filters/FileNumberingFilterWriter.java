@@ -21,7 +21,7 @@ public class FileNumberingFilterWriter extends FilterWriter {
 
   private static final Logger LOG = Logger.getLogger(FileNumberingFilterWriter.class.getName());
   private int nbLines = 0;
-  private boolean lastLine = false;
+  private boolean newLine = true;
   private char lastChar = ' ';
 
   public FileNumberingFilterWriter(Writer out) {
@@ -33,23 +33,26 @@ public class FileNumberingFilterWriter extends FilterWriter {
       str = str.substring(off, off + len);
       String[] elements = Utils.getNextLine(str);
       while(!elements[0].equals("")) {
-        //Première ligne
-        if(!lastLine) {
+        //Si la dernière ligne est une fin de ligne commencement d'une nouvelle ligen
+        if(newLine) {
           out.write(Integer.toString(++nbLines) + '\t' + elements[0]);
         }
         else {
           out.write(elements[0]);
-          lastLine = false;
+          newLine = true;
         }
+        //Utilisation de la fonction de partition de chaîne sur la deuxième partie de la chaîne
         elements = Utils.getNextLine(elements[1]);
       }
-      if(lastLine){
+      //s'il n'y a pas eu de nouvelle ligne alors écriture de elements[1] seulement car la fonction termine
+      //toujours par une ligne vide avec un numéro et une tabulation
+      if(!newLine){
         out.write(elements[1]);
-        lastLine = false;
+        newLine = true;
       }
       else {
         out.write(Integer.toString(++nbLines) + '\t' + elements[1]);
-        lastLine = true;
+        newLine = false;
       }
   }
 
@@ -61,24 +64,26 @@ public class FileNumberingFilterWriter extends FilterWriter {
   @Override
   public void write(int c) throws IOException {
     boolean newLine = false;
-    if(nbLines == 0){
-      out.write(Integer.toString(++nbLines) + '\t');
-    }
-    if((lastChar == '\n' ||  lastChar == '\r') && c == '\n') {
-      newLine = true;
-      //Changement du lastChar pour ne pas rester avec à chaque fois une fin de ligne
-      lastChar = ' ';
+    //Permet de vérifier que la retour à la ligne Windows pour cela il faut vérifier le dernier caractère puis le
+    //caractère actuel
+    if(lastChar == '\r' && c == '\n') {
+      //Enregistrement du caractère actuel comme carcatère de fin de ligne
+      lastChar = (char)c;
     }
     else if(lastChar == '\n' || lastChar == '\r'){
-      out.write(Integer.toString(++nbLines) + '\t');
+      //Changement du lastChar pour ne pas rester avec à chaque fois une fin de ligne
       lastChar = ' ';
+      newLine = true;
     }
+    //Si une nouvelle ligne est desiré ajout d'une nouvelle ligne
+    if(newLine || nbLines == 0){
+      out.write(Integer.toString(++nbLines) + '\t');
+    }
+    //Si ce n'est pas une nouvelle ligne et que c est un caractère de fin de ligne stockage de sa valeur
     if(!newLine && (c == '\n' || c == '\r'))
       lastChar = (char)c;
+
     out.write(c);
-    if(newLine){
-      out.write(Integer.toString(++nbLines) + '\t');
-    }
   }
 
 }

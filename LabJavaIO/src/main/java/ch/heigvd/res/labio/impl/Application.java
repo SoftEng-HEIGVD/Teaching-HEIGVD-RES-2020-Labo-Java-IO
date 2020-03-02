@@ -81,9 +81,12 @@ public class Application implements IApplication {
   public void fetchAndStoreQuotes(int numberOfQuotes) throws IOException {
     clearOutputDirectory();
     QuoteClient client = new QuoteClient();
+    //Boucle permettant de créer le nombre de quotes passées par paramètre
     for (int i = 1; i <= numberOfQuotes; i++) {
       Quote quote = client.fetchQuote();
+      //Stockage du nom de fichier dans un string
       String filename = "quote-" + i + ".utf8";
+      //Stockage de la quote dans le fichier avec le nom défini au-dessus
       storeQuote(quote, filename);
       LOG.info("Received a new joke with " + quote.getTags().size() + " tags.");
       for (String tag : quote.getTags()) {
@@ -118,9 +121,9 @@ public class Application implements IApplication {
    * @throws IOException 
    */
   void storeQuote(Quote quote, String filename) throws IOException {
-
     StringBuilder path = new StringBuilder();
     path.append("/");
+    //Boucle parcourant les tags liés à la quote créer le string indiquant le chemin ou sera stocké la quote
     for(String tag : quote.getTags())
       path.append(tag).append("/");
 
@@ -134,7 +137,6 @@ public class Application implements IApplication {
     }else{
       System.out.println("File already exists");
     }
-    //throw new UnsupportedOperationException("The student has not implemented this method yet.");
   }
   
   /**
@@ -151,9 +153,11 @@ public class Application implements IApplication {
          * of the the IFileVisitor interface inline. You just have to add the body of the visit method, which should
          * be pretty easy (we want to write the filename, including the path, to the writer passed in argument).
          */
+        //getPath de file donne le chemin absolu du fichier passé en paramètre
         String filename = file.getPath();
         try {
           writer.write(filename + "\n");
+          //Ferme le writer pour forcer l'écriture du chemin
           writer.close();
         }
         catch (IOException test){
