@@ -147,7 +147,7 @@ public class Application implements IApplication {
             @Override
             public void visit(File file) {
                 try {
-                    writer.write(file.getCanonicalPath() + '\n'); // Writes the absolute path in the writer
+                    writer.write(file.getPath()+ '\n'); // Writes the absolute path in the writer
                 } catch (IOException e) {
                     LOG.info(e.toString());
                 }

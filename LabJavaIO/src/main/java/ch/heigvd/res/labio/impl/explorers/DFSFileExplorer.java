@@ -23,12 +23,13 @@ public class DFSFileExplorer implements IFileExplorer {
         // Exit if the file doesn't exist
         if (!rootDirectory.exists()) return;
 
-        // Visit all the files first
+        // Visit the subdirectories first
+        for (File directory : rootDirectory.listFiles())
+            if (directory.isDirectory()) explore(directory, vistor);
+
+        // Visit all the files second
         for (File file : rootDirectory.listFiles())
             if (file.isFile()) vistor.visit(file);
 
-        // Visit the subdirectories second
-        for (File directory : rootDirectory.listFiles())
-            if (directory.isDirectory()) explore(directory, vistor);
     }
 }
