@@ -39,13 +39,13 @@ public class DFSFileExplorer implements IFileExplorer {
             if (files != null) {
                 Arrays.sort(files);
             }
-
+            for (File file : files) {
+                vistor.visit(file);
+            }
             for (File directory : directories) {
                 vistor.visit(directory);
                 dfs(directory, vistor);
             }
-            for (File file : files) {
-                vistor.visit(file);
-            }
+
         }
     }

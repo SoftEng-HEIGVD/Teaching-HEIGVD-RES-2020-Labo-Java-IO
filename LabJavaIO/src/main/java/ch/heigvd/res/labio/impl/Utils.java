@@ -5,9 +5,9 @@ package ch.heigvd.res.labio.impl;
  * @author Olivier Liechti
  */
 public class Utils {
-  public static final String WINDOWS = "\r\n";
-  public static final String UNXSUBSYS = "\n";
-  public static final String MACOS = "\r";
+  public static final String WINDOWS_SEPARATOR = "\r\n";
+  public static final String UNIX_SEPARATOR = "\n";
+  public static final String MACOS_SEPARATOR = "\r";
 
   /**
    * This method looks for the next new line separators (\r, \n, \r\n) to extract
@@ -21,15 +21,15 @@ public class Utils {
   public static String[] getNextLine(String lines) {
     String[] newLines = {"", ""};
 
-    if (lines.contains(UNXSUBSYS) && !lines.contains(WINDOWS)) { //UNIX
-      newLines[0] = lines.substring(0, lines.indexOf(UNXSUBSYS) + UNXSUBSYS.length());
-      newLines[1] = lines.substring(lines.indexOf(UNXSUBSYS) + UNXSUBSYS.length());
-    } else if (lines.contains(MACOS) && !lines.contains(WINDOWS)) { //MACOS
-      newLines[0] = lines.substring(0, lines.indexOf(MACOS) + MACOS.length());
-      newLines[1] = lines.substring(lines.indexOf(MACOS) + MACOS.length());
-    } else if (lines.contains(WINDOWS)) { //Windows
-      newLines[0] = lines.substring(0, lines.indexOf(WINDOWS) + WINDOWS.length());
-      newLines[1] = lines.substring(lines.indexOf(WINDOWS) + WINDOWS.length());
+    if (lines.contains(UNIX_SEPARATOR) && !lines.contains(WINDOWS_SEPARATOR)) { //UNIX
+      newLines[0] = lines.substring(0, lines.indexOf(UNIX_SEPARATOR) + UNIX_SEPARATOR.length());
+      newLines[1] = lines.substring(lines.indexOf(UNIX_SEPARATOR) + UNIX_SEPARATOR.length());
+    } else if (lines.contains(MACOS_SEPARATOR) && !lines.contains(WINDOWS_SEPARATOR)) { //MACOS
+      newLines[0] = lines.substring(0, lines.indexOf(MACOS_SEPARATOR) + MACOS_SEPARATOR.length());
+      newLines[1] = lines.substring(lines.indexOf(MACOS_SEPARATOR) + MACOS_SEPARATOR.length());
+    } else if (lines.contains(WINDOWS_SEPARATOR)) { //Windows
+      newLines[0] = lines.substring(0, lines.indexOf(WINDOWS_SEPARATOR) + WINDOWS_SEPARATOR.length());
+      newLines[1] = lines.substring(lines.indexOf(WINDOWS_SEPARATOR) + WINDOWS_SEPARATOR.length());
     } else {
       newLines[1] = lines;
     }

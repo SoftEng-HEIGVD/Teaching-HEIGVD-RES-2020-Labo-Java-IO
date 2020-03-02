@@ -77,27 +77,6 @@ public class Application implements IApplication {
         }
     }
 
-    @Override
-    public void fetchAndStoreQuotes(int numberOfQuotes) throws IOException {
-        clearOutputDirectory();
-        QuoteClient client = new QuoteClient();
-        for (int i = 0; i < numberOfQuotes; i++) {
-            Quote quote = client.fetchQuote();
-            /* There is a missing piece here!
-             * As you can see, this method handles the first part of the lab. It uses the web service
-             * client to fetch quotes. We have removed a single line from this method. It is a call to
-             * one method provided by this class, which is responsible for storing the content of the
-             * quote in a text file (and for generating the directories based on the tags).
-             */
-
-            LOG.info("Received a new joke with " + quote.getTags().size() + " tags.");
-            for (String tag : quote.getTags()) {
-                LOG.info("> " + tag);
-            }
-            storeQuote(quote, "quote-" + i );
-        }
-    }
-
     /**
      * This method deletes the WORKSPACE_DIRECTORY and its content. It uses the
      * apache commons-io library. You should call this method in the main method.
@@ -107,6 +86,22 @@ public class Application implements IApplication {
     void clearOutputDirectory() throws IOException {
         FileUtils.deleteDirectory(new File(WORKSPACE_DIRECTORY));
     }
+
+    @Override
+    public void fetchAndStoreQuotes(int numberOfQuotes) throws IOException {
+        clearOutputDirectory();
+        QuoteClient client = new QuoteClient();
+        for (int i = 0; i < numberOfQuotes; i++) {
+            Quote quote = client.fetchQuote();
+            LOG.info("Received a new joke with " + quote.getTags().size() + " tags.");
+            for (String tag : quote.getTags()) {
+                LOG.info("> " + tag);
+            }
+            storeQuote(quote, "quote-" + i +".utf8");
+        }
+    }
+
+
 
     /**
      * This method stores the content of a quote in the local file system. It has
@@ -132,6 +127,7 @@ public class Application implements IApplication {
         //adding filename to path
         path+="/"+filename;
         File file = new File(path);
+        //Writing content to file encoded in UTF8
         Writer output = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), StandardCharsets.UTF_8));
         output.write(quote.getQuote());
         output.close();
@@ -148,21 +144,14 @@ public class Application implements IApplication {
             explorer.explore(new File(WORKSPACE_DIRECTORY), new IFileVisitor() {
                 @Override
                 public void visit(File file) {
-                    /*
-                     * There is a missing piece here. Notice how we use an anonymous class here. We provide the implementation
-                     * of the the IFileVisitor interface inline. You just have to add the body of the visit method, which should
-                     * be pretty easy (we want to write the filename, including the path, to the writer passed in argument).
-                     */
-                 //   LOG.info("extracting paths and filenames.... \n");
-                    //Extracting file pathname
-                    String pathname = file.getPath();
                     //Writing pathname to writer passed as argument
                     try {
-                        writer.write(pathname + "\n");
-                    } catch (IOException e) {
+                        writer.write(file.getPath() + '\n');
+                    }
+                    catch (IOException e) {
                         e.getMessage();
                     }
-                   // LOG.info("File read : " + pathname);
+
 
                 }
             });
