@@ -8,13 +8,10 @@ import ch.heigvd.res.labio.interfaces.IFileVisitor;
 import ch.heigvd.res.labio.quotes.QuoteClient;
 import ch.heigvd.res.labio.quotes.Quote;
 
-import java.nio.charset.StandardCharsets;
-
 import java.io.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import ch.heigvd.res.labio.quotes.TagsGenerator;
 import org.apache.commons.io.FileUtils;
 
 /**
@@ -86,12 +83,6 @@ public class Application implements IApplication {
     QuoteClient client = new QuoteClient();
     for (int i = 0; i < numberOfQuotes; i++) {
       Quote quote = client.fetchQuote();
-      /* There is a missing piece here!
-       * As you can see, this method handles the first part of the lab. It uses the web service
-       * client to fetch quotes. We have removed a single line from this method. It is a call to
-       * one method provided by this class, which is responsible for storing the content of the
-       * quote in a text file (and for generating the directories based on the tags).
-       */
       String filename = "/quote-" + i + ".utf8";
       storeQuote(quote, filename);
       LOG.info("Received a new joke with " + quote.getTags().size() + " tags.");
@@ -133,27 +124,24 @@ public class Application implements IApplication {
     File actualDir = new File(path);
 
     int tagNum = quote.getTags().size();
-    //itbLOG.info(String.valueOf(tagNum));
     if(tagNum != 0){
       for(String tag : quote.getTags()){
+
+        //creating the new directory with the tag
         path += tag + File.separator;
         actualDir = new File(path);
 
-        //LOG.info(actualDir.getPath());
-
+        //if there is already this directory, it is not necessary to create a new one
         if(actualDir.isDirectory() == false){
           actualDir.mkdirs();
         }
       }
     }
 
+    //Adding the quote utf8 file
     File newFile = new File(actualDir, filename);
-    LOG.info(newFile.getPath());
     FileWriter fileWriter = new FileWriter(newFile);
     fileWriter.write(quote.getQuote());
-    fileWriter.close();
-
-    //throw new UnsupportedOperationException("The student has not implemented this method yet.");
   }
   
   /**
@@ -172,8 +160,8 @@ public class Application implements IApplication {
          */
         try {
           writer.write("\n" + file.getPath());
-        }catch(IOException exception){
-          System.out.println("Enable to write path of the file");
+        } catch (IOException e) {
+          e.printStackTrace();
         }
       }
     });
