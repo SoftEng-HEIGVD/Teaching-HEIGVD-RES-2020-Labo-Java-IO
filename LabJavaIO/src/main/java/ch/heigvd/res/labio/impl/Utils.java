@@ -1,5 +1,6 @@
 package ch.heigvd.res.labio.impl;
 
+import java.util.Arrays;
 import java.util.logging.Logger;
 
 /**
@@ -20,7 +21,21 @@ public class Utils {
    * contain any line separator, then the first element is an empty string.
    */
   public static String[] getNextLine(String lines) {
-    throw new UnsupportedOperationException("The student has not implemented this method yet.");
+
+    // get the system-dependent line separator
+    // https://www.geeksforgeeks.org/system-lineseparator-method-in-java-with-examples/
+
+    int indexOfLineSep = lines.indexOf(System.lineSeparator());
+
+    if (indexOfLineSep == -1)
+      return new String[]{"",lines};
+
+    indexOfLineSep += System.lineSeparator().length(); //to include the line separator in the substring
+
+    return new String[] {
+      lines.substring(0, indexOfLineSep),
+      lines.substring(indexOfLineSep)
+    };
   }
 
 }
