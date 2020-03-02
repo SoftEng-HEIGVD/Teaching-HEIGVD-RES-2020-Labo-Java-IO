@@ -126,6 +126,8 @@ public class Application implements IApplication {
    */
   void storeQuote(Quote quote, String filename) throws IOException {
 
+    //TODO
+
     String dir = WORKSPACE_DIRECTORY;
     for(String tag : quote.getTags()){
       dir += '/' + tag;
