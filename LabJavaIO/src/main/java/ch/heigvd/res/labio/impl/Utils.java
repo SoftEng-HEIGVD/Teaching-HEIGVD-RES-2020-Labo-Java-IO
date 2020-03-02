@@ -27,10 +27,11 @@ public class Utils {
 
     int indexOfLineSep = lines.indexOf(System.lineSeparator());
 
+    // we check if there is/isn't a line separator
     if (indexOfLineSep == -1)
-      return new String[]{"",lines};
-
-    indexOfLineSep += System.lineSeparator().length(); //to include the line separator in the substring
+      indexOfLineSep = 0;
+    else
+      indexOfLineSep += System.lineSeparator().length(); //to include the line separator in the substring
 
     return new String[] {
       lines.substring(0, indexOfLineSep),
