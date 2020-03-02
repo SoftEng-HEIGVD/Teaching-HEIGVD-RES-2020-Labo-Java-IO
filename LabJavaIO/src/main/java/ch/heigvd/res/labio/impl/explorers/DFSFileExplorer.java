@@ -2,12 +2,9 @@ package ch.heigvd.res.labio.impl.explorers;
 
 import ch.heigvd.res.labio.interfaces.IFileExplorer;
 import ch.heigvd.res.labio.interfaces.IFileVisitor;
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.filefilter.WildcardFileFilter;
 
 import java.io.File;
-import java.io.IOException;
-import java.util.*;
+import java.util.Arrays;
 
 /**
  * This implementation of the IFileExplorer interface performs a depth-first
@@ -21,31 +18,27 @@ public class DFSFileExplorer implements IFileExplorer {
 
     @Override
     public void explore(File rootDirectory, IFileVisitor vistor) {
-            vistor.visit(rootDirectory);
-            if (rootDirectory.isDirectory()) {
-                if (rootDirectory.list().length > 0) {
-                    dfs(rootDirectory, vistor);
-                }
-            }
+        vistor.visit(rootDirectory);
+        if (!rootDirectory.exists()) {
+            return;
         }
 
-        public void dfs(File rootDirectory, IFileVisitor vistor) {
-            File[] directories = rootDirectory.listFiles(File::isDirectory);
-            File[] files = rootDirectory.listFiles(File::isFile);
-
-            if (directories != null) {
-                Arrays.sort(directories);
-            }
-            if (files != null) {
-                Arrays.sort(files);
-            }
-            for (File file : files) {
-                vistor.visit(file);
-            }
-            for (File directory : directories) {
-                vistor.visit(directory);
-                dfs(directory, vistor);
-            }
-
+        //Sort is necessary for DFS to work as expected.
+        //List of directories
+        File[] dirs = rootDirectory.listFiles(File::isDirectory);
+        if (dirs.length != 0) {
+            Arrays.sort(dirs);
+        }
+        //List of files
+        File[] files = rootDirectory.listFiles(File::isFile);
+        if (dirs.length != 0) {
+            Arrays.sort(files);
+        }
+        for (File dir : dirs) {
+            explore(dir, vistor);
+        }
+        for (File file : files) {
+            vistor.visit(file);
         }
     }
+}

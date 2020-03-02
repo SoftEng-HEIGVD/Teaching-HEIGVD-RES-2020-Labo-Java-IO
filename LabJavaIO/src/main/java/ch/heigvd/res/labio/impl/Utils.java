@@ -5,8 +5,8 @@ package ch.heigvd.res.labio.impl;
  * @author Olivier Liechti
  */
 public class Utils {
-  public static final String WINDOWS_SEPARATOR = "\r\n";
   public static final String UNIX_SEPARATOR = "\n";
+  public static final String WIN = "\r\n";
   public static final String MACOS_SEPARATOR = "\r";
 
   /**
@@ -19,22 +19,25 @@ public class Utils {
    * contain any line separator, then the first element is an empty string.
    */
   public static String[] getNextLine(String lines) {
-    String[] newLines = {"", ""};
-
-    if (lines.contains(UNIX_SEPARATOR) && !lines.contains(WINDOWS_SEPARATOR)) { //UNIX
-      newLines[0] = lines.substring(0, lines.indexOf(UNIX_SEPARATOR) + UNIX_SEPARATOR.length());
-      newLines[1] = lines.substring(lines.indexOf(UNIX_SEPARATOR) + UNIX_SEPARATOR.length());
-    } else if (lines.contains(MACOS_SEPARATOR) && !lines.contains(WINDOWS_SEPARATOR)) { //MACOS
-      newLines[0] = lines.substring(0, lines.indexOf(MACOS_SEPARATOR) + MACOS_SEPARATOR.length());
-      newLines[1] = lines.substring(lines.indexOf(MACOS_SEPARATOR) + MACOS_SEPARATOR.length());
-    } else if (lines.contains(WINDOWS_SEPARATOR)) { //Windows
-      newLines[0] = lines.substring(0, lines.indexOf(WINDOWS_SEPARATOR) + WINDOWS_SEPARATOR.length());
-      newLines[1] = lines.substring(lines.indexOf(WINDOWS_SEPARATOR) + WINDOWS_SEPARATOR.length());
+    String[] nLine = {"", ""};
+    //for unix (if the lines dosent have windows break lines so they wont have macos breaklines)
+    if (lines.contains(UNIX_SEPARATOR) && !lines.contains(WIN)) {
+      nLine[0] = lines.substring(0, lines.indexOf(UNIX_SEPARATOR) + UNIX_SEPARATOR.length());
+      nLine[1] = lines.substring(lines.indexOf(UNIX_SEPARATOR) + UNIX_SEPARATOR.length());
+      //Case of mac breaklines
+    } else if (lines.contains(MACOS_SEPARATOR) && !lines.contains(WIN)) {
+      nLine[0] = lines.substring(0, lines.indexOf(MACOS_SEPARATOR) + MACOS_SEPARATOR.length());
+      nLine[1] = lines.substring(lines.indexOf(MACOS_SEPARATOR) + MACOS_SEPARATOR.length());
+    }
+    //Case of windows breaklines
+    else if (lines.contains(WIN)) {
+      nLine[0] = lines.substring(0, lines.indexOf(WIN) + WIN.length());
+      nLine[1] = lines.substring(lines.indexOf(WIN) + WIN.length());
     } else {
-      newLines[1] = lines;
+      nLine[1] = lines;
     }
 
-    return newLines;
+    return nLine;
   }
 
 }

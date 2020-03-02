@@ -36,10 +36,10 @@ public class FileNumberingFilterWriter extends FilterWriter {
         pChar = nbLine + "ŧ";
         nbLine++;
       }
-      if((pChar + currentChar).equalsIgnoreCase(Utils.WINDOWS_SEPARATOR)){
+      if ((pChar + currentChar).equalsIgnoreCase(Utils.WIN)) {
         super.out.write(pChar + currentChar);
         pChar = "";
-      } else if(String.valueOf(currentChar).equalsIgnoreCase(Utils.UNIX_SEPARATOR)){
+      } else if (String.valueOf(currentChar).equalsIgnoreCase(Utils.UNIX_SEPARATOR)) {
         super.out.write(currentChar);
         pChar = "";
       } else if (String.valueOf(currentChar).equalsIgnoreCase(Utils.MACOS_SEPARATOR)) {

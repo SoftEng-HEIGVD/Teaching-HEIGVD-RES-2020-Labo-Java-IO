@@ -5,15 +5,14 @@ import ch.heigvd.res.labio.impl.transformers.CompleteFileTransformer;
 import ch.heigvd.res.labio.interfaces.IApplication;
 import ch.heigvd.res.labio.interfaces.IFileExplorer;
 import ch.heigvd.res.labio.interfaces.IFileVisitor;
-import ch.heigvd.res.labio.quotes.QuoteClient;
 import ch.heigvd.res.labio.quotes.Quote;
+import ch.heigvd.res.labio.quotes.QuoteClient;
+import org.apache.commons.io.FileUtils;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import org.apache.commons.io.FileUtils;
 
 /**
  * @author Olivier Liechti
@@ -77,15 +76,7 @@ public class Application implements IApplication {
         }
     }
 
-    /**
-     * This method deletes the WORKSPACE_DIRECTORY and its content. It uses the
-     * apache commons-io library. You should call this method in the main method.
-     *
-     * @throws IOException
-     */
-    void clearOutputDirectory() throws IOException {
-        FileUtils.deleteDirectory(new File(WORKSPACE_DIRECTORY));
-    }
+
 
     @Override
     public void fetchAndStoreQuotes(int numberOfQuotes) throws IOException {
@@ -97,11 +88,20 @@ public class Application implements IApplication {
             for (String tag : quote.getTags()) {
                 LOG.info("> " + tag);
             }
-            storeQuote(quote, "quote-" + i +".utf8");
+            storeQuote(quote, "quote-" + i + ".utf8");
         }
     }
 
 
+    /**
+     * This method deletes the WORKSPACE_DIRECTORY and its content. It uses the
+     * apache commons-io library. You should call this method in the main method.
+     *
+     * @throws IOException
+     */
+    void clearOutputDirectory() throws IOException {
+        FileUtils.deleteDirectory(new File(WORKSPACE_DIRECTORY));
+    }
 
     /**
      * This method stores the content of a quote in the local file system. It has
