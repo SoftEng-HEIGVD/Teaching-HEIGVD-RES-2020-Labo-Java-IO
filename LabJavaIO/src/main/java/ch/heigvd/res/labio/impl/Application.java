@@ -123,15 +123,19 @@ public class Application implements IApplication {
   void storeQuote(Quote quote, String filename) throws IOException {
     StringBuilder path = new StringBuilder();
     path.append("/");
-    //Boucle parcourant les tags liés à la quote créer le string indiquant le chemin ou sera stocké la quote
+    //Boucle parcourant les tags liés à la quote créer la string indiquant le chemin ou sera stocké la quote
     for(String tag : quote.getTags())
       path.append(tag).append("/");
 
+    //Créer l'objet directories étant le chemin ou le quote sera stockée
     File directories = new File(WORKSPACE_DIRECTORY + path.toString());
+    //Création des dossiers
     directories.mkdirs();
     File file = new File(WORKSPACE_DIRECTORY + path.toString() + filename);
+    //Création du fichier
     if(file.createNewFile()){
       Writer writer = new OutputStreamWriter(new FileOutputStream(file), StandardCharsets.UTF_8);
+      //Ecriture de la quote à l'intérieur du fichier
       writer.write(quote.getQuote());
       writer.close();
     }else{

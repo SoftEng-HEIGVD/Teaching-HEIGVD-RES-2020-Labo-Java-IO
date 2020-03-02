@@ -20,9 +20,9 @@ import java.util.logging.Logger;
 public class FileNumberingFilterWriter extends FilterWriter {
 
   private static final Logger LOG = Logger.getLogger(FileNumberingFilterWriter.class.getName());
-  private int nbLines = 0;
-  private boolean newLine = true;
-  private char lastChar = ' ';
+  private int nbLines = 0; //Permet de garder le nombre de ligne écrite dans le fichier
+  private boolean newLine = true;//Permet d'indiquer si une nouvelle ligne doit être créer
+  private char lastChar = ' ';//Permet de garder le dernier caractère écrit dans le writer
 
   public FileNumberingFilterWriter(Writer out) {
     super(out);
@@ -63,7 +63,7 @@ public class FileNumberingFilterWriter extends FilterWriter {
 
   @Override
   public void write(int c) throws IOException {
-    boolean newLine = false;
+    newLine = false;
     //Permet de vérifier que la retour à la ligne Windows pour cela il faut vérifier le dernier caractère puis le
     //caractère actuel
     if(lastChar == '\r' && c == '\n') {
