@@ -21,6 +21,7 @@ public class FileNumberingFilterWriter extends FilterWriter {
 
     private static final Logger LOG = Logger.getLogger(FileNumberingFilterWriter.class.getName());
     private int lineNb = 0;
+    private boolean start = true;
 
     public FileNumberingFilterWriter(Writer out) {
         super(out);
@@ -64,7 +65,7 @@ public class FileNumberingFilterWriter extends FilterWriter {
 
     @Override
     public void write(int c) throws IOException {
-        throw new UnsupportedOperationException("The student has not implemented this method yet.");
+       // TODO
     }
 
 }
