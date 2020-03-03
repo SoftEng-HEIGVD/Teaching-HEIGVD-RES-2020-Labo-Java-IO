@@ -97,6 +97,8 @@ public class Application implements IApplication {
             storeQuote(quote, "quote-" + (i + 1) + ".utf8");
 
         }
+
+
     }
 
     /**
@@ -135,6 +137,8 @@ public class Application implements IApplication {
         file.createNewFile();
         FileWriter writer = new FileWriter(file);
         writer.write(quote.getQuote());
+
+        writer.close();
     }
 
     /**
