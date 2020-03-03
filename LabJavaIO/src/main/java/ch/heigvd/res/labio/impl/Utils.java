@@ -22,16 +22,16 @@ public class Utils {
   public static String[] getNextLine(String lines) {
 
     String[] result = {"", ""};
-
-    if(lines.contains("\n")){
+    // faire for sur tableau
+    if (lines.contains("\r\n")) {
+      result[0] = lines.substring(0, lines.indexOf("\r\n") + 2);
+      result[1] = lines.substring(lines.indexOf("\r\n") + 2);
+     } else if (lines.contains("\n")){
       result[0] = lines.substring(0, lines.indexOf("\n") + 1);
       result[1] = lines.substring(lines.indexOf("\n") + 1);
     } else if(lines.contains("\r")) {
       result[0] = lines.substring(0, lines.indexOf("\r") + 1);
       result[1] = lines.substring(lines.indexOf("\r") + 1);
-    } else if(lines.contains("\r\n")) {
-      result[0] = lines.substring(0, lines.indexOf("\r\n") + 2);
-      result[1] = lines.substring(lines.indexOf("\r\n") + 2);
     } else {
       result[1] = lines;
     }
