@@ -36,21 +36,21 @@ public class FileNumberingFilterWriter extends FilterWriter {
         if(start)
             out.write(++counter + "\t", 0, 2);
 
-        while(true){
+        while(len > 0){
             //get next line
             lines = Utils.getNextLine(lines[1]);
 
+            //write next line according to its values
             if(lines[0].length() != 0) {
                 out.write(lines[0], start ? off : 0, Math.min(lines[0].length(),len));
-                len -= lines[0].length();
                 out.write(++counter + "\t",0,String.valueOf(counter).length() + 1);
-                start = false;
+                len -= lines[0].length();
             } else {
                 out.write(lines[1], start ? off : 0, Math.min(lines[1].length(),len));
-                start = false;
-                break;
+                len -= lines[1].length();
             }
 
+            start = false;
         }
 
     }
