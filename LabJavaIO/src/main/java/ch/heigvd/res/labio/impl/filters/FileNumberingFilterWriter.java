@@ -16,8 +16,8 @@ import java.util.logging.Logger;
  * @author Olivier Liechti
  */
 public class FileNumberingFilterWriter extends FilterWriter {
-
   private int lignCounter = 1;
+  private boolean isWindowsLignReturn = false;
   private static final Logger LOG = Logger.getLogger(FileNumberingFilterWriter.class.getName());
 
   public FileNumberingFilterWriter(Writer out) {
@@ -26,38 +26,42 @@ public class FileNumberingFilterWriter extends FilterWriter {
 
   @Override
   public void write(String str, int off, int len) throws IOException {
-    for(int i = off; i < len; i++){
-      if(str.charAt(i) == '\n'){
-        write('\n'+ lignCounter + '\t');
-        lignCounter++;
-      }else{
-        write(str.charAt(i));
+      for (int i = off; i < len + off ; i++){
+        this.write((int)str.charAt(i));
       }
-
-    }
-    //throw new UnsupportedOperationException("The student has not implemented this method yet.");
   }
 
   @Override
   public void write(char[] cbuf, int off, int len) throws IOException {
-    for(int i = off; i < len; i++){
-      if(cbuf[i] == '\n'){
-        write('\n'+ lignCounter + '\t');
-        lignCounter++;
-      }
-      write(cbuf[i]);
-    }
-    //throw new UnsupportedOperationException("The student has not implemented this method yet.");
+    String tmp = new String(cbuf);
+    this.write(tmp,off,len);
   }
 
   @Override
   public void write(int c) throws IOException {
-    if((char)c == '\n'){
-      lignCounter++;
-      write((char)c);
+    if (lignCounter == 1){
+      this.out.write(((Integer)lignCounter++).toString());
+      this.out.write('\t');
     }
-    write((char)c);
-    //throw new UnsupportedOperationException("The student has not implemented this method yet.");
-  }
+    if(isWindowsLignReturn && (char)c != '\n'){
+      this.out.write('\r');
+      this.out.write(((Integer)lignCounter++).toString());
+      this.out.write('\t');
+      isWindowsLignReturn = false;
+    }
 
+    if((char)c == '\n'){
+      if(isWindowsLignReturn){
+        this.out.write('\r');
+      }
+      this.out.write('\n');
+      this.out.write(((Integer)lignCounter++).toString());
+      this.out.write('\t');
+      isWindowsLignReturn = false;
+    }else if((char)c == '\r'){
+      isWindowsLignReturn = true;
+    }else {
+      this.out.write((char)c);
+    }
+  }
 }
