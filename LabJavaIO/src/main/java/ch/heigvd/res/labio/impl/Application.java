@@ -133,7 +133,7 @@ public class Application implements IApplication {
       new File(path + "/" + tag).mkdir();
       path += "/" + tag;
     }
-      System.out.println("Storing quote path : " + path + "/" + filename + ".utf8");
+
     new File(path + "/" + filename + ".utf8").mkdir();
   }
   

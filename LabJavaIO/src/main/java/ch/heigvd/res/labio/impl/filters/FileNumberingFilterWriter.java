@@ -1,5 +1,7 @@
 package ch.heigvd.res.labio.impl.filters;
 
+import ch.heigvd.res.labio.impl.Utils;
+
 import java.io.FilterWriter;
 import java.io.IOException;
 import java.io.Writer;
@@ -12,37 +14,41 @@ import java.util.stream.Stream;
  * When filter encounters a line separator, it sends it to the decorated writer.
  * It then sends the line number and a tab character, before resuming the write
  * process.
- *
+ * <p>
  * Hello\nWorld -> 1\tHello\n2\tWorld
  *
  * @author Olivier Liechti
  */
 public class FileNumberingFilterWriter extends FilterWriter {
 
-  private static final Logger LOG = Logger.getLogger(FileNumberingFilterWriter.class.getName());
+    private static final Logger LOG = Logger.getLogger(FileNumberingFilterWriter.class.getName());
 
-  public FileNumberingFilterWriter(Writer out) {
-    super(out);
-  }
-
-  @Override
-  public void write(String str, int off, int len) throws IOException {
-    int counter = 1;
-    String strNumbered = "";
-    for (String line : str.split("\\r?\\n")) {
-        strNumbered = ++counter + "\t" + line;
+    public FileNumberingFilterWriter(Writer out) {
+        super(out);
     }
 
-    super.write(strNumbered, off, len);
-  }
+    @Override
+    public void write(String str, int off, int len) throws IOException {
 
-  @Override
-  public void write(char[] cbuf, int off, int len) throws IOException {
-    super.write(cbuf, off, len);
-  }
+        int lineCounter = 1;
+        String strNumbered = "";
 
-  @Override
-  public void write(int c) throws IOException {
+        while (!Utils.getNextLine(str)[0].equals("")) {
+            strNumbered += lineCounter + "\t" + Utils.getNextLine(str)[0];
+            str = Utils.getNextLine(str)[1];
+            lineCounter++;
+        }
+
+        super.write(strNumbered, off, len);
+    }
+
+    @Override
+    public void write(char[] cbuf, int off, int len) throws IOException {
+        super.write(cbuf, off, len);
+    }
+
+    @Override
+    public void write(int c) throws IOException {
     /*if(counter == 0) {
         counter++;
         System.out.println("WRITING : " + counter + '\t' + (char) c);
@@ -53,7 +59,7 @@ public class FileNumberingFilterWriter extends FilterWriter {
         super.write(c);
     }*/
 
-    super.write(c);
-  }
+        super.write(c);
+    }
 
 }
