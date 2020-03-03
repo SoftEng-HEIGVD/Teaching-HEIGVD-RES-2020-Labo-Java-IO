@@ -9,6 +9,9 @@ import java.util.logging.Logger;
 public class Utils {
 
   private static final Logger LOG = Logger.getLogger(Utils.class.getName());
+  private static final char MACOS_ENDLINE = '\r';
+  private static final char LINUX_ENDLINE = '\n';
+  private static final String WINDOWS_ENDLINE = "\r\n";
 
   /**
    * This method looks for the next new line separators (\r, \n, \r\n) to extract
@@ -20,43 +23,20 @@ public class Utils {
    * contain any line separator, then the first element is an empty string.
    */
   public static String[] getNextLine(String lines) {
-    String[] elements = new String[2];
-    boolean endFound = false;//Indique qu'un fin de ligne a été trouvé
-    int i = 0;//Compteur pour parcourir la chaîne de caractère
-
-    while(!endFound && i < lines.length()){
-      //Si le caractère trouvé et un caractère de fin de ligne
-      if(lines.charAt(i) == '\r' || lines.charAt(i) == '\n'){
-          endFound = true;
-          //Si i + 1 dépasse la longeur de la chaîne cela veut dire que le caractère de fin de ligne est le dernier caractère
-          if(i + 1 >= lines.length()) {
-            elements[0] = lines.substring(0, i + 1);
-            elements[1] = "";
-          }
-          else{
-            //Si le caractère i un \r et que i + 1 est un \n cela indique que c'est un retour à la ligne(Windows)
-            if(lines.charAt(i) == '\r' && lines.charAt(i + 1) == '\n') {
-              //Comme il est sur que c'est un retour à la ligne enregistrement de la substring
-              elements[0] = lines.substring(0, i + 2);
-              //Si i + 2 dépasse la taille de la chaîne cela indique que le caractère est la fin de la chaîne
-              //pas de substring supplémentaire dans ce cas sinon enregistrement de la substring dans elements[1]
-              if(i + 2 >= lines.length()) {
-                elements[1] = "";
-              }
-              else {
-                elements[1] = lines.substring(i + 2);
-              }
-            } else {
-              elements[0] = lines.substring(0, i + 1);
-              elements[1] = lines.substring(i + 1);
-            }
-          }
-      }
-      i++;
+    String[] elements = {"",""};
+    if(lines.contains(WINDOWS_ENDLINE)){
+      elements[0] = lines.substring(0,lines.indexOf(WINDOWS_ENDLINE) + WINDOWS_ENDLINE.length());
+      elements[1] = lines.substring(lines.indexOf(WINDOWS_ENDLINE) + WINDOWS_ENDLINE.length());
     }
-    //Si aucun élément de nouvelle ligne est trouvé la ligne est mise à l'emplacement elements[1] et elements[0] est une chaîne vide
-    if(elements[0] == null){
-      elements[0] = "";
+    else if(lines.contains(String.valueOf(MACOS_ENDLINE))){
+      elements[0] = lines.substring(0, lines.indexOf(MACOS_ENDLINE) + 1);//+ 1 car le caractère de fin de ligne doit être inclu
+      elements[1] = lines.substring(lines.indexOf(MACOS_ENDLINE) + 1);
+    }
+    else if(lines.contains(String.valueOf(LINUX_ENDLINE))){
+      elements[0] = lines.substring(0, lines.indexOf(LINUX_ENDLINE) + 1);
+      elements[1] = lines.substring(lines.indexOf(LINUX_ENDLINE) + 1);
+    }
+    else{
       elements[1] = lines;
     }
     return elements;

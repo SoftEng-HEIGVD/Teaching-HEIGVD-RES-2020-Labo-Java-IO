@@ -16,23 +16,18 @@ public class DFSFileExplorer implements IFileExplorer {
 
   @Override
   public void explore(File rootDirectory, IFileVisitor vistor) {
-    // get list of all files and directories present in root
+    //Met tout les fichiers ou dossiers contenu dans le rootDirectory
     File[] listOfFilesAndDirectory = rootDirectory.listFiles();
     vistor.visit(rootDirectory);
-    // listFiles() returns non-null array if root denotes a directory
-    if (listOfFilesAndDirectory != null)
+    //Si listFiles() renvoie un tableau null cela signifie que le dossier est vide ou que c'est un fichier.
+    //Fin de la récursion
+    if (listOfFilesAndDirectory == null) {
+      return;
+    }
+    //Parcours des fichiers du dossier
+    for (File file : listOfFilesAndDirectory)
     {
-      for (File file : listOfFilesAndDirectory)
-      {
-        // if file denotes a directory, recur for it
-        if (file.isDirectory()) {
-          explore(file,vistor);
-        }
-        // if file denotes a file
-        else {
-          vistor.visit(file);
-        }
-      }
+        explore(file,vistor);
     }
   }
 
