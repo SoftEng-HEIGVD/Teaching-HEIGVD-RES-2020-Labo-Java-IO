@@ -1,7 +1,6 @@
 package ch.heigvd.res.labio.interfaces;
 
 import java.io.File;
-import java.io.IOException;
 
 /**
  * This interface is used together with the IFileExplorer interface. It defines

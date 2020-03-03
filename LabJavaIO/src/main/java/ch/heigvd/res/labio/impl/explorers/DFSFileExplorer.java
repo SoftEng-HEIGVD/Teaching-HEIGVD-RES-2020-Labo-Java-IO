@@ -3,7 +3,7 @@ package ch.heigvd.res.labio.impl.explorers;
 import ch.heigvd.res.labio.interfaces.IFileExplorer;
 import ch.heigvd.res.labio.interfaces.IFileVisitor;
 import java.io.File;
-import java.io.FileFilter;
+import java.util.Arrays;
 
 /**
  * This implementation of the IFileExplorer interface performs a depth-first
@@ -15,8 +15,6 @@ import java.io.FileFilter;
  */
 public class DFSFileExplorer implements IFileExplorer {
 
-  private boolean rootHasBeenVisited = false;
-
   @Override
   public void explore(File rootDirectory, IFileVisitor visitor) {
 
@@ -26,31 +24,20 @@ public class DFSFileExplorer implements IFileExplorer {
 
     // Secondly I visit my child files
 
-    File[] concreteFiles = rootDirectory.listFiles(File::isFile);
+    File[] concreteFiles = rootDirectory.listFiles();
 
     // if there isn't any child files, come back in our exploration
 
     if(concreteFiles == null)
       return;
 
+    Arrays.sort(concreteFiles);
+
     for(File childFile : concreteFiles) {
-      if (childFile != null) {
+      if (childFile.isFile()) {
         visitor.visit(childFile);
-      }
-    }
-
-    // Thirldy I explore my subdirectories
-
-    File[] subDirectories = rootDirectory.listFiles(File::isDirectory);
-
-    // if there isn't any subdirectories, come back in our exploration
-
-    if(subDirectories == null)
-      return;
-
-    for(File subDirectory : subDirectories){
-      if(subDirectory != null){
-        explore(subDirectory, visitor);
+      }else{
+        explore(childFile, visitor);
       }
     }
 

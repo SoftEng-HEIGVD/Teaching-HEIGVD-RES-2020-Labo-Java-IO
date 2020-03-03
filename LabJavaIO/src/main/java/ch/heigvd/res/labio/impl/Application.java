@@ -157,7 +157,8 @@ public class Application implements IApplication {
       public void visit(File file){
         try {
           writer.write(String.format("%s\n", file.getPath()));
-        }catch(IOException ignored){
+        }catch(IOException e){
+          LOG.info(e.toString());
         }
       }
     });

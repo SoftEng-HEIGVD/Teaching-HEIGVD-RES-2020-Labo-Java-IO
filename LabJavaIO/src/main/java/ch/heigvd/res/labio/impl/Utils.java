@@ -1,6 +1,5 @@
 package ch.heigvd.res.labio.impl;
 
-import java.util.ArrayDeque;
 import java.util.logging.Logger;
 
 /**

@@ -4,7 +4,6 @@ import ch.heigvd.res.labio.impl.Utils;
 
 import java.io.FilterWriter;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 import java.util.logging.Logger;
 
