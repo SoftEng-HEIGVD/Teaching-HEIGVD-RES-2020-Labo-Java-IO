@@ -1,7 +1,5 @@
 package ch.heigvd.res.labio.impl;
 
-import java.io.BufferedReader;
-import java.io.StringReader;
 import java.util.logging.Logger;
 
 /**
@@ -15,8 +13,8 @@ public class Utils {
      * https://stackoverflow.com/questions/2206378/how-to-split-a-string-but-also-keep-the-delimiters
      * https://www.rexegg.com/regex-lookarounds.html
      * I'm using lookbehind patterns to assert the content coming immediately before
-     * the delimiters in the string.
-     *
+     * the end of line delimiters in the string.
+     * <p>
      * This method looks for the next new line separators (\r, \n, \r\n) to extract
      * the next line in the string passed in arguments.
      *
@@ -33,7 +31,7 @@ public class Utils {
         // If there are new line chars at the end of the lines
         if(splittedLines.length == 2)
             return splittedLines;
-        // If there's no new line char at the end of a line return the first line as empty
+            // If there's no new line char at the end of a line return the first line as empty
         else
             return new String[]{"", splittedLines[0]};
     }
