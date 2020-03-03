@@ -25,6 +25,16 @@ public class FileNumberingFilterWriter extends FilterWriter {
     super(out);
   }
 
+  /**
+   * Write the line number and a tab
+   * @throws IOException
+   */
+  private void writeLineNumber() throws IOException {
+    String strLine = Integer.toString(++line);
+    super.write(strLine, 0, strLine.length());
+    super.write('\t');
+  }
+
   @Override
   public void write(String str, int off, int len) throws IOException {
     this.write(str.toCharArray(), off, len);
@@ -39,13 +49,15 @@ public class FileNumberingFilterWriter extends FilterWriter {
 
   @Override
   public void write(int c) throws IOException {
+    //Write line number if this is the first line or if we have a single \r newline (and not \r\n)
     if (line == 0 || (previous == '\r' && c != '\n'))
-      super.write(++line + "\t", 0, 1 + ("" + line).length());
+      writeLineNumber();
 
     super.write(c);
 
+    //Write line number if we have a \n
     if (c == '\n')
-      super.write(++line + "\t", 0, 1 + ("" + line).length());
+      writeLineNumber();
 
     previous = c;
   }
