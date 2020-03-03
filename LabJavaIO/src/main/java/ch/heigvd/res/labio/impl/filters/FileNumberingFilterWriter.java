@@ -21,7 +21,6 @@ public class FileNumberingFilterWriter extends FilterWriter {
 
     private static final Logger LOG = Logger.getLogger(FileNumberingFilterWriter.class.getName());
     private int counter = 0;
-    private char lastChar;
     private boolean start = true;
 
     public FileNumberingFilterWriter(Writer out) {
@@ -31,23 +30,23 @@ public class FileNumberingFilterWriter extends FilterWriter {
     @Override
     public void write(String str, int off, int len) throws IOException {
 
-        String[] lines = new String[] {"",str};
+        String[] lines = new String[]{"", str};
 
         //init first tab
-        if(start)
+        if (start)
             out.write(++counter + "\t", 0, 2);
 
-        while(len > 0){
+        while (len > 0) {
             //get next line
             lines = Utils.getNextLine(lines[1]);
 
             //write next line according to its values
-            if(lines[0].length() != 0) {
-                out.write(lines[0], start ? off : 0, Math.min(lines[0].length(),len));
-                out.write(++counter + "\t",0,String.valueOf(counter).length() + 1);
+            if (lines[0].length() != 0) {
+                out.write(lines[0], start ? off : 0, Math.min(lines[0].length(), len));
+                out.write(++counter + "\t", 0, String.valueOf(counter).length() + 1);
                 len -= lines[0].length();
             } else {
-                out.write(lines[1], start ? off : 0, Math.min(lines[1].length(),len));
+                out.write(lines[1], start ? off : 0, Math.min(lines[1].length(), len));
                 len -= lines[1].length();
             }
 
@@ -65,21 +64,17 @@ public class FileNumberingFilterWriter extends FilterWriter {
     @Override
     public void write(int c) throws IOException {
 
-      char current = (char)c;
+        char current = (char) c;
 
-      if(current == '\n' && lastChar == '\r')
-          return;
+        if (start && current != '\n') {
+            out.write(++counter + "\t");
+            start = false;
+        }
 
-      if(start){
-        out.write(++counter + "\t");
-        start = false;
-      }
+        out.write(current);
 
-      out.write(c);
-      if(current == '\n' || current == '\r')
-          out.write(++counter + "\t");
+        if (current == '\n' || current == '\r')
+            start = true;
 
-      lastChar = current;
     }
-
 }
