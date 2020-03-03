@@ -9,6 +9,9 @@ import ch.heigvd.res.labio.quotes.QuoteClient;
 import ch.heigvd.res.labio.quotes.Quote;
 
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.commons.io.FileUtils;
@@ -23,8 +26,9 @@ public class Application implements IApplication {
    * This constant defines where the quotes will be stored. The path is relative
    * to where the Java application is invoked.
    */
+
   public static String WORKSPACE_DIRECTORY = "./workspace/quotes";
-  
+
   private static final Logger LOG = Logger.getLogger(Application.class.getName());
   
   public static void main(String[] args) {
@@ -82,7 +86,7 @@ public class Application implements IApplication {
     QuoteClient client = new QuoteClient();
     for (int i = 0; i < numberOfQuotes; i++) {
       Quote quote = client.fetchQuote();
-      storeQuote(quote,"quote-" +i + ".utf8");
+      storeQuote(quote,"quote-" + i + ".utf8"); //missing piece
       /* There is a missing piece here!
        * As you can see, this method handles the first part of the lab. It uses the web service
        * client to fetch quotes. We have removed a single line from this method. It is a call to
@@ -123,17 +127,21 @@ public class Application implements IApplication {
    * @throws IOException 
    */
   void storeQuote(Quote quote, String filename) throws IOException {
-    String tagPath = WORKSPACE_DIRECTORY;
-    File currentDir = new File(tagPath);
-    for(String tag : quote.getTags()){
-      tagPath += tag + File.separator;
-      currentDir = new File(tagPath);
-      currentDir.mkdir();
+    String currentPath = WORKSPACE_DIRECTORY + File.separator;
+    //On construit le path dans lequel sera créé le fichier de la quote
+    for(String tag :quote.getTags()){
+      currentPath+= tag + File.separator;
     }
-    File quoteFile = new File(currentDir,filename);
+
+    //Crée tous les dossiers intermédiaires
+    Path finalPath = Paths.get(currentPath);
+    Files.createDirectories(finalPath);
+
+    //On crée le fichier qui contiendra la quote
+    File quoteFile = new File(finalPath.toString(),filename);
     FileWriter fileWriter = new FileWriter(quoteFile);
-    fileWriter.write(quote.getQuote());
-    fileWriter.close();
+    fileWriter.write(quote.getQuote()); //on y ajoute son contenu
+    fileWriter.close(); //on ferme le Writer.
   }
   
   /**
@@ -150,8 +158,7 @@ public class Application implements IApplication {
          * of the the IFileVisitor interface inline. You just have to add the body of the visit method, which should
          * be pretty easy (we want to write the filename, including the path, to the writer passed in argument).
          */
-        String fileName = file.getAbsolutePath();
-        writer.write(fileName + "\n");
+        writer.write(file.getPath() + "\n");
       }
     });
   }
