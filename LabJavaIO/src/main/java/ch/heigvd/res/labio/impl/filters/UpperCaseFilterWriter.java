@@ -22,14 +22,14 @@ public class UpperCaseFilterWriter extends FilterWriter {
   @Override
   public void write(char[] cbuf, int off, int len) throws IOException {
     //convert char array to string
-    write(cbuf.toString(), off, len);
+    String string = new String(cbuf);
+    write(string, off, len);
   }
 
   @Override
   public void write(int c) throws IOException {
     // convert int to char
-    write(c);
-
+    write(String.valueOf((char) c), 0, 1);
   }
 
 }
