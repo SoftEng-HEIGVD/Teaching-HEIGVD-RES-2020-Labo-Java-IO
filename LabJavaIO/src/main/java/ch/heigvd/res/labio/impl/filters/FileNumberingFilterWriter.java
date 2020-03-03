@@ -21,6 +21,7 @@ public class FileNumberingFilterWriter extends FilterWriter {
 
     private static final Logger LOG = Logger.getLogger(FileNumberingFilterWriter.class.getName());
     private int counter = 0;
+    private char lastChar;
     private boolean start = true;
 
     public FileNumberingFilterWriter(Writer out) {
@@ -64,16 +65,21 @@ public class FileNumberingFilterWriter extends FilterWriter {
     @Override
     public void write(int c) throws IOException {
 
+      char current = (char)c;
+
+      if(current == '\n' && lastChar == '\r')
+          return;
+
       if(start){
         out.write(++counter + "\t");
         start = false;
       }
 
       out.write(c);
-
-      if((char)c == '\n')
+      if(current == '\n' || current == '\r')
           out.write(++counter + "\t");
 
+      lastChar = current;
     }
 
 }
