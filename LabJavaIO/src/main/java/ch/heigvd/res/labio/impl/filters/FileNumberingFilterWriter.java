@@ -4,6 +4,7 @@ import java.io.FilterWriter;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.logging.Logger;
+import ch.heigvd.res.labio.impl.Utils;
 
 /**
  * This class transforms the streams of character sent to the decorated writer.
@@ -29,23 +30,37 @@ public class FileNumberingFilterWriter extends FilterWriter {
   private String fileNumbering(String str, int off, int len){
     StringBuilder transformedStr = new StringBuilder();
 
+    String toExecute = str.substring(off,off+len);
+
+
+
     if(isFirstLine){
       transformedStr.append(++counter + "\t");
       isFirstLine = false;
     }
 
-    for(int i = off; i < off + len;++i){
-      if(str.charAt(i) == '\n' && lastChar != '\r'){
-        transformedStr.append("\n" + ++counter + "\t");
-      }else if(str.charAt(i) == '\n'){
-        transformedStr.append("\r\n" + ++counter + "\t");
-      }else if(str.charAt(i) != '\r'){
-        if(lastChar == '\r'){
-          transformedStr.append("\r" + ++counter + "\t");
-        }
-        transformedStr.append(str.charAt(i));
+    if(toExecute.length() == 1){
+      if(toExecute.charAt(0) == '\r'){
+        lastChar = toExecute.charAt(0);
+        return transformedStr.toString();
+      }else if(toExecute.charAt(0) == '\n' && lastChar =='\r') {
+        lastChar = toExecute.charAt(0);
+        return transformedStr.toString() + "\r\n" + ++counter + "\t";
+      }else if(toExecute.charAt(0) != '\n' && lastChar == '\r'){
+        lastChar = toExecute.charAt(0);
+        return transformedStr.toString() + "\r" + ++counter + "\t";
       }
-      lastChar = str.charAt(i);
+      lastChar = toExecute.charAt(0);
+    }
+
+    String[] lines = Utils.getNextLine(toExecute);
+    while(lines[0] != ""){
+      transformedStr.append(lines[0]);
+      transformedStr.append(++counter + "\t");
+      lines = Utils.getNextLine(lines[1]);
+    }
+    if(lines[1] != ""){
+      transformedStr.append(lines[1]);
     }
     return transformedStr.toString();
   }
