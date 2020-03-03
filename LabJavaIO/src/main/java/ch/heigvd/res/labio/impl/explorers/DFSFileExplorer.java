@@ -25,8 +25,11 @@ public class DFSFileExplorer implements IFileExplorer {
         //check if not null then goes in
         if (files != null) {
             for (File f : files) {
-                if (f.isDirectory())
+                if (f.isDirectory()) {
                     explore(f, visitor);
+                } else {
+                    visitor.visit(f);
+                }
             }
         }
 

@@ -132,7 +132,6 @@ public class Application implements IApplication {
       dir += '/' + tag;
     }
     dir += '/' + filename + ".utf8";
-    String dirOut = dir + ".out";
 
     //generate both files and dirs
     File file = new File(dir);
@@ -140,11 +139,9 @@ public class Application implements IApplication {
 
     //create files and write quote + close
     FileWriter writer = new FileWriter(dir);
-    FileWriter writerOut = new FileWriter(dirOut);
-    writer.write(quote.getQuote(), 0, quote.getQuote().length());
+    writer.write(quote.getQuote());
     writer.flush();
     writer.close();
-    writerOut.close();
   }
   
   /**
@@ -161,8 +158,9 @@ public class Application implements IApplication {
          * of the the IFileVisitor interface inline. You just have to add the body of the visit method, which should
          * be pretty easy (we want to write the filename, including the path, to the writer passed in argument).
          */
+
         try {
-          writer.write(file.getPath());
+          writer.write(file.getPath() + "\n");
         } catch (IOException e) {
           e.printStackTrace();
         }
