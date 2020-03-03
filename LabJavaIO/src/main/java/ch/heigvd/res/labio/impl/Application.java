@@ -126,8 +126,6 @@ public class Application implements IApplication {
    */
   void storeQuote(Quote quote, String filename) throws IOException {
 
-    //TODO
-
     String dir = WORKSPACE_DIRECTORY;
     for(String tag : quote.getTags()){
       dir += '/' + tag;
@@ -135,10 +133,10 @@ public class Application implements IApplication {
     dir += '/' + filename + ".utf8";
 
     File file = new File(dir);
-    file.mkdirs();
+    file.getParentFile().mkdirs();
 
     FileWriter writer = new FileWriter(dir);
-    writer.write(quote.getQuote());
+    writer.write(quote.getQuote(), 0, quote.getQuote().length());
   }
   
   /**
@@ -155,6 +153,11 @@ public class Application implements IApplication {
          * of the the IFileVisitor interface inline. You just have to add the body of the visit method, which should
          * be pretty easy (we want to write the filename, including the path, to the writer passed in argument).
          */
+        try {
+          writer.write(file.getPath());
+        } catch (IOException e) {
+          e.printStackTrace();
+        }
       }
     });
   }
