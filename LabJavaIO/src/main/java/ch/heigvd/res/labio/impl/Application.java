@@ -90,7 +90,7 @@ public class Application implements IApplication {
        * one method provided by this class, which is responsible for storing the content of the
        * quote in a text file (and for generating the directories based on the tags).
        */
-      storeQuote(quote, "quote-" + i + ".utf8");
+      storeQuote(quote, String.format("quote-%d.utf8", i + 1));
       LOG.info("Received a new joke with " + quote.getTags().size() + " tags.");
       for (String tag : quote.getTags()) {
         LOG.info("> " + tag);
@@ -147,7 +147,7 @@ public class Application implements IApplication {
          * be pretty easy (we want to write the filename, including the path, to the writer passed in argument).
          */
         try {
-          writer.append(file.toString()).append("\n");
+          writer.append(file.toString()).append(System.lineSeparator());
         } catch (IOException e) {
           e.printStackTrace();
         }
