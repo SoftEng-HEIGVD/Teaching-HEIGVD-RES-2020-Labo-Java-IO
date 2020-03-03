@@ -1,5 +1,7 @@
 package ch.heigvd.res.labio.impl.filters;
 
+import ch.heigvd.res.labio.impl.Utils;
+
 import java.io.FilterWriter;
 import java.io.IOException;
 import java.io.Writer;
@@ -27,38 +29,36 @@ public class FileNumberingFilterWriter extends FilterWriter {
 
     @Override
     public void write(String str, int off, int len) throws IOException {
-        //call of char[] method
-        write(str.toCharArray(), off, len);
+
+        String[] lines = new String[] {"",str};
+
+        //init first tab
+        if(start)
+            out.write(++counter + "\t", 0, 2);
+
+        while(true){
+            //get next line
+            lines = Utils.getNextLine(lines[1]);
+
+            if(lines[0].length() != 0) {
+                out.write(lines[0], start ? off : 0, Math.min(lines[0].length(),len));
+                len -= lines[0].length();
+                out.write(++counter + "\t",0,String.valueOf(counter).length() + 1);
+                start = false;
+            } else {
+                out.write(lines[1], start ? off : 0, Math.min(lines[1].length(),len));
+                start = false;
+                break;
+            }
+
+        }
+
     }
 
     @Override
     public void write(char[] cbuf, int off, int len) throws IOException {
-
-        String res = new String();
-        int lenFinal = len;
-
-        if(start){
-          res += ++counter + "\t";
-          start = false;
-        }
-
-        //copies into result all the characters, from off for len
-        for (int i = off; i < len + off; i++){
-
-            if(cbuf[i] == '\r' && cbuf[i+1] == '\n') {
-                i++; lenFinal--;
-            }
-
-            res += cbuf[i];
-
-            //check windows and MacOS
-            if (cbuf[i] == '\n' || cbuf[i] == '\r') {
-                res += ++counter + "\t";
-            }
-
-        }
-
-        out.write(res, 0, lenFinal + counter * 2);
+        //call of string method
+        write(new String(cbuf), off, len);
     }
 
     @Override
