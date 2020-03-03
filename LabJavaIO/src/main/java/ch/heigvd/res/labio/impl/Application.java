@@ -7,12 +7,12 @@ import ch.heigvd.res.labio.interfaces.IFileExplorer;
 import ch.heigvd.res.labio.interfaces.IFileVisitor;
 import ch.heigvd.res.labio.quotes.QuoteClient;
 import ch.heigvd.res.labio.quotes.Quote;
-import java.io.File;
-import java.io.IOException;
-import java.io.StringWriter;
-import java.io.Writer;
+
+import java.io.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import java.lang.String;
 import org.apache.commons.io.FileUtils;
 
 /**
@@ -90,6 +90,7 @@ public class Application implements IApplication {
        * one method provided by this class, which is responsible for storing the content of the
        * quote in a text file (and for generating the directories based on the tags).
        */
+      storeQuote(quote, String.format("quote-%d.utf8", i + 1));
       LOG.info("Received a new joke with " + quote.getTags().size() + " tags.");
       for (String tag : quote.getTags()) {
         LOG.info("> " + tag);
@@ -123,7 +124,28 @@ public class Application implements IApplication {
    * @throws IOException 
    */
   void storeQuote(Quote quote, String filename) throws IOException {
-    throw new UnsupportedOperationException("The student has not implemented this method yet.");
+    File baseFolder = new File(Application.WORKSPACE_DIRECTORY);
+
+    // Creating the directory tree corresponding to the tags
+    for (String tag : quote.getTags()) {
+      // Verifiy that the folder exist or could be created
+      if(!baseFolder.exists() && !baseFolder.mkdir()){
+        throw new IOException("Couldn't create the path leading to the quote file " + filename);
+      }
+      baseFolder = new File(baseFolder, tag);
+    }
+
+    File quoteFile = new File(filename);
+    //
+    if (!quoteFile.exists() && !quoteFile.createNewFile()) {
+      throw new IOException("Couldn't create the quoteFile " + filename);
+    }
+
+    // Write the quote in the file
+    Writer writer = new BufferedWriter(new FileWriter(quoteFile));
+    writer.write(quote.getQuote());
+    writer.flush();
+    writer.close();
   }
   
   /**
