@@ -132,7 +132,7 @@ public class Application implements IApplication {
     File pathToQuote = new File(path);
     pathToQuote.getParentFile().mkdirs();
 
-    //Full path with name of the file
+    //Full path with name of the file and quote
     String pathToQuoteIncludingFile = path + File.separator + filename;
 
     //Writer is open for writing something inside and close it

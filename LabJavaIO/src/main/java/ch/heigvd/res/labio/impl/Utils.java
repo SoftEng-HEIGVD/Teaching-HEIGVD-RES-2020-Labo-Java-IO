@@ -26,6 +26,7 @@ public class Utils {
    * contain any line separator, then the first element is an empty string.
    */
   public static String[] getNextLine(String lines) {
+    //Line splitted in two
     String[] result = new String[NB_LINES];
     //Tab of all type of systems (separators)
     String[] separators = {MAC, UNIX, WINDOWS};
