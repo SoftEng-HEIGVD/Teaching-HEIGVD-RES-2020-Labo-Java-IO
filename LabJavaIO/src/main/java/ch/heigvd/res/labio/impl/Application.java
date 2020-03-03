@@ -118,28 +118,30 @@ public class Application implements IApplication {
    * @throws IOException 
    */
   void storeQuote(Quote quote, String filename) throws IOException {
-    File baseFolder = new File(Application.WORKSPACE_DIRECTORY);
+    File folder = new File(Application.WORKSPACE_DIRECTORY);
 
     // Creating the directory tree corresponding to the tags
     for (String tag : quote.getTags()) {
       // Verifiy that the folder exist or could be created
-      if(!baseFolder.exists() && !baseFolder.mkdir()){
+      if(!folder.exists() && !folder.mkdirs()){
         throw new IOException("Couldn't create the path leading to the quote file " + filename);
       }
-      baseFolder = new File(baseFolder, tag);
+      folder = new File(folder, tag);
     }
 
-    File quoteFile = new File(filename);
-    //
+    // Tests the last folder
+    if(!folder.exists() && !folder.mkdirs()){
+      throw new IOException("Couldn't create the path leading to the quote file " + filename);
+    }
+
+    File quoteFile = new File(folder, filename);
+    // Verify that the file is present
     if (!quoteFile.exists() && !quoteFile.createNewFile()) {
       throw new IOException("Couldn't create the quoteFile " + filename);
     }
 
     // Write the quote in the file
-    Writer writer = new BufferedWriter(new FileWriter(quoteFile));
-    writer.write(quote.getQuote());
-    writer.flush();
-    writer.close();
+    FileUtils.write(quoteFile, quote.getQuote());
   }
   
   /**
@@ -151,11 +153,11 @@ public class Application implements IApplication {
     explorer.explore(new File(WORKSPACE_DIRECTORY), new IFileVisitor() {
       @Override
       public void visit(File file) {
-        /*
-         * There is a missing piece here. Notice how we use an anonymous class here. We provide the implementation
-         * of the the IFileVisitor interface inline. You just have to add the body of the visit method, which should
-         * be pretty easy (we want to write the filename, including the path, to the writer passed in argument).
-         */
+        try {
+          writer.write(file.getPath() + System.lineSeparator());
+        } catch (IOException e) {
+          e.printStackTrace();
+        }
       }
     });
   }
