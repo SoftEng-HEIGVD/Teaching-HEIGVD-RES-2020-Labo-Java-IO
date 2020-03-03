@@ -126,17 +126,25 @@ public class Application implements IApplication {
    */
   void storeQuote(Quote quote, String filename) throws IOException {
 
+    //generate path
     String dir = WORKSPACE_DIRECTORY;
     for(String tag : quote.getTags()){
       dir += '/' + tag;
     }
     dir += '/' + filename + ".utf8";
+    String dirOut = dir + ".out";
 
+    //generate both files and dirs
     File file = new File(dir);
     file.getParentFile().mkdirs();
 
+    //create files and write quote + close
     FileWriter writer = new FileWriter(dir);
+    FileWriter writerOut = new FileWriter(dirOut);
     writer.write(quote.getQuote(), 0, quote.getQuote().length());
+    writer.flush();
+    writer.close();
+    writerOut.close();
   }
   
   /**
