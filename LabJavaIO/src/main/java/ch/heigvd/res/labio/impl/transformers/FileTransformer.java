@@ -23,7 +23,7 @@ import java.util.logging.Logger;
  * The subclasses have to implement the decorateWithFilters method, which instantiates
  * a list of filters and decorates the output writer with them.
  * 
- * @author Olivier Liechti
+ * @author Olivier Liechti, Robin Demarta
  */
 public abstract class FileTransformer implements IFileVisitor {
 
@@ -53,12 +53,13 @@ public abstract class FileTransformer implements IFileVisitor {
       Writer writer = new OutputStreamWriter(new FileOutputStream(file.getPath()+ ".out"), "UTF-8"); // the bug fix by teacher
       writer = decorateWithFilters(writer);
 
-      /*
-       * There is a missing piece here: you have an input reader and an ouput writer (notice how the 
-       * writer has been decorated by the concrete subclass!). You need to write a loop to read the
-       * characters and write them to the writer.
-       */
-      
+      // Read reader and write in writer
+      String str = "";
+      int c;
+      while((c = reader.read()) != -1)
+        str += (char)c;
+      writer.write(str);
+
       reader.close();
       writer.flush();
       writer.close();
