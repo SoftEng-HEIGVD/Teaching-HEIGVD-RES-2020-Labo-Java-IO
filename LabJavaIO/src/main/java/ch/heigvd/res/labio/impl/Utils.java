@@ -23,7 +23,6 @@ public class Utils {
     // ?<= means that the separator (aka \n, \r or \r\n) will be kept in output
     // \r(?!\n) means that we don't want the \r to be followed by \n (otherwise the (\r\n) would never be considered)
     String[] result = lines.split("(?<=((\r\n)|\n|(\r(?!\n))))", 2);
-
     return result.length == 1 ? new String[]{"", result[0]} : result; // Complete array if there's no line return
   }
 }
