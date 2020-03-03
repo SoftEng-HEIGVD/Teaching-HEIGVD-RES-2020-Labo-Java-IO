@@ -1,15 +1,8 @@
 package ch.heigvd.res.labio.impl.transformers;
 
 import ch.heigvd.res.labio.interfaces.IFileVisitor;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.FilterWriter;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.io.Reader;
-import java.io.Writer;
+
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -29,6 +22,7 @@ public abstract class FileTransformer implements IFileVisitor {
 
   private static final Logger LOG = Logger.getLogger(FileTransformer.class.getName());
   private final List<FilterWriter> filters = new ArrayList<>();
+  private static final int BUFFER_SIZE = 4096;
   
   /**
    * The subclasses implement this method to define what transformation(s) are
@@ -53,9 +47,10 @@ public abstract class FileTransformer implements IFileVisitor {
       Writer writer = new OutputStreamWriter(new FileOutputStream(file.getPath()+ ".out"), "UTF-8"); // the bug fix by teacher
       writer = decorateWithFilters(writer);
 
-      int c;
-      while ((c = reader.read()) != -1) {
-        writer.write(c);
+      char[] buf = new char[BUFFER_SIZE];
+      int len;
+      while ((len = reader.read(buf)) != -1) {
+        writer.write(buf, 0, len);
       }
       
       reader.close();
