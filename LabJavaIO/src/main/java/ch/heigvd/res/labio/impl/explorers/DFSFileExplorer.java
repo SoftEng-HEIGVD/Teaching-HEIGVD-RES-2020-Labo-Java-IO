@@ -15,9 +15,7 @@ import java.io.FileFilter;
  */
 public class DFSFileExplorer implements IFileExplorer {
 
-  private static final FileFilter onlyConcreteFiles = File::isFile;
-
-  private static final FileFilter onlyConcreteDirectories = File::isDirectory;
+  private boolean rootHasBeenVisited = false;
 
   @Override
   public void explore(File rootDirectory, IFileVisitor visitor) {
@@ -28,7 +26,7 @@ public class DFSFileExplorer implements IFileExplorer {
 
     // Secondly I visit my child files
 
-    File[] concreteFiles = rootDirectory.listFiles(onlyConcreteFiles);
+    File[] concreteFiles = rootDirectory.listFiles(File::isFile);
 
     // if there isn't any child files, come back in our exploration
 
@@ -43,7 +41,7 @@ public class DFSFileExplorer implements IFileExplorer {
 
     // Thirldy I explore my subdirectories
 
-    File[] subDirectories = rootDirectory.listFiles(onlyConcreteDirectories);
+    File[] subDirectories = rootDirectory.listFiles(File::isDirectory);
 
     // if there isn't any subdirectories, come back in our exploration
 

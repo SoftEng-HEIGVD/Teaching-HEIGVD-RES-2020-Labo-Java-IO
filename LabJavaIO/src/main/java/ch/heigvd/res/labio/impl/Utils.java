@@ -1,5 +1,6 @@
 package ch.heigvd.res.labio.impl;
 
+import java.util.ArrayDeque;
 import java.util.logging.Logger;
 
 /**
@@ -20,12 +21,16 @@ public class Utils {
    * contain any line separator, then the first element is an empty string.
    */
   public static String[] getNextLine(String lines) {
+
+    int idxWindows = lines.indexOf("\r\n");
+    int idxUnix = lines.indexOf('\n');
+    int idxMacOS = lines.indexOf('\r');
+
     // case Windows
-    if(lines.contains("\r\n"))
+    if(idxWindows != -1 && idxWindows < idxUnix && idxWindows <= idxMacOS)
       return lines.split("(?<=(\r\n))", 2);
     // case Unix or MacOS
-    // TODO : find a better way to verify if the string has \n or \r
-    if(lines.contains("\n") || lines.contains("\r"))
+    if(idxUnix != -1 || idxMacOS != -1)
       return lines.split("(?<=[\n\r])", 2);
     // default case
     return new String[] { "", lines };

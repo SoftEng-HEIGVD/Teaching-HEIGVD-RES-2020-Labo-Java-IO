@@ -21,21 +21,17 @@ import java.util.logging.Logger;
 public class FileNumberingFilterWriter extends FilterWriter {
 
   private static final Logger LOG = Logger.getLogger(FileNumberingFilterWriter.class.getName());
-  private int numCounter;
+  private int numCounter; // counter of lines (starts at 0)
+  private int oldC; // old char written
 
   public FileNumberingFilterWriter(Writer out) {
     super(out);
     this.numCounter = 0;
+    this.oldC = 0;
   }
 
-  private static boolean isABreakLine(char c){
-    switch (c){
-      case '\n':
-      case '\r':
-        return true;
-      default:
-        return false;
-    }
+  private void writeNewLine() throws IOException {
+    this.out.write(String.format("%d\t", ++numCounter));
   }
 
   @Override
@@ -44,16 +40,16 @@ public class FileNumberingFilterWriter extends FilterWriter {
     String[] reading = Utils.getNextLine(strToProcess);
 
     if(numCounter == 0)
-      this.out.write(String.format("%d\t", ++numCounter));
+      writeNewLine();
 
-    while(!reading[0].isEmpty()){
+    while(!reading[0].isEmpty()){ // While there is a line to read
       this.out.write(reading[0]);
       strToProcess = reading[1];
       reading = Utils.getNextLine(strToProcess);
-      this.out.write(String.format("%d\t", ++numCounter));
+      writeNewLine();
     }
 
-    this.out.write(reading[1]);
+    this.out.write(reading[1]); // We write the rest of the text because there is any line left
   }
 
   @Override
@@ -63,7 +59,28 @@ public class FileNumberingFilterWriter extends FilterWriter {
 
   @Override
   public void write(int c) throws IOException {
-    // TODO : je vois pas comment le faire
+    if(numCounter == 0)
+      writeNewLine();
+
+    this.out.write(c);
+
+    // Case Unix
+    if(oldC != '\r' && c == '\n')
+      writeNewLine();
+    // Case Mac OS
+    else if(oldC == '\r' && c != '\n') {
+      writeNewLine();
+      this.out.write('\r');
+    }
+    else if(c == '\r') {
+      oldC = '\r';
+      return;
+    }
+    // Case Windows
+    else if(oldC == '\r')
+      writeNewLine();
+
+    oldC = c;
   }
 
 }
