@@ -4,6 +4,8 @@ import java.io.FilterWriter;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * This class transforms the streams of character sent to the decorated writer.
@@ -11,7 +13,7 @@ import java.util.logging.Logger;
  * It then sends the line number and a tab character, before resuming the write
  * process.
  *
- * Hello\n\World -> 1\Hello\n2\tWorld
+ * Hello\nWorld -> 1\tHello\n2\tWorld
  *
  * @author Olivier Liechti
  */
@@ -25,17 +27,33 @@ public class FileNumberingFilterWriter extends FilterWriter {
 
   @Override
   public void write(String str, int off, int len) throws IOException {
-    throw new UnsupportedOperationException("The student has not implemented this method yet.");
+    int counter = 1;
+    String strNumbered = "";
+    for (String line : str.split("\\r?\\n")) {
+        strNumbered = ++counter + "\t" + line;
+    }
+
+    super.write(strNumbered, off, len);
   }
 
   @Override
   public void write(char[] cbuf, int off, int len) throws IOException {
-    throw new UnsupportedOperationException("The student has not implemented this method yet.");
+    super.write(cbuf, off, len);
   }
 
   @Override
   public void write(int c) throws IOException {
-    throw new UnsupportedOperationException("The student has not implemented this method yet.");
+    /*if(counter == 0) {
+        counter++;
+        System.out.println("WRITING : " + counter + '\t' + (char) c);
+        super.write(counter + '\t' + (char) c);
+    } else if(c == '\n') {
+        super.write((char) c + ++counter + '\t');
+    } else {
+        super.write(c);
+    }*/
+
+    super.write(c);
   }
 
 }
