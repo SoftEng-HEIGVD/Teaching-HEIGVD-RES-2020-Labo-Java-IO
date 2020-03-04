@@ -1,10 +1,14 @@
+
 package ch.heigvd.res.labio.impl;
+
+import sun.nio.cs.ext.MacThai;
 
 import java.util.logging.Logger;
 
 /**
  *
  * @author Olivier Liechti
+ * @author Quentin Saucy
  */
 public class Utils {
 
@@ -20,7 +24,16 @@ public class Utils {
    * contain any line separator, then the first element is an empty string.
    */
   public static String[] getNextLine(String lines) {
-    throw new UnsupportedOperationException("The student has not implemented this method yet.");
+    String[] arrayLines = new String[2];
+    int nbrToRemove =1;
+    int pos;
+    int rEndLinePos = lines.indexOf('\r');
+    int nEndlinePos = lines.indexOf('\n');
+    pos =Math.max(rEndLinePos,nEndlinePos);
+    arrayLines[0] = lines.substring(0,pos+1);
+    arrayLines[1] = lines.substring(pos+1);
+    return arrayLines;
+
   }
 
 }
