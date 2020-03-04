@@ -26,9 +26,9 @@ public class FileNumberingFilterWriter extends FilterWriter {
 
   @Override
   public void write(String str, int off, int len) throws IOException {
-      for (int i = off; i < len + off ; i++){
-        this.write((int)str.charAt(i));
-      }
+    for (int i = off; i < len + off ; i++){
+      this.write((int)str.charAt(i));
+    }
   }
 
   @Override
@@ -42,6 +42,26 @@ public class FileNumberingFilterWriter extends FilterWriter {
     if (lignCounter == 1){
       this.out.write(((Integer)lignCounter++).toString());
       this.out.write('\t');
+    }
+    if(isWindowsLignReturn && (char)c != '\n'){
+      this.out.write('\r');
+      this.out.write(((Integer)lignCounter++).toString());
+      this.out.write('\t');
+      isWindowsLignReturn = false;
+    }
+
+    if((char)c == '\n'){
+      if(isWindowsLignReturn){
+        this.out.write('\r');
+      }
+      this.out.write('\n');
+      this.out.write(((Integer)lignCounter++).toString());
+      this.out.write('\t');
+      isWindowsLignReturn = false;
+    }else if((char)c == '\r'){
+      isWindowsLignReturn = true;
+    }else {
+      this.out.write((char)c);
     }
   }
 }
