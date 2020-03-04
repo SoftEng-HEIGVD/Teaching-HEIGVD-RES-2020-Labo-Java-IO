@@ -4,6 +4,7 @@ import java.io.FilterWriter;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.logging.Logger;
+import ch.heigvd.res.labio.impl.Utils;
 
 /**
  * This class transforms the streams of character sent to the decorated writer.
@@ -37,14 +38,24 @@ public class FileNumberingFilterWriter extends FilterWriter {
 
   @Override
   public void write(String str, int off, int len) throws IOException {
-    this.write(str.toCharArray(), off, len);
+    if (line == 0)
+      writeLineNumber();
+
+    str = str.substring(off, off + len);
+    String[] lines;
+    while (!(lines = Utils.getNextLine(str))[0].isEmpty()) {
+      super.write(lines[0], 0, lines[0].length());
+      writeLineNumber();
+
+      str = lines[1];
+    }
+
+    super.write(str, 0, str.length());
   }
 
   @Override
   public void write(char[] cbuf, int off, int len) throws IOException {
-    for (int i = off; i < off + len; i++) {
-      this.write(cbuf[i]);
-    }
+    this.write(new String(cbuf, off, len), 0, len);
   }
 
   @Override
