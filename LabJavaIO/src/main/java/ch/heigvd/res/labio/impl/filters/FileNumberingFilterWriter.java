@@ -43,25 +43,5 @@ public class FileNumberingFilterWriter extends FilterWriter {
       this.out.write(((Integer)lignCounter++).toString());
       this.out.write('\t');
     }
-    if(isWindowsLignReturn && (char)c != '\n'){
-      this.out.write('\r');
-      this.out.write(((Integer)lignCounter++).toString());
-      this.out.write('\t');
-      isWindowsLignReturn = false;
-    }
-
-    if((char)c == '\n'){
-      if(isWindowsLignReturn){
-        this.out.write('\r');
-      }
-      this.out.write('\n');
-      this.out.write(((Integer)lignCounter++).toString());
-      this.out.write('\t');
-      isWindowsLignReturn = false;
-    }else if((char)c == '\r'){
-      isWindowsLignReturn = true;
-    }else {
-      this.out.write((char)c);
-    }
   }
 }
