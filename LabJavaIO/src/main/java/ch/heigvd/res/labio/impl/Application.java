@@ -142,6 +142,10 @@ public class Application implements IApplication {
     File newFile = new File(actualDir, filename);
     FileWriter fileWriter = new FileWriter(newFile);
     fileWriter.write(quote.getQuote());
+
+    fileWriter.flush();
+    fileWriter.close();
+
   }
   
   /**
@@ -159,7 +163,8 @@ public class Application implements IApplication {
          * be pretty easy (we want to write the filename, including the path, to the writer passed in argument).
          */
         try {
-          writer.write("\n" + file.getPath());
+          writer.write(file.getPath());
+          writer.write(System.lineSeparator());
         } catch (IOException e) {
           e.printStackTrace();
         }
