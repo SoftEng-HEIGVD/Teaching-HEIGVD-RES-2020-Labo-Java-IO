@@ -94,6 +94,9 @@ public class Application implements IApplication {
       for (String tag : quote.getTags()) {
         LOG.info("> " + tag);
       }
+
+      // Restoring the missing call in the method
+      this.storeQuote(quote, "quote-"+i+".utf8");
     }
   }
   
@@ -122,8 +125,9 @@ public class Application implements IApplication {
    * @param filename the name of the file to create and where to store the quote text
    * @throws IOException 
    */
-  void storeQuote(Quote quote, String filename) throws IOException {
-    throw new UnsupportedOperationException("The student has not implemented this method yet.");
+  void storeQuote(Quote quote, String filename) throws IOException
+  {
+      quote.getTags();
   }
   
   /**
