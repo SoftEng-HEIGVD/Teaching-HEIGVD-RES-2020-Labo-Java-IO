@@ -122,15 +122,20 @@ public class Application implements IApplication {
    * @throws IOException 
    */
   void storeQuote(Quote quote, String filename) throws IOException {
+    // construction du chemin
     List<String> tags =quote.getTags();
     java.util.Collections.sort(tags);
-    String s =WORKSPACE_DIRECTORY +"/";
+    String s = WORKSPACE_DIRECTORY +"/";
     for (String tmp : tags)
-      s+=tmp +"/";
+      s += tmp +"/";
+
+    // création répértoire
     File f = new File(s);
     f.mkdirs();
     s += filename;
+
     FileWriter fw = new FileWriter(s);
+    // écriture du fichier
     fw.write(quote.getQuote(),0,quote.getQuote().length());
     fw.flush();
   }

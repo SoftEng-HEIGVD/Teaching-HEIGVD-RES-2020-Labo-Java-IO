@@ -20,11 +20,12 @@ public class DFSFileExplorer implements IFileExplorer {
     vistor.visit(rootDirectory);
     File[] f = rootDirectory.listFiles();
     //test si le répertoire est vide
-    if(rootDirectory.isDirectory()) {
+    if (rootDirectory.isDirectory()) {
       Arrays.sort(f);
       for (File file : f) {
         explore(file, vistor);
       }
+    }
   }
 
 }
