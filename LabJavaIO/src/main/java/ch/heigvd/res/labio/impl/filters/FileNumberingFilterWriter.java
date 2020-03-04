@@ -1,5 +1,7 @@
 package ch.heigvd.res.labio.impl.filters;
 
+import ch.heigvd.res.labio.impl.Utils;
+
 import java.io.FilterWriter;
 import java.io.IOException;
 import java.io.Writer;
@@ -17,25 +19,70 @@ import java.util.logging.Logger;
  */
 public class FileNumberingFilterWriter extends FilterWriter {
 
-  private static final Logger LOG = Logger.getLogger(FileNumberingFilterWriter.class.getName());
+    private static final Logger LOG = Logger.getLogger(FileNumberingFilterWriter.class.getName());
+    private int lineNb = 0;
+    private int lastChar = -1;
 
-  public FileNumberingFilterWriter(Writer out) {
-    super(out);
-  }
+    public FileNumberingFilterWriter(Writer out) {
+        super(out);
+    }
 
-  @Override
-  public void write(String str, int off, int len) throws IOException {
-    throw new UnsupportedOperationException("The student has not implemented this method yet.");
-  }
+    private void writeLineNb() throws IOException {
+        out.write((++lineNb) + "\t");
+    }
 
-  @Override
-  public void write(char[] cbuf, int off, int len) throws IOException {
-    throw new UnsupportedOperationException("The student has not implemented this method yet.");
-  }
+    @Override
+    public void write(String str, int off, int len) throws IOException {
+        String[] lines = Utils.getNextLine(str.substring(off, off+len));
 
-  @Override
-  public void write(int c) throws IOException {
-    throw new UnsupportedOperationException("The student has not implemented this method yet.");
-  }
+        // First time only display the line nb
+        if(lineNb == 0){
+            writeLineNb();
+        }
+
+        // There is some line return
+        if(!lines[0].equals("")) {
+            // Write the line and the line nb
+            out.write(lines[0]);
+            writeLineNb();
+            // Write next line
+            if(!lines[1].equals("")){
+                write(lines[1]);
+            }
+        }
+        // No return line so only one simple line remaining
+        else if(!lines[1].equals("")){
+            out.write(lines[1]);
+        }
+
+
+    }
+
+    @Override
+    public void write(char[] cbuf, int off, int len) throws IOException {
+        write(String.valueOf(cbuf), off, len);
+    }
+
+    @Override
+    public void write(int c) throws IOException {
+        // First time, only display the line nb
+        if(lastChar == -1){
+            writeLineNb();
+        }
+        // There is a \r inside the line
+        else if(lastChar == '\r' && c != '\n'){
+            writeLineNb();
+        }
+
+        out.write(c);
+
+        // Case of we have a \n or \r\n (window return line)
+        if(c == '\n'){
+            writeLineNb();
+        }
+
+        // Update the last char
+        lastChar = c;
+    }
 
 }

@@ -10,23 +10,27 @@ import java.io.Writer;
  */
 public class UpperCaseFilterWriter extends FilterWriter {
   
-  public UpperCaseFilterWriter(Writer wrappedWriter) {
-    super(wrappedWriter);
-  }
+    public UpperCaseFilterWriter(Writer wrappedWriter) {
+        super(wrappedWriter);
+    }
 
-  @Override
-  public void write(String str, int off, int len) throws IOException {
-    throw new UnsupportedOperationException("The student has not implemented this method yet.");
-  }
+    @Override
+    public void write(String str, int off, int len) throws IOException {
+        super.write(str.toUpperCase(), off, len);
+    }
 
-  @Override
-  public void write(char[] cbuf, int off, int len) throws IOException {
-    throw new UnsupportedOperationException("The student has not implemented this method yet.");
-  }
+    @Override
+    public void write(char[] cbuf, int off, int len) throws IOException {
+        // Convert each char to uppercase before to pass the buffer to the super.write()
+        for(int i = 0; i < cbuf.length; ++i){
+            cbuf[i] = Character.toUpperCase(cbuf[i]);
+        }
+        super.write(cbuf, off, len);
+    }
 
-  @Override
-  public void write(int c) throws IOException {
-    throw new UnsupportedOperationException("The student has not implemented this method yet.");
-  }
+    @Override
+    public void write(int c) throws IOException {
+        super.write(Character.toUpperCase(c));
+    }
 
 }

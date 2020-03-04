@@ -20,7 +20,7 @@ public class UtilsTest {
     String[] r1 = Utils.getNextLine(lines);
     String[] e1 = {"hello\r\n", "world\r\n"};
     assertArrayEquals(e1, r1);
-    String[] r2 = Utils.getNextLine(r1[1]);
+    String[] r2 = Utils.getNextLine(e1[1]);
     String[] e2 = {"world\r\n", ""};
     assertArrayEquals(e2, r2);
   }
