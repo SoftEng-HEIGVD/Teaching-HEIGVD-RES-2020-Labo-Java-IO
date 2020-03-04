@@ -21,7 +21,7 @@ public class FileNumberingFilterWriter extends FilterWriter {
 
     private static final Logger LOG = Logger.getLogger(FileNumberingFilterWriter.class.getName());
     private int lineNb = 0;
-    private boolean start = true;
+    private int lastChar = -1;
 
     public FileNumberingFilterWriter(Writer out) {
         super(out);
@@ -65,7 +65,24 @@ public class FileNumberingFilterWriter extends FilterWriter {
 
     @Override
     public void write(int c) throws IOException {
-       // TODO
+        // First time, only display the line nb
+        if(lastChar == -1){
+            writeLineNb();
+        }
+        // There is a \r inside the line
+        else if(lastChar == '\r' && c != '\n'){
+            writeLineNb();
+        }
+
+        out.write(c);
+
+        // Case of we have a \n or \r\n (window return line)
+        if(c == '\n'){
+            writeLineNb();
+        }
+
+        // Update the last char
+        lastChar = c;
     }
 
 }

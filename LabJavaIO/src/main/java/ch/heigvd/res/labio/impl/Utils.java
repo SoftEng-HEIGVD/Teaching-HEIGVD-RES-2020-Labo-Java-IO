@@ -79,13 +79,4 @@ public class Utils {
         return count;
     }
 
-    /**
-     * Check if the String in parameter ends with a return line
-     * @param str The String we want to check
-     * @return True if the String ends with a return line
-     */
-    private static boolean strEndWithReturnLine(String str){
-        return str.endsWith(WINDOWS_RETURN_LINE) || str.endsWith(UNIX_RETURN_LINE) || str.endsWith(MAC_RETURN_LINE);
-    }
-
 }
