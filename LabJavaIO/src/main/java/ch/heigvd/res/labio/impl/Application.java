@@ -122,21 +122,18 @@ public class Application implements IApplication {
    */
   void storeQuote(Quote quote, String filename) throws IOException {
     //Root path for all directories
-    String path = WORKSPACE_DIRECTORY;
-
+    StringBuilder path = new StringBuilder(WORKSPACE_DIRECTORY);
     //Creation of all directories name (name herited by tags)
     for(String tag : quote.getTags()){
-      path += File.separator + tag;
+      path.append('/').append(tag);
     }
 
-    File pathToQuote = new File(path);
+    path.append("/").append(filename);
+    File pathToQuote = new File(path.toString());
     pathToQuote.getParentFile().mkdirs();
 
-    //Full path with name of the file and quote
-    String pathToQuoteIncludingFile = path + File.separator + filename;
-
     //Writer is open for writing something inside and close it
-    OutputStreamWriter writer = new OutputStreamWriter(new FileOutputStream(pathToQuoteIncludingFile), StandardCharsets.UTF_8);
+    OutputStreamWriter writer = new OutputStreamWriter(new FileOutputStream(pathToQuote), StandardCharsets.UTF_8);
     writer.write(quote.getQuote());
     writer.flush();
     writer.close();
