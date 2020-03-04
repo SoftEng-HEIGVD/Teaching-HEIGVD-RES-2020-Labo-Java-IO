@@ -16,7 +16,8 @@ import java.util.logging.Logger;
  * @author Olivier Liechti
  */
 public class FileNumberingFilterWriter extends FilterWriter {
-
+  private int lignCounter = 1;
+  private boolean isWindowsLignReturn = false;
   private static final Logger LOG = Logger.getLogger(FileNumberingFilterWriter.class.getName());
 
   public FileNumberingFilterWriter(Writer out) {
@@ -25,17 +26,42 @@ public class FileNumberingFilterWriter extends FilterWriter {
 
   @Override
   public void write(String str, int off, int len) throws IOException {
-    throw new UnsupportedOperationException("The student has not implemented this method yet.");
+    for (int i = off; i < len + off ; i++){
+      this.write((int)str.charAt(i));
+    }
   }
 
   @Override
   public void write(char[] cbuf, int off, int len) throws IOException {
-    throw new UnsupportedOperationException("The student has not implemented this method yet.");
+    String tmp = new String(cbuf);
+    this.write(tmp,off,len);
   }
 
   @Override
   public void write(int c) throws IOException {
-    throw new UnsupportedOperationException("The student has not implemented this method yet.");
-  }
+    if (lignCounter == 1){
+      this.out.write(((Integer)lignCounter++).toString());
+      this.out.write('\t');
+    }
+    if(isWindowsLignReturn && (char)c != '\n'){
+      this.out.write('\r');
+      this.out.write(((Integer)lignCounter++).toString());
+      this.out.write('\t');
+      isWindowsLignReturn = false;
+    }
 
+    if((char)c == '\n'){
+      if(isWindowsLignReturn){
+        this.out.write('\r');
+      }
+      this.out.write('\n');
+      this.out.write(((Integer)lignCounter++).toString());
+      this.out.write('\t');
+      isWindowsLignReturn = false;
+    }else if((char)c == '\r'){
+      isWindowsLignReturn = true;
+    }else {
+      this.out.write((char)c);
+    }
+  }
 }

@@ -35,7 +35,7 @@ public class FileNumberingFilterWriterTest {
     writer.write(line2);
     assertEquals("1\t" + line1 + "2\t" + line2 + "3\t", stringWriter.toString());
   }
-  
+
   @Test
   public void itShouldWorkIfThereIsNoNewLineAtTheEnd() throws IOException {
     String line1 = "this is a line\n";
@@ -43,7 +43,7 @@ public class FileNumberingFilterWriterTest {
     StringWriter stringWriter = new StringWriter();
     FileNumberingFilterWriter writer = new FileNumberingFilterWriter(stringWriter);
     writer.write(line1);
-    writer.write(line2);  
+    writer.write(line2);
     assertEquals("1\t" + line1 + "2\t" + line2, stringWriter.toString());
   }
 
@@ -56,7 +56,7 @@ public class FileNumberingFilterWriterTest {
     FileNumberingFilterWriter writer = new FileNumberingFilterWriter(stringWriter);
     writer.write(line1_1);
     writer.write(line1_2);
-    writer.write(line2);  
+    writer.write(line2);
     assertEquals("1\t" + line1_1 + line1_2 + "2\t" + line2, stringWriter.toString());
   }
 
@@ -124,7 +124,7 @@ public class FileNumberingFilterWriterTest {
     }
     writer.write("last");
     referenceWriter.write(120 + "\tlast");
-    
+
     stringWriter.close();
     String computedValue = stringWriter.toString();
     String referenceValue = referenceWriter.toString();
