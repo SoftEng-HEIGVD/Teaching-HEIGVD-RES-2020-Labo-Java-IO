@@ -47,7 +47,7 @@ public class Utils
             return new String[] {"", lines};
         }
 
-        return new String[] {lines.substring(0, pos+1), lines.substring(pos+1, lines.length())};
+        return new String[] {lines.substring(0, pos+1), lines.substring(pos+1)};
     }
 
 }
