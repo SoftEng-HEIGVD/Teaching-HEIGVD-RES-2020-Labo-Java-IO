@@ -120,12 +120,13 @@ public class Application implements IApplication {
   void storeQuote(Quote quote, String filename) throws IOException {
     File folder = new File(Application.WORKSPACE_DIRECTORY);
 
-    // Creating the directory tree corresponding to the tags
+    // Creating the folder tree corresponding to the tags
     for (String tag : quote.getTags()) {
-      // Verifiy that the folder exist or could be created
+      // Verifiy that the parent folder exist or could be created
       if(!folder.exists() && !folder.mkdirs()){
         throw new IOException("Couldn't create the path leading to the quote file " + filename);
       }
+      // Creating child folder
       folder = new File(folder, tag);
     }
 
