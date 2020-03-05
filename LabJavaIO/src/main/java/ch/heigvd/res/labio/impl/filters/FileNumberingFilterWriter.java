@@ -4,6 +4,7 @@ import ch.heigvd.res.labio.impl.Utils;
 import java.io.FilterWriter;
 import java.io.IOException;
 import java.io.Writer;
+import java.lang.reflect.UndeclaredThrowableException;
 import java.util.Arrays;
 import java.util.logging.Logger;
 
@@ -21,69 +22,46 @@ public class FileNumberingFilterWriter extends FilterWriter {
 
   private static final Logger LOG = Logger.getLogger(FileNumberingFilterWriter.class.getName());
   private int nbLines = 0; //Permet de garder le nombre de ligne écrite dans le fichier
-  private boolean newLine = true;//Permet d'indiquer si une nouvelle ligne doit être créer
-  private char lastChar = ' ';//Permet de garder le dernier caractère écrit dans le writer
+  private char lastChar = ' ';
 
   public FileNumberingFilterWriter(Writer out) {
     super(out);
+  }
+
+  private void writeNewLine() throws IOException{
+      out.write(Integer.toString(++nbLines) + '\t');
   }
 
   @Override
   public void write(String str, int off, int len) throws IOException {
       str = str.substring(off, off + len);
       String[] elements = Utils.getNextLine(str);
+      if(nbLines == 0){
+          writeNewLine();
+      }
       while(!elements[0].equals("")) {
-        //Si la dernière ligne est une fin de ligne commencement d'une nouvelle ligen
-        if(newLine) {
-          out.write(Integer.toString(++nbLines) + '\t' + elements[0]);
-        }
-        else {
           out.write(elements[0]);
-          newLine = true;
-        }
-        //Utilisation de la fonction de partition de chaîne sur la deuxième partie de la chaîne
-        elements = Utils.getNextLine(elements[1]);
+          writeNewLine();
+          elements = Utils.getNextLine(elements[1]);
       }
-      //s'il n'y a pas eu de nouvelle ligne alors écriture de elements[1] seulement car la fonction termine
-      //toujours par une ligne vide avec un numéro et une tabulation
-      if(!newLine){
-        out.write(elements[1]);
-        newLine = true;
-      }
-      else {
-        out.write(Integer.toString(++nbLines) + '\t' + elements[1]);
-        newLine = false;
-      }
+      out.write(elements[1]);
   }
 
   @Override
   public void write(char[] cbuf, int off, int len) throws IOException {
-    out.write(Arrays.toString(cbuf), off, len);
+    out.write(new String(cbuf, off,len), 0, len);
   }
 
   @Override
   public void write(int c) throws IOException {
-    newLine = false;
-    //Permet de vérifier que la retour à la ligne Windows pour cela il faut vérifier le dernier caractère puis le
-    //caractère actuel
-    if(lastChar == '\r' && c == '\n') {
-      //Enregistrement du caractère actuel comme carcatère de fin de ligne
-      lastChar = (char)c;
+    if(nbLines == 0 || (lastChar == Utils.MACOS_ENDLINE && (char)c != Utils.LINUX_ENDLINE)){
+        writeNewLine();
     }
-    else if(lastChar == '\n' || lastChar == '\r'){
-      //Changement du lastChar pour ne pas rester avec à chaque fois une fin de ligne
-      lastChar = ' ';
-      newLine = true;
-    }
-    //Si une nouvelle ligne est desiré ajout d'une nouvelle ligne
-    if(newLine || nbLines == 0){
-      out.write(Integer.toString(++nbLines) + '\t');
-    }
-    //Si ce n'est pas une nouvelle ligne et que c est un caractère de fin de ligne stockage de sa valeur
-    if(!newLine && (c == '\n' || c == '\r'))
-      lastChar = (char)c;
-
     out.write(c);
+    if(lastChar == Utils.LINUX_ENDLINE){
+        writeNewLine();
+    }
+    lastChar = (char)c;
   }
 
 }

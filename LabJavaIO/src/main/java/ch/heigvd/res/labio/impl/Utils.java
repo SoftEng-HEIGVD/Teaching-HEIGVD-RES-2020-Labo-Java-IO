@@ -9,9 +9,9 @@ import java.util.logging.Logger;
 public class Utils {
 
   private static final Logger LOG = Logger.getLogger(Utils.class.getName());
-  private static final char MACOS_ENDLINE = '\r';
-  private static final char LINUX_ENDLINE = '\n';
-  private static final String WINDOWS_ENDLINE = "\r\n";
+  public static final char MACOS_ENDLINE = '\r';
+  public static final char LINUX_ENDLINE = '\n';
+  public static final String WINDOWS_ENDLINE = "\r\n";
 
   /**
    * This method looks for the next new line separators (\r, \n, \r\n) to extract
@@ -23,7 +23,8 @@ public class Utils {
    * contain any line separator, then the first element is an empty string.
    */
   public static String[] getNextLine(String lines) {
-    String[] elements = {"",""};
+    String[] elements = new String[2];
+    //Regarde si le retour à la ligen windows est contenu dans la chaîne est sépare la chaîne si c'est le cas
     if(lines.contains(WINDOWS_ENDLINE)){
       elements[0] = lines.substring(0,lines.indexOf(WINDOWS_ENDLINE) + WINDOWS_ENDLINE.length());
       elements[1] = lines.substring(lines.indexOf(WINDOWS_ENDLINE) + WINDOWS_ENDLINE.length());
@@ -38,6 +39,9 @@ public class Utils {
     }
     else{
       elements[1] = lines;
+    }
+    if(elements[0] == null){
+      elements[0] = "";
     }
     return elements;
   }
