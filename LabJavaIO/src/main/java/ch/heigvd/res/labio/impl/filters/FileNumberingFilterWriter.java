@@ -58,7 +58,7 @@ public class FileNumberingFilterWriter extends FilterWriter {
         writeNewLine();
     }
     out.write(c);
-    if(lastChar == Utils.LINUX_ENDLINE){
+    if(c == Utils.LINUX_ENDLINE){
         writeNewLine();
     }
     lastChar = (char)c;
