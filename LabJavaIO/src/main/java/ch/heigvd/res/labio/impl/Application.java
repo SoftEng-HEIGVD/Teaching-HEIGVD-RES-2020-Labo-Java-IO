@@ -130,6 +130,7 @@ public class Application implements IApplication {
 
     path.append("/").append(filename);
     File pathToQuote = new File(path.toString());
+
     pathToQuote.getParentFile().mkdirs();
 
     //Writer is open for writing something inside and close it
