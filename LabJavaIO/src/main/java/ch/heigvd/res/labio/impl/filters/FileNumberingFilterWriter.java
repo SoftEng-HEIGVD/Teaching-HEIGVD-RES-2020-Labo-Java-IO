@@ -30,35 +30,30 @@ public class FileNumberingFilterWriter extends FilterWriter {
     @Override
     public void write(String str, int off, int len) throws IOException {
 
-        int lineCounter = 1;
+        //int lineCounter = 1;
         String strNumbered = "";
 
-        while (!Utils.getNextLine(str)[0].equals("")) {
+        /*while (!Utils.getNextLine(str.substring(off, off + len))[0].equals("")) {
             strNumbered += lineCounter + "\t" + Utils.getNextLine(str)[0];
-            str = Utils.getNextLine(str)[1];
+            str = Utils.getNextLine(str.substring(off, off + len))[1];
             lineCounter++;
-        }
+        }*/
 
         super.write(strNumbered, off, len);
     }
 
     @Override
     public void write(char[] cbuf, int off, int len) throws IOException {
-        super.write(cbuf, off, len);
+        String str = "";
+
+        for(char c : cbuf)
+            str += c;
+
+        super.write(str, off, len);
     }
 
     @Override
     public void write(int c) throws IOException {
-    /*if(counter == 0) {
-        counter++;
-        System.out.println("WRITING : " + counter + '\t' + (char) c);
-        super.write(counter + '\t' + (char) c);
-    } else if(c == '\n') {
-        super.write((char) c + ++counter + '\t');
-    } else {
-        super.write(c);
-    }*/
-
         super.write(c);
     }
 
