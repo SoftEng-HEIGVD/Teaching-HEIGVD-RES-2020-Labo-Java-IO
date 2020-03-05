@@ -1,5 +1,7 @@
 package ch.heigvd.res.labio.impl.filters;
 
+import ch.heigvd.res.labio.impl.Utils;
+
 import java.io.FilterWriter;
 import java.io.IOException;
 import java.io.Writer;
@@ -26,12 +28,30 @@ public class FileNumberingFilterWriter extends FilterWriter {
 
   @Override
   public void write(String str, int off, int len) throws IOException {
-    StringBuilder sb = new StringBuilder(str);
+
+    str = str.substring(off,off+len);
+
+    String[] lines = Utils.getNextLine(str);
+    String line = lines[1];
+    StringBuilder sb = new StringBuilder();
+    int counter = 1;
+
+
+    do {
+      lines = Utils.getNextLine(str);
+      line = lines[0];
+      str = lines[1];
+
+      sb.append(counter).append('\t').append(line);
+      counter++;
+
+    }while (!line.equals(""));
+    /*StringBuilder sb = new StringBuilder();
     int count = 1;
     for (int i = 0; i < str.length() ; i++) {
       if(str.charAt(i) == '\n')
         sb.insert(i,count++);
-    }
+    }*/
 
     super.out.write(sb.toString());
 
@@ -52,7 +72,12 @@ public class FileNumberingFilterWriter extends FilterWriter {
 
   @Override
   public void write(int c) throws IOException {
-    //throw new UnsupportedOperationException("The student has not implemented this method yet.");
+    int count = 1;
+    if (c == '\n'){
+      super.out.write(count++);
+      super.out.write('\t');
+    }
+
     super.out.write(c);
   }
 

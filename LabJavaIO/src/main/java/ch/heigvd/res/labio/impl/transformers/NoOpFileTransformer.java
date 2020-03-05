@@ -13,7 +13,6 @@ public class NoOpFileTransformer extends FileTransformer {
 
   @Override
   public Writer decorateWithFilters(Writer writer) {
-    //throw new UnsupportedOperationException("The student has not implemented this method yet.");
     /*
      * The NoOpFileTransformer does not apply any transformation of the character stream
      * (no uppercase, no line number, etc.). So, we don't need to decorate the writer connected to

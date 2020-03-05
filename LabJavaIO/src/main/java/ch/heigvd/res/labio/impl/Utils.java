@@ -24,7 +24,6 @@ public class Utils {
 
     // get the system-dependent line separator
     // https://www.geeksforgeeks.org/system-lineseparator-method-in-java-with-examples/
-
     int indexOfLineSep = lines.indexOf(System.lineSeparator());
 
     // we check if there is/isn't a line separator
