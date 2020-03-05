@@ -89,6 +89,7 @@ public class Application implements IApplication {
        * one method provided by this class, which is responsible for storing the content of the
        * quote in a text file (and for generating the directories based on the tags).
        */
+      storeQuote(quote,"quote-" + i + ".utf8");
       LOG.info("Received a new joke with " + quote.getTags().size() + " tags.");
       for (String tag : quote.getTags()) {
         LOG.info("> " + tag);
@@ -126,8 +127,9 @@ public class Application implements IApplication {
     List<String> tags =quote.getTags();
     java.util.Collections.sort(tags);
     String s = WORKSPACE_DIRECTORY +"/";
-    for (String tmp : tags)
-      s += tmp +"/";
+    for (String tmp : tags) {
+      s += tmp + "/";
+    }
 
     // création répértoire
     File f = new File(s);
@@ -137,7 +139,7 @@ public class Application implements IApplication {
     FileWriter fw = new FileWriter(s);
     // écriture du fichier
     fw.write(quote.getQuote(),0,quote.getQuote().length());
-    fw.flush();
+    fw.close();
   }
   
   /**
@@ -149,11 +151,11 @@ public class Application implements IApplication {
     explorer.explore(new File(WORKSPACE_DIRECTORY), new IFileVisitor() {
       @Override
       public void visit(File file) {
-        /*
-         * There is a missing piece here. Notice how we use an anonymous class here. We provide the implementation
-         * of the the IFileVisitor interface inline. You just have to add the body of the visit method, which should
-         * be pretty easy (we want to write the filename, including the path, to the writer passed in argument).
-         */
+        try{
+          writer.write(file.getPath() + '\n');
+        }catch (IOException e ){
+          System.out.println(e);
+        }
       }
     });
   }
