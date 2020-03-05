@@ -13,13 +13,12 @@ import java.util.logging.Logger;
  * <p>
  * Hello\nWorld -> 1\tHello\n2\tWorld
  *
- * @author Olivier Liechti
- * @author Ludovic Bonzon
+ * @author Olivier Liechti, Ludovic Bonzon
  */
 public class FileNumberingFilterWriter extends FilterWriter {
 
     private static final Logger LOG = Logger.getLogger(FileNumberingFilterWriter.class.getName());
-    private int lineNb = 1;                 // Counter for the line number
+    private int lineNb = 1;                 // Counter for the current line number
     private int lastCharWritten = -1;       // Memorises the last char written in the file
 
     public FileNumberingFilterWriter(Writer out) {
@@ -57,6 +56,7 @@ public class FileNumberingFilterWriter extends FilterWriter {
 
     @Override
     public void write(char[] cbuf, int off, int len) throws IOException {
+        // Uses the write method for strings
         this.write(new String(cbuf), off, len);
     }
 
@@ -78,6 +78,7 @@ public class FileNumberingFilterWriter extends FilterWriter {
         lastCharWritten = c;
     }
 
+    // Helper method that writes the beginning of a line as the following: "<lineNb>\t"
     private void writeLineNb() throws IOException {
         out.write(lineNb++ + "\t");
     }

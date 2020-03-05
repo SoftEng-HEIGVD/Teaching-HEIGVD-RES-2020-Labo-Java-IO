@@ -24,8 +24,7 @@ import java.util.logging.Logger;
  * The subclasses have to implement the decorateWithFilters method, which instantiates
  * a list of filters and decorates the output writer with them.
  *
- * @author Olivier Liechti
- * @author Ludovic Bonzon
+ * @author Olivier Liechti, Ludovic Bonzon
  */
 public abstract class FileTransformer implements IFileVisitor {
 
@@ -66,7 +65,7 @@ public abstract class FileTransformer implements IFileVisitor {
             char[] buffer = new char[BUFFERSIZE];
             int length;
 
-            // While there's still something to read, we write it with the two filters applied
+            // While there's still something to read, we write it
             while((length = reader.read(buffer)) != -1) {
                 writer.write(buffer, 0, length);
             }

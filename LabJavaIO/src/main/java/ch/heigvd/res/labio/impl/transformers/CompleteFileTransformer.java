@@ -12,8 +12,7 @@ import java.io.Writer;
  * generate an output file with 1) uppercase letters and 2) line numbers at the
  * beginning of each line.
  *
- * @author Olivier Liechti
- * @author Ludovic Bonzon
+ * @author Olivier Liechti, Ludovic Bonzon
  */
 public class CompleteFileTransformer extends FileTransformer {
 
@@ -25,6 +24,7 @@ public class CompleteFileTransformer extends FileTransformer {
          * decorate with a FileNumberingFilterWriter. The resulting writer is used by the abstract class to write the characters read from the
          * input files. So, the input is first prefixed with line numbers, then transformed to uppercase, then sent to the output file.f
          */
+        // Simply returns a new writer with both file numbering and uppercase treatments added
         return new FileNumberingFilterWriter(new UpperCaseFilterWriter(writer));
     }
 

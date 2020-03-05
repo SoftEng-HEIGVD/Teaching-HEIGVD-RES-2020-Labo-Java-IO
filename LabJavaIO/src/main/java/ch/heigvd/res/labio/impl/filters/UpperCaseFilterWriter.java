@@ -5,8 +5,7 @@ import java.io.IOException;
 import java.io.Writer;
 
 /**
- * @author Olivier Liechti
- * @author Ludovic Bonzon
+ * @author Olivier Liechti, Ludovic Bonzon
  */
 public class UpperCaseFilterWriter extends FilterWriter {
 

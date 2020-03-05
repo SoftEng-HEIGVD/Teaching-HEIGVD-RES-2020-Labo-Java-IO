@@ -15,7 +15,7 @@ import java.util.logging.Logger;
 import org.apache.commons.io.FileUtils;
 
 /**
- * @author Olivier Liechti
+ * @author Olivier Liechti, Ludovic Bonzon
  */
 public class Application implements IApplication {
 
@@ -92,6 +92,7 @@ public class Application implements IApplication {
             for(String tag : quote.getTags()) {
                 LOG.info("> " + tag);
             }
+            storeQuote(quote, "quote-" + i + ".utf8");
         }
     }
 
@@ -138,7 +139,9 @@ public class Application implements IApplication {
         // Fill in the file
         Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), "UTF-8"));
         writer.write(quote.getQuote());
+        writer.flush();
         writer.close();
+
     }
 
     /**
@@ -155,6 +158,11 @@ public class Application implements IApplication {
                  * of the the IFileVisitor interface inline. You just have to add the body of the visit method, which should
                  * be pretty easy (we want to write the filename, including the path, to the writer passed in argument).
                  */
+                try {
+                    writer.write(file.getPath() + "\n");
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         });
     }
