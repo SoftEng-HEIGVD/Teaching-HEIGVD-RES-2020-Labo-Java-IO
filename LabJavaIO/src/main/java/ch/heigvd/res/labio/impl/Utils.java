@@ -31,9 +31,11 @@ public class Utils
 
 		if (pos == posLF) { // if there's a linefeed after the carriage return
 			pos += 1;      // we position ourselves after the linefeed
+		} else if (posLF != -1) {
+			pos = posLF + 1;
 		}
 
-		return new String[]{"", ""};
+		return new String[]{lines.substring(0, pos), lines.substring(pos)};
 	}
 
 }
