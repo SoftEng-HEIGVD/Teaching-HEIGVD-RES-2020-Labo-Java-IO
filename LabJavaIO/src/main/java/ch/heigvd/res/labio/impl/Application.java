@@ -26,6 +26,7 @@ public class Application implements IApplication {
    * to where the Java application is invoked.
    */
   public static String WORKSPACE_DIRECTORY = "./workspace/quotes";
+  private static String QUOTE_FILE_EXTENSION = ".utf8";
   
   private static final Logger LOG = Logger.getLogger(Application.class.getName());
   
@@ -90,6 +91,9 @@ public class Application implements IApplication {
        * one method provided by this class, which is responsible for storing the content of the
        * quote in a text file (and for generating the directories based on the tags).
        */
+
+      this.storeQuote(quote, "quote-" + (i+1) + QUOTE_FILE_EXTENSION);
+
       LOG.info("Received a new joke with " + quote.getTags().size() + " tags.");
       for (String tag : quote.getTags()) {
         LOG.info("> " + tag);
@@ -123,7 +127,20 @@ public class Application implements IApplication {
    * @throws IOException 
    */
   void storeQuote(Quote quote, String filename) throws IOException {
-    throw new UnsupportedOperationException("The student has not implemented this method yet.");
+    // throw new UnsupportedOperationException("The student has not implemented this method yet.");
+
+    // build the root directory path
+    String path = WORKSPACE_DIRECTORY + "/";
+
+    // Create the directory structure for the quote
+    // i.e. create a sub-folder for all the tags a quote has
+    for (String tag : quote.getTags())
+      path += tag + "/";
+
+    // create the file for the quote
+    File file = new File(path + filename);
+
+    FileUtils.write(file, quote.getQuote());
   }
   
   /**
@@ -140,6 +157,11 @@ public class Application implements IApplication {
          * of the the IFileVisitor interface inline. You just have to add the body of the visit method, which should
          * be pretty easy (we want to write the filename, including the path, to the writer passed in argument).
          */
+        try {
+          writer.write(file.getPath()+"\n");
+        } catch (IOException e) {
+          e.printStackTrace();
+        }
       }
     });
   }

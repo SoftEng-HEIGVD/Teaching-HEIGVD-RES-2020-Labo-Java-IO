@@ -20,7 +20,18 @@ public class Utils {
    * contain any line separator, then the first element is an empty string.
    */
   public static String[] getNextLine(String lines) {
-    throw new UnsupportedOperationException("The student has not implemented this method yet.");
+    String[] res = new String[2];
+    
+    // The regex is split into three parts
+    // (1) `?<=`      : tells `split()` to keep the delimiter
+    // (2) `\r\n`     : windows return delimiter. We want \r AND \n
+    // (3) `\n`       : unix return delimiter. We only want a single `\n`
+    // (4) `\r(?!\n)` : macos9 return delimiter. We want a `\r` AND NO `\n` after it
+    res = lines.split("(?<=(\r\n|\n|\r(?!\n)))", 2);
+
+    // if there isn't a delimiter (i.e. the res array has a size of 1),
+    //  move the res in the second position of the returned array
+    return res.length == 1 ? new String[] {"", res[0]} : res ;
   }
 
 }

@@ -103,6 +103,7 @@ Icon
 .Trashes
 .VolumeIcon.icns
 .com.apple.timemachine.donotpresent
+.attach_pid*
 
 # Directories potentially created on remote AFP share
 .AppleDB
