@@ -34,7 +34,12 @@ public class DFSFileExplorer implements IFileExplorer
                 {
                     explore(f, visitor);
                 }
+                else
+                {
+                    visitor.visit(f);
+                }
             }
         }
+
     }
 }
