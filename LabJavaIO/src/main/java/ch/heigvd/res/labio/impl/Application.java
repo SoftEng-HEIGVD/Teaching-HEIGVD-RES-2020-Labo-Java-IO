@@ -7,10 +7,11 @@ import ch.heigvd.res.labio.interfaces.IFileExplorer;
 import ch.heigvd.res.labio.interfaces.IFileVisitor;
 import ch.heigvd.res.labio.quotes.QuoteClient;
 import ch.heigvd.res.labio.quotes.Quote;
-import java.io.File;
-import java.io.IOException;
-import java.io.StringWriter;
-import java.io.Writer;
+
+import java.io.*;
+import java.nio.file.*;
+import java.util.List;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.commons.io.FileUtils;
@@ -90,6 +91,7 @@ public class Application implements IApplication {
        * one method provided by this class, which is responsible for storing the content of the
        * quote in a text file (and for generating the directories based on the tags).
        */
+      this.storeQuote(quote,("quote-"+Integer.toString(i+1)));
       LOG.info("Received a new joke with " + quote.getTags().size() + " tags.");
       for (String tag : quote.getTags()) {
         LOG.info("> " + tag);
@@ -104,7 +106,7 @@ public class Application implements IApplication {
    * @throws IOException 
    */
   void clearOutputDirectory() throws IOException {
-    FileUtils.deleteDirectory(new File(WORKSPACE_DIRECTORY));    
+      FileUtils.deleteDirectory(new File(WORKSPACE_DIRECTORY));
   }
 
   /**
@@ -122,8 +124,32 @@ public class Application implements IApplication {
    * @param filename the name of the file to create and where to store the quote text
    * @throws IOException 
    */
-  void storeQuote(Quote quote, String filename) throws IOException {
-    throw new UnsupportedOperationException("The student has not implemented this method yet.");
+  void storeQuote(Quote quote, String filename) throws IOException
+  {
+      List<String> tags=quote.getTags();
+      String path=(WORKSPACE_DIRECTORY+"/");
+      for(String tag:tags)
+      {
+        path+=(tag+"/");
+      }
+      File file=new File(path);
+      if ((!file.exists()) && !file.mkdirs())
+      {
+          throw new UnsupportedOperationException("Directories not created");
+      }
+
+      file=new File(path+filename+".utf8");
+      file.createNewFile();
+      FileWriter writer=new FileWriter(file);
+      writer.write(quote.getQuote());
+
+      file=new File(path+filename+".utf8.out");
+      file.createNewFile();
+      writer=new FileWriter(file);
+      writer.write(quote.getQuote());
+
+      writer.flush();
+      writer.close();
   }
   
   /**
