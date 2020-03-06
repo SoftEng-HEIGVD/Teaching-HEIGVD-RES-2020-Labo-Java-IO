@@ -22,63 +22,47 @@ public class FileNumberingFilterWriter extends FilterWriter {
 
   private static final Logger LOG = Logger.getLogger(FileNumberingFilterWriter.class.getName());
 
+  private int lineCounter;
+  private boolean isFirstLine;
+  private int lastChar;
+
   public FileNumberingFilterWriter(Writer out) {
     super(out);
+    this.lineCounter = 1;
+    this.isFirstLine = true;
   }
 
   @Override
   public void write(String str, int off, int len) throws IOException {
-
     str = str.substring(off,off+len);
 
-    String[] lines = Utils.getNextLine(str);
-    String line = lines[1];
-    StringBuilder sb = new StringBuilder();
-    int counter = 1;
-
-
-    do {
-      lines = Utils.getNextLine(str);
-      line = lines[0];
-      str = lines[1];
-
-      sb.append(counter).append('\t').append(line);
-      counter++;
-
-    }while (!line.equals(""));
-    /*StringBuilder sb = new StringBuilder();
-    int count = 1;
-    for (int i = 0; i < str.length() ; i++) {
-      if(str.charAt(i) == '\n')
-        sb.insert(i,count++);
-    }*/
-
-    super.out.write(sb.toString());
-
+    this.write(str.toCharArray(),0,str.length());
   }
 
   @Override
   public void write(char[] cbuf, int off, int len) throws IOException {
-    StringBuilder sb = new StringBuilder();
-    int count = 1;
     for (char c : cbuf) {
-      if (c == '\n')
-        sb.append(count++);
-      sb.append(c);
+      this.write(c);
     }
 
-    super.out.write(sb.toString().toCharArray(),off,len);
   }
 
   @Override
   public void write(int c) throws IOException {
-    int count = 1;
-    if (c == '\n'){
-      super.out.write(count++);
-      super.out.write('\t');
+
+    if (this.isFirstLine) {
+      this.isFirstLine = false;
+      super.out.write(this.lineCounter++ + "\t");
     }
 
-    super.out.write(c);
+    if (c == '\n' && this.lastChar != '\r' || c == '\r'){
+      super.out.write(c);
+      super.out.write(this.lineCounter++ + "\t");
+    }else {
+      super.out.write(c);
+    }
+
+    this.lastChar = c;
   }
 
 }

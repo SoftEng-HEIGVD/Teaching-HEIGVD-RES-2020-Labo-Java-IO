@@ -139,19 +139,19 @@ public class Application implements IApplication {
     File QuoteFile = new File(path,filename + ".utf8");
 
     //open the Streams
-    ByteArrayInputStream ais = new ByteArrayInputStream(quote.getQuote().getBytes());
+    ByteArrayInputStream bis = new ByteArrayInputStream(quote.getQuote().getBytes());
     FileOutputStream os = new FileOutputStream(QuoteFile);
 
     //write operation
 
     int b;
     // we read and write bytes after bytes
-    while ((b = ais.read()) != -1){
+    while ((b = bis.read()) != -1){
       os.write(b);
     }
 
     //we close our streams
-    ais.close();
+    bis.close();
     os.close();
   }
   
