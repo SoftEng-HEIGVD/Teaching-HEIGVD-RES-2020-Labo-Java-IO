@@ -18,6 +18,7 @@ import org.apache.commons.io.FileUtils;
 /**
  *
  * @author Olivier Liechti
+ * @author Robin Müller
  */
 public class Application implements IApplication {
 

@@ -11,6 +11,7 @@ import ch.heigvd.res.labio.impl.filters.*;
  * beginning of each line.
  * 
  * @author Olivier Liechti
+ * @author Robin Müller
  */
 public class CompleteFileTransformer extends FileTransformer {
 

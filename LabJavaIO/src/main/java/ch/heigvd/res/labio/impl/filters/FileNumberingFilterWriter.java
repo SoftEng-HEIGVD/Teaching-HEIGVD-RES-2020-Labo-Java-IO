@@ -15,6 +15,7 @@ import ch.heigvd.res.labio.impl.Utils;
  * Hello\n\World -> 1\Hello\n2\tWorld
  *
  * @author Olivier Liechti
+ * @author Robin Müller
  */
 public class FileNumberingFilterWriter extends FilterWriter {
 
