@@ -23,24 +23,15 @@ public class FileNumberingFilterWriter extends FilterWriter
 	private              int    line     = 1;
 	private              int    lastChar = -1;
 
-	private static final char CR  = '\r'; // carriage return
-	private static final char LF  = '\n'; // linefeed
-	private static final char TAB = '\t'; // tabulation
+	private static final String CR  = "\r"; // carriage return
+	private static final String LF  = "\n"; // linefeed
+	private static final String TAB = "\t"; // tabulation
 
 	public FileNumberingFilterWriter(Writer out)
 	{
 		super(out);
 	}
 
-	@Override
-	public void flush() throws IOException
-	{
-		if (lastChar == CR) {
-			String str = line + "" + TAB;
-			line += 1;
-			super.write(str, 0, str.length());
-		}
-	}
 
 	@Override
 	public void write(String str, int off, int len) throws IOException
@@ -69,16 +60,17 @@ public class FileNumberingFilterWriter extends FilterWriter
 			line += 1;
 		}
 
-		if (c == LF) {
-			str += c + line + TAB;
+		if (LF.charAt(0) == c) {
+			str += LF + line + TAB;
 			line += 1;
 		} else {
-			if (lastChar == CR) {
+			if (CR.charAt(0) == lastChar) {
 				str += line + TAB;
 				line += 1;
 			}
 			str += (char) c;
 		}
+		lastChar = c;
 		super.write(str, 0, str.length());
 	}
 
