@@ -120,15 +120,15 @@ public class Application implements IApplication {
       ));
     }
   }
-  
+
   /**
    * This method deletes the WORKSPACE_DIRECTORY and its content. It uses the
    * apache commons-io library. You should call this method in the main method.
-   * 
-   * @throws IOException 
+   *
+   * @throws IOException
    */
   void clearOutputDirectory() throws IOException {
-    FileUtils.deleteDirectory(new File(WORKSPACE_DIRECTORY));    
+    FileUtils.deleteDirectory(new File(WORKSPACE_DIRECTORY));
   }
 
   /**
@@ -161,10 +161,10 @@ public class Application implements IApplication {
     writer.print(quote.getQuote());
     writer.close();
   }
-  
+
   /**
-   * This method uses a IFileExplorer to explore the file system and prints the name of each
-   * encountered file and directory.
+   * This method uses a IFileExplorer to explore the file system and prints the
+   * name of each encountered file and directory.
    */
   void printFileNames(final Writer writer) {
     IFileExplorer explorer = new DFSFileExplorer();
@@ -183,7 +183,7 @@ public class Application implements IApplication {
   @Override
   public void processQuoteFiles() throws IOException {
     IFileExplorer explorer = new DFSFileExplorer();
-    explorer.explore(new File(WORKSPACE_DIRECTORY), new CompleteFileTransformer());    
+    explorer.explore(new File(WORKSPACE_DIRECTORY), new CompleteFileTransformer());
   }
 
 }
