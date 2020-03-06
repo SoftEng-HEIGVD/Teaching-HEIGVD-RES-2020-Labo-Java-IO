@@ -1,5 +1,7 @@
 package ch.heigvd.res.labio.impl.filters;
 
+import ch.heigvd.res.labio.impl.Utils;
+
 import java.io.FilterWriter;
 import java.io.IOException;
 import java.io.Writer;
@@ -20,54 +22,47 @@ public class FileNumberingFilterWriter extends FilterWriter {
 
   private static final Logger LOG = Logger.getLogger(FileNumberingFilterWriter.class.getName());
 
+  private String buffer = "";
   private int line = 0;
-  private int lastChar = -1;
 
   public FileNumberingFilterWriter(Writer out) {
     super(out);
   }
 
-  @Override
-  public void flush() throws IOException {
-
-    if (lastChar == '\r') {
-      String toSend = ++line + "\t";
-      super.write(toSend, 0, toSend.length());
+  private void writeLineFromBuffer() throws IOException {
+    StringBuilder toSend = new StringBuilder();
+    if (line == 0) {
+      toSend.append(++line + "\t");
     }
-    super.flush();
+
+    String[] ret = Utils.getNextLine(buffer);
+    while (!ret[0].equals("")) {
+      toSend.append(ret[0] + ++line + "\t");
+      ret = Utils.getNextLine(ret[1]);
+    }
+    buffer = "";
+    toSend.append(ret[1]);
+    super.write(toSend.toString(), 0, toSend.length());
   }
 
   @Override
   public void write(String str, int off, int len) throws IOException {
-    for (int i = off; i < off + len; i++) {
-      write(str.charAt(i));
-    }
+    buffer += str.substring(off, off+len);
+    writeLineFromBuffer();
   }
 
   @Override
   public void write(char[] cbuf, int off, int len) throws IOException {
-    for (int i = off; i < off + len; i++) {
-      write(cbuf[i]);
-    }
+    buffer += new String(cbuf, off, len);
+    writeLineFromBuffer();
   }
 
   @Override
   public void write(int c) throws IOException {
-    String toSend = "";
-    if (line == 0)
-      toSend += ++line + "\t";
-
-    if (c == '\n') {
-      toSend += "\n" + ++line + "\t";
-    } else {
-      if (lastChar == '\r') {
-        toSend += ++line + "\t";
-      }
-      toSend += (char) c;
+    buffer += (char) c;
+    if (c != '\n' && c != '\r') {
+      writeLineFromBuffer();
     }
-    lastChar = c;
-
-    super.write(toSend, 0, toSend.length());
   }
 
 }
