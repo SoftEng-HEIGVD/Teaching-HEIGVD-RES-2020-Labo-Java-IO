@@ -19,8 +19,9 @@ public class FileNumberingFilterWriter extends FilterWriter {
 
   private static final Logger LOG = Logger.getLogger(FileNumberingFilterWriter.class.getName());
 
-  private char previousCharacter = '\0';
-  private int counter = 0;
+  private char previousCharacter = '\0',
+               currentCharacter = '\0';
+  private int  counter = 0;
 
   public FileNumberingFilterWriter(Writer out) {
     super(out);
@@ -40,16 +41,16 @@ public class FileNumberingFilterWriter extends FilterWriter {
 
   @Override
   public void write(int c) throws IOException {
-    char charToWrite = (char) c;
-    if (previousCharacter == '\0' || (charToWrite != '\n' && previousCharacter == '\r'))
-      out.write(++counter + "\t" + charToWrite);
+    currentCharacter = (char) c;
+    if (previousCharacter == '\0' || (currentCharacter != '\n' && previousCharacter == '\r'))
+      out.write(++counter + "\t" + currentCharacter);
     else
-      out.write(charToWrite);
+      out.write(currentCharacter);
 
-    if(charToWrite == '\n')
+    if(currentCharacter == '\n')
       out.write(++counter + "\t");
 
-    previousCharacter = charToWrite;
+    previousCharacter = currentCharacter;
   }
 
 }
