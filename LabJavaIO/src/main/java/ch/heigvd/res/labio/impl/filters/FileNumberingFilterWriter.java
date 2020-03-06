@@ -34,14 +34,14 @@ public class FileNumberingFilterWriter extends FilterWriter {
 
   @Override
   public void write(String str, int off, int len) throws IOException {
-    for (int i = off; i < off + len; i++) {
-      write(str.charAt(i));
-    }
+    this.write(str.toCharArray(), off, len);
   }
 
   @Override
   public void write(char[] cbuf, int off, int len) throws IOException {
-    this.write(new String(cbuf), off, len);
+    for (int i = off; i < off + len; i++) {
+      write(cbuf[i]);
+    }
   }
 
   /**
