@@ -19,13 +19,14 @@ public class FileNumberingFilterWriter extends FilterWriter {
 
   private static final Logger LOG = Logger.getLogger(FileNumberingFilterWriter.class.getName());
 
-  private static final int STATE_EMPTY = -1;
-  private static final int STATE_LAST_CHAR_NORMAL = 0;
-  private static final int STATE_LAST_CHAR_RET_N = 1;
-  private static final int STATE_LAST_CHAR_RET_R = 2;
+  /**
+   * An enumeration that represents the different states that the writer
+   * can be in regarding the last character that was written.
+   */
+  private enum State { Empty, Normal, RetN, RetR }
 
   private int nextLineNumber = 1;
-  private int state = STATE_EMPTY;
+  private State state = State.Empty;
 
   public FileNumberingFilterWriter(Writer out) {
     super(out);
@@ -63,28 +64,23 @@ public class FileNumberingFilterWriter extends FilterWriter {
   private void setState(int c) {
     switch (c) {
       case '\n':
-        state = STATE_LAST_CHAR_RET_N;
+        state = State.RetN;
         break;
       case '\r':
-        state = STATE_LAST_CHAR_RET_R;
+        state = State.RetR;
         break;
       default:
-        state = STATE_LAST_CHAR_NORMAL;
+        state = State.Normal;
         break;
     }
-  }
-
-  private void outputIfNeeded() throws IOException {
-    if (state == STATE_LAST_CHAR_RET_N)
-      output();
   }
 
   @Override
   public void write(int c) throws IOException {
 
-    if (state == STATE_EMPTY) {
+    if (state == State.Empty) {
       output();
-    } else if (state == STATE_LAST_CHAR_RET_R) {
+    } else if (state == State.RetR) {
       if (c != '\n') {
         output();
       }
@@ -92,7 +88,9 @@ public class FileNumberingFilterWriter extends FilterWriter {
 
     out.write(c);
     setState(c);
-    outputIfNeeded();
+
+    if (state == State.RetN)
+      output();
   }
 
 }
