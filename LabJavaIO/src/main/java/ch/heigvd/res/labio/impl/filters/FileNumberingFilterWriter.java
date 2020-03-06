@@ -46,6 +46,12 @@ public class FileNumberingFilterWriter extends FilterWriter {
 
     super.write(c);
 
+    /**
+     * A little bug here, "some\r" will become "1\tsome\r" and not "1\tsome\r2\t"
+     * Since the "encoding" of newline words with the charset "\n\r" is not
+     * prefix-free, it seems theoretically impossible to handle...but I'm not 
+     * 100% sure about that (say 90).
+     */
     if ((char) c == '\r') {
       possiblyNewLine = true;
     } else if ((char) c == '\n') {
