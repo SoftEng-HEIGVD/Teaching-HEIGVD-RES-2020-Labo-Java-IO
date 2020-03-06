@@ -29,19 +29,37 @@ public class FileNumberingFilterWriter extends FilterWriter {
 
   @Override
   public void write(String str, int off, int len) throws IOException {
-      if(str == "") return;
+
+      //If empty string
+      if(len < 1) return;
+
       String sub = str.substring(off, off + len );
+
+      /*
+         nextLines provide a two strings tab :
+         [0] : first line found with a delimiter (\n,\r, \r\n)
+         [1] : the rest of the input string
+         If the input string has no delimiter (one line), [0] will be empty and [1] will contains the line
+      */
       String[] nextLines = Utils.getNextLine(sub);
 
       //Add the first numbering
       if(firstLine){
-          nextLines[0] = "1\t" + nextLines[0];
+
+          if(nextLines[0] == "" && nextLines[1] != ""){
+              nextLines[1] = "1\t" + nextLines[1];
+          }else{
+              nextLines[0] = "1\t" + nextLines[0];
+          }
           firstLine = false;
       }
+
+      //Case of only one line
       if(nextLines[0] == "" && nextLines[1] != ""){
-          super.out.write(nextLines [1]);
+          super.out.write(nextLines[1]);
           return;
       }
+
       //Add the number
       if(nextLines[0] != "") {
           char lastChar = nextLines[0].charAt(nextLines[0].length() - 1);
@@ -49,7 +67,7 @@ public class FileNumberingFilterWriter extends FilterWriter {
               nextLines[0] += (++counter) + "\t";
       }
 
-
+      //Write the line
       super.out.write(nextLines[0]);
       //If there is more than one line
       if(nextLines[1].length() > 1)
@@ -64,6 +82,12 @@ public class FileNumberingFilterWriter extends FilterWriter {
 
   @Override
   public void write(int c) throws IOException {
+
+      /*
+        I could do it with this only instruction , but it won't passe the test itShouldHandleWriteWithAnInt()
+        Because this test assume that if you have \r then \n you have only one line numbering !
+       */
+      // this.write(Character.toString((char) c),0, 1);
 
       String writing = "";
       char caract = (char) c;

@@ -64,7 +64,7 @@ public abstract class FileTransformer implements IFileVisitor {
       int nbNewBytes = reader.read(buffer);
 
       while(nbNewBytes != -1){
-        writer.write(buffer,0, nbNewBytes - 1);
+        writer.write(buffer,0, nbNewBytes);
 
         //TODO : erase buffer ?
         nbNewBytes = reader.read(buffer);
