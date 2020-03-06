@@ -18,6 +18,9 @@ import java.util.logging.Logger;
 public class FileNumberingFilterWriter extends FilterWriter {
 
   private static final Logger LOG = Logger.getLogger(FileNumberingFilterWriter.class.getName());
+  private int cpt = 1;
+  private boolean firstRound = false;
+  private int previousC;
 
   public FileNumberingFilterWriter(Writer out) {
     super(out);
@@ -25,17 +28,50 @@ public class FileNumberingFilterWriter extends FilterWriter {
 
   @Override
   public void write(String str, int off, int len) throws IOException {
-    throw new UnsupportedOperationException("The student has not implemented this method yet.");
+
+    str = str.substring(off,off+len);
+
+    for (int i = 0; i < str.length(); i++){
+      char c = str.charAt(i);
+      this.write(c);
+    }
+
   }
 
   @Override
   public void write(char[] cbuf, int off, int len) throws IOException {
-    throw new UnsupportedOperationException("The student has not implemented this method yet.");
+    this.write(new String(cbuf), off, len);
   }
 
   @Override
   public void write(int c) throws IOException {
-    throw new UnsupportedOperationException("The student has not implemented this method yet.");
+
+    if(cpt == 1){
+      writeNumberLine();
+    }
+
+    if (firstRound && previousC == '\r'){
+          out.write('\r');
+          if (c!='\n')
+           writeNumberLine();
+    }
+
+    if (c == '\n'){
+      out.write('\n');
+      writeNumberLine();
+    }
+
+    if (c != '\r' && c!='\n') {
+      out.write(c);
+    }
+
+    previousC = c;
+    firstRound = true;
+
+  }
+
+  public void writeNumberLine() throws IOException {
+    out.write(cpt++ + "\t");
   }
 
 }
