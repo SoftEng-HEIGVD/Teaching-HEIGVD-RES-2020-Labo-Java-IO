@@ -31,14 +31,10 @@ public class Utils
             {
                 if (pos < lines.length()-1 && lines.charAt(pos+1) == '\n')
                 {
-                    pos += 1;
-                    break;  // In case of a carriage return (\r\n) then we must advance pos by 1 to find the end of the line
-                }
-                else
-                {
-                    break;  // Either ends by \r or isn't followed by \n so we found pos
+                    pos += 1; // In case of a carriage return (\r\n) then we must advance pos by 1 to find the end of the line
                 }
 
+                break;
             }
         }
 
