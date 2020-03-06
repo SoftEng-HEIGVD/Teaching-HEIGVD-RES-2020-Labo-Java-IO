@@ -9,6 +9,7 @@ import ch.heigvd.res.labio.quotes.QuoteClient;
 import ch.heigvd.res.labio.quotes.Quote;
 import java.io.File;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.util.logging.Level;
@@ -78,22 +79,45 @@ public class Application implements IApplication {
     }
   }
 
+  /**
+   * Gets {@code numberOfQuotes} quotes from {@link QuoteClient}'s
+   * {@code WEB_SERVICE_ENDPOINT} endpoint and stores them (in UTF-8 encoding)
+   * according to their respective tags.
+   * <p>
+   * Clears the {@code WORKSPACE_DIRECTORY} each time it is run.
+   *
+   * @author Moïn DANAI
+   *
+   * @param numberOfQuotes how many quotes to fetch from the Internet
+   *
+   * @throws IOException if any error occurs when contacting the
+   *                     {@code WEB_SERVICE_ENDPOINT}
+   */
   @Override
   public void fetchAndStoreQuotes(int numberOfQuotes) throws IOException {
+    // ensure the quotes directory is in a clean state
     clearOutputDirectory();
+
+    // fetch and store quotes
     QuoteClient client = new QuoteClient();
     for (int i = 0; i < numberOfQuotes; i++) {
       Quote quote = client.fetchQuote();
-      /* There is a missing piece here!
-       * As you can see, this method handles the first part of the lab. It uses the web service
-       * client to fetch quotes. We have removed a single line from this method. It is a call to
-       * one method provided by this class, which is responsible for storing the content of the
-       * quote in a text file (and for generating the directories based on the tags).
-       */
       LOG.info("Received a new joke with " + quote.getTags().size() + " tags.");
+
+      // construct path from tags
+      String tagPath = "";
       for (String tag : quote.getTags()) {
         LOG.info("> " + tag);
+        tagPath += String.format("%s/", tag);
       }
+
+      // construct filename and store as a file
+      storeQuote(quote, String.format(
+        "%s/%s%s.utf-8",
+        WORKSPACE_DIRECTORY,
+        tagPath,
+        String.format("quote-%d", i)
+      ));
     }
   }
   
@@ -108,22 +132,34 @@ public class Application implements IApplication {
   }
 
   /**
-   * This method stores the content of a quote in the local file system. It has
-   * 2 responsibilities: 
-   * 
-   * - with quote.getTags(), it gets a list of tags and uses
-   *   it to create sub-folders (for instance, if a quote has three tags "A", "B" and
-   *   "C", it will be stored in /quotes/A/B/C/quotes-n.utf8.
-   * 
+   * This method stores the content of a quote in the local file system. It has 2
+   * responsibilities:
+   * <p>
+   * - with quote.getTags(), it gets a list of tags and uses it to create
+   * sub-folders (for instance, if a quote has three tags "A", "B" and "C", it
+   * will be stored in /quotes/A/B/C/quotes-n.utf8.
+   * <p>
    * - with quote.getQuote(), it has access to the text of the quote. It stores
-   *   this text in UTF-8 file.
-   * 
-   * @param quote the quote object, with tags and text
-   * @param filename the name of the file to create and where to store the quote text
-   * @throws IOException 
+   * this text in UTF-8 file.
+   *
+   * @author Moïn DANAI
+   *
+   * @param quote    the quote object, with tags and text
+   * @param filename the name of the file to create and where to store the quote
+   *                 text
+   * @throws IOException
    */
   void storeQuote(Quote quote, String filename) throws IOException {
-    throw new UnsupportedOperationException("The student has not implemented this method yet.");
+    // create the file's path and the file itself
+    File quoteFile = new File(filename);
+    quoteFile.getParentFile().mkdirs();
+    quoteFile.createNewFile();
+    // check bool errors
+
+    // write the quote to disk
+    PrintWriter writer = new PrintWriter(quoteFile, "UTF-8");
+    writer.print(quote.getQuote());
+    writer.close();
   }
   
   /**
