@@ -1,6 +1,7 @@
 package ch.heigvd.res.labio.interfaces;
 
 import java.io.File;
+import java.io.IOException;
 
 /**
  * This interface is used to perform one operation on each element (file and
