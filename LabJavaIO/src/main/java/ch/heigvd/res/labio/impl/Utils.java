@@ -27,7 +27,11 @@ public class Utils
 	{
 		int posCR = lines.indexOf(CR);
 		int posLF = lines.indexOf(LF);
-		int pos   = posCR + 1;
+		int pos   = posCR + 1;  // we position ourselves after the carriage return
+
+		if (pos == posLF) { // if there's a linefeed after the carriage return
+			pos += 1;      // we position ourselves after the linefeed
+		}
 
 		return new String[]{"", ""};
 	}
