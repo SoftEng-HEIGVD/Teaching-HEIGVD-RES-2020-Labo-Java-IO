@@ -23,6 +23,8 @@ public class FileNumberingFilterWriter extends FilterWriter
 	private              int    line     = 1;
 	private              int    lastChar = -1;
 
+	// the following are used as String and not char so that we can print without having
+	// to cast our integers in write(int c)
 	private static final String CR  = "\r"; // carriage return
 	private static final String LF  = "\n"; // linefeed
 	private static final String TAB = "\t"; // tabulation
@@ -31,7 +33,6 @@ public class FileNumberingFilterWriter extends FilterWriter
 	{
 		super(out);
 	}
-
 
 	@Override
 	public void write(String str, int off, int len) throws IOException
@@ -53,8 +54,6 @@ public class FileNumberingFilterWriter extends FilterWriter
 	public void write(int c) throws IOException
 	{
 		String str = "";
-
-
 		if (line == 1) {
 			str += line + TAB;
 			line += 1;
