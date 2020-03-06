@@ -23,6 +23,10 @@ public class FileNumberingFilterWriter extends FilterWriter
 	private              int    line     = 1;
 	private              int    lastChar = -1;
 
+	private static final char CR  = '\r'; // carriage return
+	private static final char LF  = '\n'; // linefeed
+	private static final char TAB = '\t'; // tabulation
+
 	public FileNumberingFilterWriter(Writer out)
 	{
 		super(out);
@@ -31,10 +35,10 @@ public class FileNumberingFilterWriter extends FilterWriter
 	@Override
 	public void flush() throws IOException
 	{
-		if (lastChar == '\r') {
-			String toSend = line + "\t";
+		if (lastChar == CR) {
+			String str = line + "" + TAB;
 			line += 1;
-			super.write(toSend, 0, toSend.length());
+			super.write(str, 0, str.length());
 		}
 	}
 
@@ -61,21 +65,20 @@ public class FileNumberingFilterWriter extends FilterWriter
 
 
 		if (line == 1) {
-			str += line + "\t";
+			str += line + TAB;
 			line += 1;
 		}
 
-		if (c == '\n') {
-			str += "\n" + line + "\t";
+		if (c == LF) {
+			str += c + line + TAB;
 			line += 1;
 		} else {
-			if (lastChar == '\r') {
-				str += line + "\t";
+			if (lastChar == CR) {
+				str += line + TAB;
 				line += 1;
 			}
 			str += (char) c;
 		}
-		lastChar = c;
 		super.write(str, 0, str.length());
 	}
 
