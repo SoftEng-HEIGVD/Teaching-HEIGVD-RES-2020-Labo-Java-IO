@@ -1,6 +1,7 @@
 package ch.heigvd.res.labio.interfaces;
 
 import java.io.File;
+import java.io.IOException;
 
 /**
  * This interface is used to perform one operation on each element (file and
@@ -23,6 +24,6 @@ public interface IFileExplorer {
    * @param rootDirectory the directory where to start the traversal
    * @param vistor defines the operation to be performed on each file
    */
-  public void explore(File rootDirectory, IFileVisitor vistor);
+  public void explore(File rootDirectory, IFileVisitor vistor) throws IOException;
   
 }
