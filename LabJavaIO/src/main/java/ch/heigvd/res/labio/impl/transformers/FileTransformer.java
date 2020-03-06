@@ -27,6 +27,7 @@ import java.util.logging.Logger;
  */
 public abstract class FileTransformer implements IFileVisitor {
 
+  private static final int BUF_SIZE = 4096;
   private static final Logger LOG = Logger.getLogger(FileTransformer.class.getName());
   private final List<FilterWriter> filters = new ArrayList<>();
   
@@ -53,12 +54,11 @@ public abstract class FileTransformer implements IFileVisitor {
       Writer writer = new OutputStreamWriter(new FileOutputStream(file.getPath()+ ".out"), "UTF-8"); // the bug fix by teacher
       writer = decorateWithFilters(writer);
 
-      /*
-       * There is a missing piece here: you have an input reader and an ouput writer (notice how the 
-       * writer has been decorated by the concrete subclass!). You need to write a loop to read the
-       * characters and write them to the writer.
-       */
-      
+      char[] buffer = new char[BUF_SIZE];
+      int b;
+      while ((b = reader.read(buffer, 0, BUF_SIZE)) != -1)
+          writer.write(buffer, 0, b);
+
       reader.close();
       writer.flush();
       writer.close();
