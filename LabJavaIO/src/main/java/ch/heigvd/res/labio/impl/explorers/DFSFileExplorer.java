@@ -3,6 +3,7 @@ package ch.heigvd.res.labio.impl.explorers;
 import ch.heigvd.res.labio.interfaces.IFileExplorer;
 import ch.heigvd.res.labio.interfaces.IFileVisitor;
 import java.io.File;
+import java.nio.file.Files;
 
 /**
  * This implementation of the IFileExplorer interface performs a depth-first
@@ -16,7 +17,17 @@ public class DFSFileExplorer implements IFileExplorer {
 
   @Override
   public void explore(File rootDirectory, IFileVisitor vistor) {
-    throw new UnsupportedOperationException("The student has not implemented this method yet.");
+    vistor.visit(rootDirectory); // on visite le dossier actuel, donc DFS pre-ordre, nous assure que chaque fichier est visité
+    File[] subFiles = rootDirectory.listFiles(); // on liste les sous-fichiers
+
+    //On va procéder de manière récursive, donc tout d'abord le cas basique
+    if(subFiles == null){
+      return; //basique, si on a pas de sous fichiers, on s'arrete
+    }
+
+    //ensuite la partie récursive
+    for (File f :subFiles){
+      explore(f,vistor);
+    }
   }
- //bonsoir
 }
