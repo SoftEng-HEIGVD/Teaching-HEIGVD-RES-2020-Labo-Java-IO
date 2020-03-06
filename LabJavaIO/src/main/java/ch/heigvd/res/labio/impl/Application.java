@@ -7,16 +7,15 @@ import ch.heigvd.res.labio.interfaces.IFileExplorer;
 import ch.heigvd.res.labio.interfaces.IFileVisitor;
 import ch.heigvd.res.labio.quotes.QuoteClient;
 import ch.heigvd.res.labio.quotes.Quote;
-import java.io.File;
-import java.io.IOException;
-import java.io.StringWriter;
-import java.io.Writer;
+
+import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.commons.io.FileUtils;
 
 /**
- *
+ * Maurice Lehmann : Test comment for first commit
  * @author Olivier Liechti
  */
 public class Application implements IApplication {
@@ -90,6 +89,9 @@ public class Application implements IApplication {
        * one method provided by this class, which is responsible for storing the content of the
        * quote in a text file (and for generating the directories based on the tags).
        */
+      //MLE : Adding the quote in a file in the right repository
+      storeQuote(quote, ("quote-"+ (i+1)));
+
       LOG.info("Received a new joke with " + quote.getTags().size() + " tags.");
       for (String tag : quote.getTags()) {
         LOG.info("> " + tag);
@@ -123,7 +125,25 @@ public class Application implements IApplication {
    * @throws IOException 
    */
   void storeQuote(Quote quote, String filename) throws IOException {
-    throw new UnsupportedOperationException("The student has not implemented this method yet.");
+
+    String path = WORKSPACE_DIRECTORY;
+    for(String tag : quote.getTags()){
+      path += "/" + tag;
+      //Check if the directory exists
+      File directory = new File(path);
+      //If the directory do not exists, we create it
+      if(!directory.exists())
+        directory.mkdirs();
+    }
+
+    //Since we have the path from the tags, we can create a new file
+    File quoteFile = new File(path + "/" + filename + ".utf8");
+
+    //Creating the file with the utf-8 encoding
+    try (OutputStreamWriter writer =
+                 new OutputStreamWriter(new FileOutputStream(quoteFile), StandardCharsets.UTF_8)){
+        writer.write(quote.getQuote());
+    }
   }
   
   /**
@@ -140,6 +160,12 @@ public class Application implements IApplication {
          * of the the IFileVisitor interface inline. You just have to add the body of the visit method, which should
          * be pretty easy (we want to write the filename, including the path, to the writer passed in argument).
          */
+        try {
+          writer.write(file.getPath() + "\n");
+          writer.flush();
+        }catch(IOException exception){
+          System.out.println("Enable to write path of the file");
+        }
       }
     });
   }
