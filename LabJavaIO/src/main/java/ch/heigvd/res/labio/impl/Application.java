@@ -155,7 +155,7 @@ public class Application implements IApplication {
       @Override
       public void visit(File file) {
         try {
-          writer.write(file.getPath() + System.lineSeparator());
+          writer.write(file.toString() + System.lineSeparator());
         } catch (IOException e) {
           e.printStackTrace();
         }
