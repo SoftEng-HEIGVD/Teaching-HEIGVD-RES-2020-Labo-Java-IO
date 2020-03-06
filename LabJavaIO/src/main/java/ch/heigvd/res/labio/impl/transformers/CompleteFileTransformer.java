@@ -1,5 +1,8 @@
 package ch.heigvd.res.labio.impl.transformers;
 
+import ch.heigvd.res.labio.impl.filters.FileNumberingFilterWriter;
+import ch.heigvd.res.labio.impl.filters.UpperCaseFilterWriter;
+
 import java.io.Writer;
 
 /**
