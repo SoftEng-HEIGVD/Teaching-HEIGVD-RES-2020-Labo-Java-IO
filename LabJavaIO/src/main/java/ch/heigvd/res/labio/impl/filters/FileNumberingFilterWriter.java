@@ -41,19 +41,23 @@ public class FileNumberingFilterWriter extends FilterWriter {
 
     @Override
     public void write(int c) throws IOException {
+        // First line
         if(counter == 1) {
             out.write(counter++ + "\t" + (char) c);
-        } else if (c == '\r') {
-
-        } else if (c == '\n') {
-            out.write((lastChar == '\r' ? "\r" : "") + "\n" + counter++ + "\t");
-        } else {
+        }
+        // Non line returning characters
+        else if (c != '\r' && c != '\n') {
             if(lastChar == '\r')
                 out.write("\r" + counter++ + "\t");
 
             out.write(c);
         }
+        // End of line character
+        else if (c == '\n') {
+            out.write((lastChar == '\r' ? "\r" : "") + "\n" + counter++ + "\t");
+        }
 
+        // This is to detect the line returning value of '\r\n'
         lastChar = (char) c;
     }
 }
