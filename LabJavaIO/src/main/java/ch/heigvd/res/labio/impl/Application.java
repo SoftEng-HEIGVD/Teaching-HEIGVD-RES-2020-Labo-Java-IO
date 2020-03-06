@@ -124,9 +124,8 @@ public class Application implements IApplication {
    */
   void storeQuote(Quote quote, String filename) throws IOException {
     String dirname = WORKSPACE_DIRECTORY + File.separator + String.join(File.separator, quote.getTags());
-    File dir = new File(dirname);
-    dir.mkdirs();
-    File file = new File(dir, filename);
+    File file = new File(dirname, filename);
+    file.getParentFile().mkdirs();
     FileWriter fileWriter = new FileWriter(file);
     fileWriter.write(quote.getQuote());
     fileWriter.close();
