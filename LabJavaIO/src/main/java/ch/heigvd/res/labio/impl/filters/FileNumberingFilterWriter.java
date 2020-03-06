@@ -46,11 +46,7 @@ public class FileNumberingFilterWriter extends FilterWriter {
         } else if (c == '\r') {
 
         } else if (c == '\n') {
-            if(lastChar == '\r') {
-                out.write("\r\n" + counter++ + "\t");
-            } else {
-                out.write("\n" + counter++ + "\t");
-            }
+            out.write((lastChar == '\r' ? "\r" : "") + "\n" + counter++ + "\t");
         } else {
             if(lastChar == '\r')
                 out.write("\r" + counter++ + "\t");
