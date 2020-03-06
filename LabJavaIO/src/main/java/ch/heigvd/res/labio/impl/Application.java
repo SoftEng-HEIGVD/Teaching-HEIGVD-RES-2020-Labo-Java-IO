@@ -153,11 +153,10 @@ public class Application implements IApplication {
          */
 
         try {
-          writer.write(file.getAbsolutePath() + '\n');
+          writer.write(file.getPath() + '\n');
         } catch (IOException e) {
           e.printStackTrace();
         }
-
       }
     });
   }
