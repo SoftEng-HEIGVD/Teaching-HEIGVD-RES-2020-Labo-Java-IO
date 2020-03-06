@@ -144,8 +144,6 @@ public class Application implements IApplication {
     writer.close();
 
     System.out.println(quotePath);
-
-    //throw new UnsupportedOperationException("The student has not implemented this method yet.");
   }
   
   /**
@@ -164,7 +162,7 @@ public class Application implements IApplication {
          */
         //System.out.println(file);
         try {
-          writer.write(file.getPath());
+          writer.write(file.getPath().replace('\\', '/') + "\n");
         } catch (IOException e) {
           e.printStackTrace();
         }
