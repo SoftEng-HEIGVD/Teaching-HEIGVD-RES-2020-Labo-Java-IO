@@ -7,10 +7,8 @@ import ch.heigvd.res.labio.interfaces.IFileExplorer;
 import ch.heigvd.res.labio.interfaces.IFileVisitor;
 import ch.heigvd.res.labio.quotes.QuoteClient;
 import ch.heigvd.res.labio.quotes.Quote;
-import java.io.File;
-import java.io.IOException;
-import java.io.StringWriter;
-import java.io.Writer;
+
+import java.io.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.commons.io.FileUtils;
@@ -94,6 +92,9 @@ public class Application implements IApplication {
       for (String tag : quote.getTags()) {
         LOG.info("> " + tag);
       }
+
+      // Restoring the missing call in the method
+      this.storeQuote(quote, "quote-"+i+".utf8");
     }
   }
   
@@ -122,8 +123,30 @@ public class Application implements IApplication {
    * @param filename the name of the file to create and where to store the quote text
    * @throws IOException 
    */
-  void storeQuote(Quote quote, String filename) throws IOException {
-    throw new UnsupportedOperationException("The student has not implemented this method yet.");
+  void storeQuote(Quote quote, String filename) throws IOException
+  {
+      StringBuilder sb = new StringBuilder(WORKSPACE_DIRECTORY);
+
+      for (String tag : quote.getTags())
+      {
+          sb.append('/').append(tag);
+      }
+
+      // File toWrite = new File(sb.toString());
+
+      // toWrite.mkdirs();
+      new File(sb.toString()).mkdirs();
+
+      sb.append('/').append(filename);
+
+      FileWriter fileWriter = new FileWriter(new File(sb.toString()));
+      fileWriter.write(quote.getQuote());
+      fileWriter.flush();
+      fileWriter.close();
+      // Based on : http://www.avajava.com/tutorials/lessons/how-do-i-write-a-string-to-a-file-using-commons-io.html
+      //FileUtils.writeStringToFile(new File(sb.toString()), quote.getQuote());
+
+
   }
   
   /**
@@ -140,14 +163,25 @@ public class Application implements IApplication {
          * of the the IFileVisitor interface inline. You just have to add the body of the visit method, which should
          * be pretty easy (we want to write the filename, including the path, to the writer passed in argument).
          */
+
+          try
+          {
+              writer.write(file.toString() + '\n');
+          }
+          catch (java.io.IOException e)
+          {
+              e.printStackTrace();
+          }
+
       }
     });
   }
 
   @Override
-  public void processQuoteFiles() throws IOException {
-    IFileExplorer explorer = new DFSFileExplorer();
-    explorer.explore(new File(WORKSPACE_DIRECTORY), new CompleteFileTransformer());    
+  public void processQuoteFiles() throws IOException
+  {
+      IFileExplorer explorer = new DFSFileExplorer();
+      explorer.explore(new File(WORKSPACE_DIRECTORY), new CompleteFileTransformer());
   }
 
 }
