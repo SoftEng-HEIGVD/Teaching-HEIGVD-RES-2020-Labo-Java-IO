@@ -22,6 +22,7 @@ public class FileNumberingFilterWriterTest {
     StringWriter stringWriter = new StringWriter();
     FileNumberingFilterWriter writer = new FileNumberingFilterWriter(stringWriter);
     writer.write(line);
+    writer.flush();
     assertEquals("1\t" + line + "2\t", stringWriter.toString());
   }
 
@@ -33,6 +34,7 @@ public class FileNumberingFilterWriterTest {
     FileNumberingFilterWriter writer = new FileNumberingFilterWriter(stringWriter);
     writer.write(line1);
     writer.write(line2);
+    writer.flush();
     assertEquals("1\t" + line1 + "2\t" + line2 + "3\t", stringWriter.toString());
   }
   
@@ -43,7 +45,8 @@ public class FileNumberingFilterWriterTest {
     StringWriter stringWriter = new StringWriter();
     FileNumberingFilterWriter writer = new FileNumberingFilterWriter(stringWriter);
     writer.write(line1);
-    writer.write(line2);  
+    writer.write(line2);
+    writer.flush();
     assertEquals("1\t" + line1 + "2\t" + line2, stringWriter.toString());
   }
 
@@ -56,7 +59,8 @@ public class FileNumberingFilterWriterTest {
     FileNumberingFilterWriter writer = new FileNumberingFilterWriter(stringWriter);
     writer.write(line1_1);
     writer.write(line1_2);
-    writer.write(line2);  
+    writer.write(line2);
+    writer.flush();
     assertEquals("1\t" + line1_1 + line1_2 + "2\t" + line2, stringWriter.toString());
   }
 
@@ -68,6 +72,7 @@ public class FileNumberingFilterWriterTest {
     int startIndex = 2;
     int len = 4;
     writer.write(line, startIndex, len);
+    writer.flush();
     assertEquals("1\t" + "only", stringWriter.toString());
   }
 
@@ -80,6 +85,7 @@ public class FileNumberingFilterWriterTest {
       int c = line.charAt(i);
       writer.write(c);
     }
+    writer.flush();
     assertEquals("1\tThis is line 1\r\n2\tThis is line 2\n3\tThis is line 3", stringWriter.toString());
   }
 
@@ -90,6 +96,7 @@ public class FileNumberingFilterWriterTest {
     StringWriter stringWriter = new StringWriter();
     FileNumberingFilterWriter writer = new FileNumberingFilterWriter(stringWriter);
     writer.write(line);
+    writer.flush();
     assertEquals(expected, stringWriter.toString());
   }
 
@@ -100,6 +107,7 @@ public class FileNumberingFilterWriterTest {
     StringWriter stringWriter = new StringWriter();
     FileNumberingFilterWriter writer = new FileNumberingFilterWriter(stringWriter);
     writer.write(line);
+    writer.flush();
     assertEquals(expected, stringWriter.toString());
   }
 
@@ -110,6 +118,7 @@ public class FileNumberingFilterWriterTest {
     StringWriter stringWriter = new StringWriter();
     FileNumberingFilterWriter writer = new FileNumberingFilterWriter(stringWriter);
     writer.write(line);
+    writer.flush();
     assertEquals(expected, stringWriter.toString());
   }
 
@@ -124,7 +133,8 @@ public class FileNumberingFilterWriterTest {
     }
     writer.write("last");
     referenceWriter.write(120 + "\tlast");
-    
+    writer.flush();
+
     stringWriter.close();
     String computedValue = stringWriter.toString();
     String referenceValue = referenceWriter.toString();
