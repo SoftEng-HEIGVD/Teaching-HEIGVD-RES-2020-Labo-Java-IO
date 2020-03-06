@@ -32,7 +32,6 @@ public class Utils {
         }
       }else if(tabIndex == 0 && lines.charAt(i) == '\n'){
         tabIndex++;
-        result[0] += lines.charAt(i);
       }
     }
     if(tabIndex == 0){
