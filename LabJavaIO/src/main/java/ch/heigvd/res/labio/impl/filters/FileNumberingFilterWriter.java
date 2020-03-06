@@ -29,8 +29,8 @@ public class FileNumberingFilterWriter extends FilterWriter {
 
   @Override
   public void write(String str, int off, int len) throws IOException {
-
-      String sub = str.substring(off, off + len);
+      if(str == "") return;
+      String sub = str.substring(off, off + len );
       String[] nextLines = Utils.getNextLine(sub);
 
       //Add the first numbering
@@ -38,10 +38,16 @@ public class FileNumberingFilterWriter extends FilterWriter {
           nextLines[0] = "1\t" + nextLines[0];
           firstLine = false;
       }
+      if(nextLines[0] == "" && nextLines[1] != ""){
+          super.out.write(nextLines [1]);
+          return;
+      }
       //Add the number
-      char lastChar = nextLines[0].charAt(nextLines[0].length() - 1);
-      if( lastChar == '\n' || lastChar == '\r')
-          nextLines[0] += (++counter) + "\t";
+      if(nextLines[0] != "") {
+          char lastChar = nextLines[0].charAt(nextLines[0].length() - 1);
+          if (lastChar == '\n' || lastChar == '\r')
+              nextLines[0] += (++counter) + "\t";
+      }
 
 
       super.out.write(nextLines[0]);

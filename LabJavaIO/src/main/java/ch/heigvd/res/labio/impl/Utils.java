@@ -25,28 +25,54 @@ public class Utils {
     returnStrings[0] = "";
     returnStrings[1] = "";
 
-    String delimiter = "";
+    int position = 0;
+    int delimiterSize = 0;
+    boolean keepGoing = true;
+    while(position < lines.length() && keepGoing){
 
-    if(lines.contains("\r\n")){ //Case Windows
-      delimiter = "\r\n";
-    }else if(lines.contains("\n")){ //Case MaxOs
-      delimiter = "\n";
-    }else if(lines.contains("\r")){ //Case Unix
-      delimiter = "\r";
+      switch(lines.charAt(position)){
+        case '\r':
+          //Case \r\n
+          if((position + 1) < lines.length() && lines.charAt(position+1) == '\n'){
+            delimiterSize++;
+          }
+          keepGoing = false;
+          break;
+        case '\n':
+          keepGoing = false;
+          break;
+       }
+       position++;
     }
 
 
-    String[] splited = lines.split(String.format("(?<=%s)", delimiter),2);
-    //If no delimiter
-    if(delimiter == "")
-      splited[0] = lines;
+    returnStrings[0] = keepGoing ? "" : lines.substring(0, position + delimiterSize);
 
-    //First part
-    returnStrings[0] = splited[0];
-    //Rest
-    returnStrings[1] = lines.substring(returnStrings[0].length());
+    returnStrings[1] = keepGoing ? lines : lines.substring(returnStrings[0].length());
 
     return returnStrings;
+
+  }
+
+  public static void main(String[] args){
+    String str = "this is a line1\nthis is a other line1";
+    String str2 = "this is a line2\rthis is a other line2\r";
+    String str21 = "this is a line2\nthis is a other line2\n";
+    String str3 = "This is line 1\nThis is line 2\r\nThis is line 3\rThis is line 4";
+    String str4 = "This is line 1";
+
+
+    String[] res = getNextLine(str4);
+    System.out.println("-------------------");
+    System.out.println(res[0]);
+
+    String[] res2 = getNextLine(res[1]);
+    System.out.println(res2[0]);
+
+
+    System.out.println("-------------------");
+
+
 
   }
 
