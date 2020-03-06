@@ -17,7 +17,7 @@ import org.apache.commons.io.FileUtils;
 
 /**
  *
- * @author Olivier Liechti
+ * @author Olivier Liechti, Florian Mulhauser
  */
 public class Application implements IApplication {
 
@@ -126,13 +126,13 @@ public class Application implements IApplication {
   void storeQuote(Quote quote, String filename) throws IOException {
     StringBuilder sb_path = new StringBuilder(WORKSPACE_DIRECTORY);
 
-    for (String tag:
-         quote.getTags()) {
-      sb_path.append(File.separator).append(tag);
+    for (String tag: quote.getTags()){
 
+      sb_path.append(File.separator).append(tag);
     }
-    sb_path.append(File.separtor).append(filename);
-    File f = new File(sb_path.toString);
+    
+    sb_path.append(File.separator).append(filename);
+    File f = new File(sb_path.toString());
     FileUtils.writeStringToFile(f, quote.getQuote());
     //throw new UnsupportedOperationException("The student has not implemented this method yet.");
   }
