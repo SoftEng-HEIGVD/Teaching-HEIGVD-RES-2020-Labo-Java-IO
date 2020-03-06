@@ -6,6 +6,7 @@ import java.io.Writer;
 import java.util.logging.Logger;
 import ch.heigvd.res.labio.impl.Utils;
 
+
 /**
  * This class transforms the streams of character sent to the decorated writer.
  * When filter encounters a line separator, it sends it to the decorated writer.
@@ -48,7 +49,7 @@ public class FileNumberingFilterWriter extends FilterWriter {
         return transformedStr.toString() + "\r\n" + ++counter + "\t";
       }else if(toExecute.charAt(0) != '\n' && lastChar == '\r'){
         lastChar = toExecute.charAt(0);
-        return transformedStr.toString() + "\r" + ++counter + "\t";
+        return transformedStr.toString() + "\r" + ++counter + "\t" + toExecute.charAt(0);
       }
       lastChar = toExecute.charAt(0);
     }
@@ -79,7 +80,8 @@ public class FileNumberingFilterWriter extends FilterWriter {
   @Override
   public void write(int c) throws IOException {
     String str = Character.toString((char)c);
-    this.out.write(fileNumbering(str,0,1));
+    str = fileNumbering(str,0,1);
+    this.out.write(str);
   }
 
 }
