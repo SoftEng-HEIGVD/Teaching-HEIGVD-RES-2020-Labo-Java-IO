@@ -36,7 +36,6 @@ public class FileNumberingFilterWriter extends FilterWriter
 			line += 1;
 			super.write(toSend, 0, toSend.length());
 		}
-		super.flush();
 	}
 
 	@Override
@@ -59,6 +58,8 @@ public class FileNumberingFilterWriter extends FilterWriter
 	public void write(int c) throws IOException
 	{
 		String str = "";
+
+
 		if (line == 1) {
 			str += line + "\t";
 			line += 1;
