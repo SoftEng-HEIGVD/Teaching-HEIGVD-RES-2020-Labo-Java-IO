@@ -20,15 +20,8 @@ public class Utils {
      * contain any line separator, then the first element is an empty string.
      */
     public static String[] getNextLine(String lines) {
-        if((lines.contains("\n") || lines.contains("\r"))) {
-
-            String nextLine = lines.split("(?<=\\R)")[0];
-            String rest     = lines.substring(nextLine.length());
-
-            return new String[] {nextLine, rest};
-        } else {
-            return new String[] {"", lines};
-        }
+        String nextLine = lines.split("(?<=\\R)")[0];
+        return new String[] {nextLine, lines.substring(nextLine.length())};
     }
 
 }
