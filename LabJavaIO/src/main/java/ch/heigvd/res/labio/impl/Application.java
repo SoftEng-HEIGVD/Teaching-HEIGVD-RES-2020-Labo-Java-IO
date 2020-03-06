@@ -119,31 +119,23 @@ public class Application implements IApplication {
    * @throws IOException
    */
   void storeQuote(Quote quote, String filename) throws IOException {
-    String quotePath = WORKSPACE_DIRECTORY;
+
+    String qPath = WORKSPACE_DIRECTORY;
     for(String tag : quote.getTags()){
-      quotePath += File.separator + tag;
+        qPath += File.separator + tag;
     }
-    try{
-
-      File directoriesToQuote = new File(quotePath);
-      directoriesToQuote.mkdirs();
-
-      // The path to the quote with the file name is built
-      String pathIncludingQuoteFile = quotePath + File.separator + filename;
-
-      // A writer on file is open to write inside and close it
-      OutputStreamWriter writer = new OutputStreamWriter(new FileOutputStream(pathIncludingQuoteFile), "UTF-8");
+    // Création d'un fichier
+      File dirToQ = new File(qPath);
+    // Création de l'arborécense
+      dirToQ.mkdirs();
+      // Ajout du nom de fichier au chemin complet
+      String pathWithFile = qPath + File.separator + filename;
+      // Ouverture d'un writer, écriture de la quote, flush puis fermeture du writer
+      OutputStreamWriter writer = new OutputStreamWriter(new FileOutputStream(pathWithFile), "UTF-8");
       writer.write(quote.getQuote());
       writer.flush();
       writer.close();
-
-      // Every input/output exception is catched
-    }catch (IOException except){
-      LOG.log(Level.SEVERE, "Error. Cannot writing on disk");
-      throw new IOException("Error. Cannot writing on disk");
-    }
   }
-
   /**
    * This method uses a IFileExplorer to explore the file system and prints the name of each
    * encountered file and directory.
