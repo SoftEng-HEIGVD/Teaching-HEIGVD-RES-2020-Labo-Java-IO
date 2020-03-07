@@ -36,7 +36,9 @@ public class FileNumberingFilterWriter extends FilterWriter {
     public void write(char[] cbuf, int off, int len) throws IOException {
         for (int i = off; i < off + len; i++) {
             write(cbuf[i]);
+
         }
+      write(0);
 
     }
 
@@ -52,13 +54,20 @@ public class FileNumberingFilterWriter extends FilterWriter {
               if(!rnFlag){
                 rnFlag=true;
                 out.write(c);
-                out.write(number++ + "\t");
+                //out.write(number++ + "\t");
+              } else {
+                out.write(c);
               }
 
 
             } else {
+              if(rnFlag){
+                out.write(number++ + "\t");
+              }
               rnFlag=false;
-              out.write(c);
+              if(c != 0) { // making c out of Java, all of this is due to \r\n
+                out.write(c);
+              }
             }
         }
     }
