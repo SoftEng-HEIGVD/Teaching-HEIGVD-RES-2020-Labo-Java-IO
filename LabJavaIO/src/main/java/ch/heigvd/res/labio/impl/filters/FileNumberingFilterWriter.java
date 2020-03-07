@@ -55,10 +55,13 @@ public class FileNumberingFilterWriter extends FilterWriter {
       super.out.write(this.lineCounter++ + "\t");
     }
 
-    if (c == '\n' && this.lastChar != '\r' || c == '\r'){
+    if (c == '\n'){
       super.out.write(c);
       super.out.write(this.lineCounter++ + "\t");
-    }else {
+    }else if (this.lastChar == '\r') {
+      super.out.write(this.lineCounter++ + "\t");
+      super.out.write(c);
+    }else{
       super.out.write(c);
     }
 
