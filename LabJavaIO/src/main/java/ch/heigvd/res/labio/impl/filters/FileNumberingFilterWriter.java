@@ -67,13 +67,13 @@ public class FileNumberingFilterWriter extends FilterWriter {
 
 
   }
-
+/**
   public void firstLine(){
     isFirst = false;
     lCounter++;
     out.write(lCounter +'\t');
   }
-
+**/
   @Override
   public void write(int c) throws IOException {
 
