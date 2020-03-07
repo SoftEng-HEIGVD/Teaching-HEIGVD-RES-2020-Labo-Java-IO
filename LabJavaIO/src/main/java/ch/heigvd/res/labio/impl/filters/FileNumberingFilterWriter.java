@@ -67,7 +67,6 @@ public class FileNumberingFilterWriter extends FilterWriter {
       }
       previousChar = (char)c;
 
-
   }
 
 }
