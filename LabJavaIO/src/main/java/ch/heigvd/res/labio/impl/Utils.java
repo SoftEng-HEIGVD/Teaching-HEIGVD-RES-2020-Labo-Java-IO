@@ -22,7 +22,7 @@ public class Utils {
    * contain any line separator, then the first element is an empty string.
    */
   public static String[] getNextLine(String lines) {
-    String[] result = lines.split("[\r\n|\r|\n]", 2);
+    String[] result = lines.split("\r\n|\r|\n", 2);
     if(lines.indexOf("\r\n") != -1){
       return new String[]{result[0] + "\r\n", result[1]};
     } else if(lines.indexOf("\r") != -1){
