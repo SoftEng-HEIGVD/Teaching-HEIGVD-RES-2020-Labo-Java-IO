@@ -137,13 +137,13 @@ public class Application implements IApplication
 	 */
 	void storeQuote(Quote quote, String filename) throws IOException
 	{
-		String dir =
-			WORKSPACE_DIRECTORY + File.separator + File.separator + quote.getTags();
+		final String SEP = File.separator;
+		String dir = WORKSPACE_DIRECTORY + SEP + String.join(SEP, quote.getQuote());
 		try {
 			File       f  = new File(dir, filename);
 			boolean    b  = f.getParentFile().mkdirs();
 			FileWriter fw = new FileWriter(f);
-			fw.write(quote.getQuote());
+			fw.write(quote.getQuote(), 0, quote.getQuote().length());
 			fw.close();
 		} catch (Exception e) {/*Whatever*/}
 	}
