@@ -10,6 +10,9 @@ import ch.heigvd.res.labio.quotes.QuoteClient;
 import ch.heigvd.res.labio.quotes.Quote;
 
 import java.io.*;
+import java.util.Comparator;
+import java.util.Objects;
+import java.util.PriorityQueue;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.commons.io.FileUtils;
@@ -162,6 +165,7 @@ public class Application implements IApplication {
   void printFileNames(final Writer writer) {
     IFileExplorer explorer = new DFSFileExplorer();
     explorer.explore(new File(WORKSPACE_DIRECTORY), new IFileVisitor() {
+
       @Override
       public void visit(File file) {
         /*

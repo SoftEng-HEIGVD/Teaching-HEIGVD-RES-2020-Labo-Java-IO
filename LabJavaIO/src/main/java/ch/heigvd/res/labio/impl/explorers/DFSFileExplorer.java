@@ -18,23 +18,25 @@ public class DFSFileExplorer implements IFileExplorer {
 
   @Override
   public void explore(File rootDirectory, IFileVisitor visitor) {
-    // time to fixe this
 
-    // the DFS algorithm recursive version
-    // TODO implement iterative version of DFS
+    // DFS iterative Version
 
-    //iterative Version
     Set<File> visited = new HashSet<>();
 
-    Stack<File> stack = new Stack<>();
+    // We use a PQ for sorting the file by their pathName
+    PriorityQueue<File> stack = new PriorityQueue<>(new Comparator<File>() {
+      @Override
+      public int compare(File file, File t1) {
+        return file.getPath().compareTo(t1.getPath());
+      }
+    });
 
     //source Directory
-    stack.push(rootDirectory);
+    stack.add(rootDirectory);
 
-    while (!stack.empty()){
+    while (stack.size() != 0){
 
-      rootDirectory = stack.peek();
-      stack.pop();
+      rootDirectory = stack.poll();
 
       if(!visited.contains(rootDirectory)){
         visited.add(rootDirectory);
@@ -44,7 +46,7 @@ public class DFSFileExplorer implements IFileExplorer {
       try {
         for (File childFile : Objects.requireNonNull(rootDirectory.listFiles())) {
           if (!visited.contains(childFile)) {
-            stack.push(childFile);
+            stack.add(childFile);
           }
         }
       }catch (NullPointerException ex){
