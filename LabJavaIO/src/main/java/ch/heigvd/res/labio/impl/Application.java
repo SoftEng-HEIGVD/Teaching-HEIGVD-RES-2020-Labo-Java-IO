@@ -142,12 +142,6 @@ public class Application implements IApplication {
       file.createNewFile();
       FileWriter writer=new FileWriter(file);
       writer.write(quote.getQuote());
-
-      file=new File(path+filename+".utf8.out");
-      file.createNewFile();
-      writer=new FileWriter(file);
-      writer.write(quote.getQuote());
-
       writer.flush();
       writer.close();
   }
@@ -161,11 +155,15 @@ public class Application implements IApplication {
     explorer.explore(new File(WORKSPACE_DIRECTORY), new IFileVisitor() {
       @Override
       public void visit(File file) {
-        /*
-         * There is a missing piece here. Notice how we use an anonymous class here. We provide the implementation
-         * of the the IFileVisitor interface inline. You just have to add the body of the visit method, which should
-         * be pretty easy (we want to write the filename, including the path, to the writer passed in argument).
-         */
+          try
+          {
+              writer.write(file.getPath());
+              writer.write("\n");
+          }
+          catch (IOException except)
+          {
+              //make Java happy
+          }
       }
     });
   }
