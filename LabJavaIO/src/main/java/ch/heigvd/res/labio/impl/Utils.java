@@ -1,6 +1,8 @@
 package ch.heigvd.res.labio.impl;
 
 import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  *
@@ -20,7 +22,15 @@ public class Utils {
    * contain any line separator, then the first element is an empty string.
    */
   public static String[] getNextLine(String lines) {
-    throw new UnsupportedOperationException("The student has not implemented this method yet.");
+    String[] result = lines.split("[\r\n|\r|\n]", 2);
+    if(lines.indexOf("\r\n") != -1){
+      return new String[]{result[0] + "\r\n", result[1]};
+    } else if(lines.indexOf("\r") != -1){
+      return new String[]{result[0] + "\r", result[1]};
+    } else if (lines.indexOf("\n") != -1){
+      return new String[]{result[0] + "\n", result[1]};
+    }
+    return new String[]{"", lines};
   }
 
 }
