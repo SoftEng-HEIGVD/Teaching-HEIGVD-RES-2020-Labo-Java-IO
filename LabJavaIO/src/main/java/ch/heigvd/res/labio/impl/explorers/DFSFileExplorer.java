@@ -34,11 +34,14 @@ public class DFSFileExplorer implements IFileExplorer {
       // Test sometimes fails without sorting
       Arrays.sort(files);
 
+      // Explore more if it's a directory or visit it if it's a file
       for (File f : files) {
 
         if (f.isDirectory()) {
-
           explore(f, visitor);
+        }
+        else {
+          visitor.visit(f);
         }
       }
     }
