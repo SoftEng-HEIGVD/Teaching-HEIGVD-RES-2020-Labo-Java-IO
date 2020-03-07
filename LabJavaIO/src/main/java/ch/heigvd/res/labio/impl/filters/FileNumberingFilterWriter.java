@@ -19,6 +19,7 @@ public class FileNumberingFilterWriter extends FilterWriter {
 
     private int number = 1;
     private boolean beginingFlag = true;
+    private boolean rnFlag = false;
     private static final Logger LOG = Logger.getLogger(FileNumberingFilterWriter.class.getName());
 
     public FileNumberingFilterWriter(Writer out) {
@@ -28,8 +29,7 @@ public class FileNumberingFilterWriter extends FilterWriter {
     @Override
     public void write(String str, int off, int len) throws IOException {
         write(str.toCharArray(), off, len);
-    beginingFlag=true;
-    number=1;
+
     }
 
     @Override
@@ -37,8 +37,7 @@ public class FileNumberingFilterWriter extends FilterWriter {
         for (int i = off; i < off + len; i++) {
             write(cbuf[i]);
         }
-    beginingFlag=true;
-    number=1;
+
     }
 
 
@@ -46,19 +45,19 @@ public class FileNumberingFilterWriter extends FilterWriter {
     public void write(int c) throws IOException {
         if (beginingFlag) {
           beginingFlag=false;
-            out.write(Character.forDigit(number++,10));
-
-            /*if (c != (char) 92) { //this is a backslash
-                out.write((char) 92);
-            }*/
-          out.write(9); // tab
+            out.write(number++ + "\t");
             out.write(c);
-            //  Hello\n\World -> 1\Hello\n2\tWorld
         } else {
-            if(c== 92){
-              out.write(Character.forDigit(number++,10));
-              out.write(9); // tab
+            if(c == 13 || c == 10){
+              if(!rnFlag){
+                rnFlag=true;
+                out.write(c);
+                out.write(number++ + "\t");
+              }
+
+
             } else {
+              rnFlag=false;
               out.write(c);
             }
         }
