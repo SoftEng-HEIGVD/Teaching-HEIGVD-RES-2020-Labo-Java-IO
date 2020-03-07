@@ -123,21 +123,26 @@ public class Application implements IApplication {
      */
     void storeQuote(Quote quote, String filename) throws IOException {
         // Create workspace
-        String path = WORKSPACE_DIRECTORY;
-        new File(path).mkdir();
+        StringBuilder path = new StringBuilder(WORKSPACE_DIRECTORY);
+        new File(path.toString()).mkdir();
 
         // Create directory for each tag
         for (String tag : quote.getTags()) {
             new File(path + "/" + tag).mkdir();
-            path += "/" + tag;
+            path.append("/").append(tag);
         }
 
         File quoteFile = new File(path + "/" + filename + ".utf8");
-        FileWriter writer = new FileWriter(quoteFile);
-        writer.write(quote.getQuote());
+        try {
+            FileWriter writer = new FileWriter(quoteFile);
+            writer.write(quote.getQuote());
 
-        writer.flush();
-        writer.close();
+            writer.flush();
+            writer.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
     /**
