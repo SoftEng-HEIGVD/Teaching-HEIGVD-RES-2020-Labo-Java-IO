@@ -13,14 +13,13 @@ import java.util.logging.Logger;
  *
  * Hello\n\World -> 1\Hello\n2\tWorld
  *
- * @author Olivier Liechti
+ * @author Olivier Liechti, Vitor Vaz Afonso
  */
 public class FileNumberingFilterWriter extends FilterWriter {
 
   private static final Logger LOG = Logger.getLogger(FileNumberingFilterWriter.class.getName());
-  private int cpt = 1;
-  private boolean firstRound = false;
-  private int previousC;
+  private int lineNumber = 1;
+  private int previousC = -1; // character undefined
 
   public FileNumberingFilterWriter(Writer out) {
     super(out);
@@ -46,32 +45,34 @@ public class FileNumberingFilterWriter extends FilterWriter {
   @Override
   public void write(int c) throws IOException {
 
-    if(cpt == 1){
+    // write the first number line in the beginning
+    if(lineNumber == 1){
       writeNumberLine();
     }
 
-    if (firstRound && previousC == '\r'){
+    // if the previous character is defined and equals '\r'
+    if (previousC !=-1 && previousC == '\r'){
           out.write('\r');
-          if (c!='\n')
-           writeNumberLine();
+          if (c!='\n') {
+            writeNumberLine();
+          }
     }
 
-    if (c == '\n'){
-      out.write('\n');
-      writeNumberLine();
-    }
-
-    if (c != '\r' && c!='\n') {
+    // write the character if it's not '\r'
+    if (c != '\r') {
       out.write(c);
     }
 
-    previousC = c;
-    firstRound = true;
+    // if the character is '\n' do a break line
+    if (c == '\n'){
+      writeNumberLine();
+    }
 
+    previousC = c;
   }
 
   public void writeNumberLine() throws IOException {
-    out.write(cpt++ + "\t");
+    out.write(lineNumber++ + "\t");
   }
 
 }

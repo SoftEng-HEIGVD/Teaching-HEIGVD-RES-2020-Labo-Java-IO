@@ -10,7 +10,7 @@ import java.io.File;
  * node (file and directory). When the explorer reaches a directory, it visits all
  * files in the directory and then moves into the subdirectories.
  *
- * @author Olivier Liechti
+ * @author Olivier Liechti, Vitor Vaz Afonso
  */
 public class DFSFileExplorer implements IFileExplorer {
 
@@ -19,7 +19,7 @@ public class DFSFileExplorer implements IFileExplorer {
 
     vistor.visit(rootDirectory); // visit the current directory
 
-    // get list of all files and directories present in root
+    // get a list of all files and directories present in root
     File[] listOfFilesAndDirectory = rootDirectory.listFiles();
 
     // do nothing if the root directory is empty
@@ -38,7 +38,6 @@ public class DFSFileExplorer implements IFileExplorer {
           vistor.visit(file);
         }
       }
-    //throw new UnsupportedOperationException("The student has not implemented this method yet.");
   }
 
 }

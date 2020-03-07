@@ -12,7 +12,7 @@ import java.io.Writer;
  * generate an output file with 1) uppercase letters and 2) line numbers at the
  * beginning of each line.
  * 
- * @author Olivier Liechti
+ * @author Olivier Liechti, Vitor Vaz Afonso
  */
 public class CompleteFileTransformer extends FileTransformer {
 

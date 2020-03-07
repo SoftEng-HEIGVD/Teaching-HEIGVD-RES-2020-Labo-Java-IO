@@ -1,12 +1,10 @@
 package ch.heigvd.res.labio.impl;
 
 import java.util.logging.Logger;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  *
- * @author Olivier Liechti
+ * @author Olivier Liechti, Vitor Vaz Afonso
  */
 public class Utils {
 
@@ -23,15 +21,15 @@ public class Utils {
    */
   public static String[] getNextLine(String lines) {
 
-    String regex = "(?<=\r\n)|(?<=\r)(?!\n)|(?<=\n)";
+    String extractNextLine = "(?<=\r\n)|(?<=\r)(?!\n)|(?<=\n)";
 
-    String[] stringLines = lines.split(regex, 2);
+    String[] splitLines = lines.split(extractNextLine, 2);
 
     // There are one or more line separators
-    if(stringLines.length == 2){
-      return stringLines;
+    if(splitLines.length == 2){
+      return splitLines;
     }else{ // There are no line separators
-      return new String[]{"",stringLines[0]};
+      return new String[]{"",splitLines[0]};
     }
 
   }
