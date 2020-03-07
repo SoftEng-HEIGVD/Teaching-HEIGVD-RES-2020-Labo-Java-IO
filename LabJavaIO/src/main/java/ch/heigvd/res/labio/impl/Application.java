@@ -135,6 +135,8 @@ public class Application implements IApplication {
     File file = new File(path);
     OutputStreamWriter outputStreamWriter = new OutputStreamWriter(new FileOutputStream(file),
             StandardCharsets.UTF_8);
+    outputStreamWriter.write(quote.getQuote());
+    outputStreamWriter.close();
   }
   
   /**
@@ -153,7 +155,7 @@ public class Application implements IApplication {
          */
         try {
             assert (!Objects.isNull(file));
-            writer.write(file.getName());
+            writer.write(file.getPath()+'\n');
         } catch (IOException e){}
       }
     });
