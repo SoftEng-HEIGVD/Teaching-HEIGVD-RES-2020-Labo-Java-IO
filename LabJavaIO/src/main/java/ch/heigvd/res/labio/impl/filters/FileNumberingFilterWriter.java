@@ -13,11 +13,13 @@ import java.util.logging.Logger;
  *
  * Hello\n\World -> 1\Hello\n2\tWorld
  *
- * @author Olivier Liechti
+ * @author Olivier Liechti, Vitor Vaz Afonso
  */
 public class FileNumberingFilterWriter extends FilterWriter {
 
   private static final Logger LOG = Logger.getLogger(FileNumberingFilterWriter.class.getName());
+  private int lineNumber = 1;
+  private int previousC = -1; // character undefined
 
   public FileNumberingFilterWriter(Writer out) {
     super(out);
@@ -25,17 +27,52 @@ public class FileNumberingFilterWriter extends FilterWriter {
 
   @Override
   public void write(String str, int off, int len) throws IOException {
-    throw new UnsupportedOperationException("The student has not implemented this method yet.");
+
+    str = str.substring(off,off+len);
+
+    for (int i = 0; i < str.length(); i++){
+      char c = str.charAt(i);
+      this.write(c);
+    }
+
   }
 
   @Override
   public void write(char[] cbuf, int off, int len) throws IOException {
-    throw new UnsupportedOperationException("The student has not implemented this method yet.");
+    this.write(new String(cbuf), off, len);
   }
 
   @Override
   public void write(int c) throws IOException {
-    throw new UnsupportedOperationException("The student has not implemented this method yet.");
+
+    // write the first number line in the beginning
+    if(lineNumber == 1){
+      writeNumberLine();
+    }
+
+    // if the previous character is defined and equals '\r'
+    if (previousC !=-1 && previousC == '\r'){
+          out.write('\r');
+          if (c!='\n') {
+            writeNumberLine();
+          }
+    }
+
+    // write the character if it's not '\r'
+    if (c != '\r') {
+      out.write(c);
+    }
+
+    // if the character is '\n' do a break line
+    if (c == '\n'){
+      writeNumberLine();
+    }
+
+    previousC = c;
+  }
+
+  public void writeNumberLine() throws IOException {
+    out.write(lineNumber++ + "\t");
   }
 
 }
