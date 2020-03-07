@@ -1,8 +1,5 @@
 package ch.heigvd.res.labio.impl;
 
-import org.apache.commons.io.input.ClosedInputStream;
-
-import java.util.Arrays;
 import java.util.logging.Logger;
 
 /**
@@ -10,8 +7,6 @@ import java.util.logging.Logger;
  * @author Olivier Liechti
  */
 public class Utils {
-
-  private static final Logger LOG = Logger.getLogger(Utils.class.getName());
 
   /**
    * This method looks for the next new line separators (\r, \n, \r\n) to extract

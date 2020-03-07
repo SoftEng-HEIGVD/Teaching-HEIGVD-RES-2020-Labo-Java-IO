@@ -1,12 +1,9 @@
 package ch.heigvd.res.labio.impl.filters;
 
-import ch.heigvd.res.labio.impl.Utils;
-
 import java.io.FilterWriter;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.logging.Logger;
-import java.util.regex.Pattern;
 
 /**
  * This class transforms the streams of character sent to the decorated writer.
@@ -35,14 +32,13 @@ public class FileNumberingFilterWriter extends FilterWriter {
   @Override
   public void write(String str, int off, int len) throws IOException {
     str = str.substring(off,off+len);
-
     this.write(str.toCharArray(),0,str.length());
   }
 
   @Override
   public void write(char[] cbuf, int off, int len) throws IOException {
-    for (char c : cbuf) {
-      this.write(c);
+    for (int i = off;i < off + len; i++) {
+      this.write(cbuf[i]);
     }
 
   }
@@ -55,14 +51,14 @@ public class FileNumberingFilterWriter extends FilterWriter {
       super.out.write(this.lineCounter++ + "\t");
     }
 
-    if (c == '\n'){
-      super.out.write(c);
+    if (this.lastChar == '\r' && c != '\n') {
       super.out.write(this.lineCounter++ + "\t");
-    }else if (this.lastChar == '\r') {
+    }
+
+    super.out.write(c);
+
+    if(c == '\n') {
       super.out.write(this.lineCounter++ + "\t");
-      super.out.write(c);
-    }else{
-      super.out.write(c);
     }
 
     this.lastChar = c;

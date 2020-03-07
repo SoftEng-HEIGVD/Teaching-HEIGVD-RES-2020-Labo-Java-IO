@@ -2,7 +2,6 @@ package ch.heigvd.res.labio.impl;
 
 import ch.heigvd.res.labio.impl.explorers.DFSFileExplorer;
 import ch.heigvd.res.labio.impl.transformers.CompleteFileTransformer;
-import ch.heigvd.res.labio.impl.transformers.NoOpFileTransformer;
 import ch.heigvd.res.labio.interfaces.IApplication;
 import ch.heigvd.res.labio.interfaces.IFileExplorer;
 import ch.heigvd.res.labio.interfaces.IFileVisitor;
@@ -10,9 +9,6 @@ import ch.heigvd.res.labio.quotes.QuoteClient;
 import ch.heigvd.res.labio.quotes.Quote;
 
 import java.io.*;
-import java.util.Comparator;
-import java.util.Objects;
-import java.util.PriorityQueue;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.commons.io.FileUtils;
