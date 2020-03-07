@@ -13,7 +13,7 @@ import java.util.logging.Logger;
  *
  * Hello\n\World -> 1\Hello\n2\tWorld
  *
- * @author Olivier Liechti
+ * @author Olivier Liechti - Modified by Nicolas Müller on 07.03.2020
  */
 public class FileNumberingFilterWriter extends FilterWriter {
 
@@ -47,6 +47,7 @@ public class FileNumberingFilterWriter extends FilterWriter {
   @Override
   public void write(int c) throws IOException {
 
+    // Adds tab and numbers if it's the first char
     if (isFirstChar) {
 
       out.write(Integer.toString(++lineCounter) + '\t');
@@ -60,13 +61,16 @@ public class FileNumberingFilterWriter extends FilterWriter {
       out.write(Integer.toString(++lineCounter) + '\t');
     }
 
+    // Writes current char
     out.write((char)c);
 
+    // Creates new line if \n found
     if (c == '\n') {
 
       out.write(Integer.toString(++lineCounter) + '\t');
     }
 
+    // Used to make it work on windows, mac and linux
     lastChar = (char) c;
   }
 }
