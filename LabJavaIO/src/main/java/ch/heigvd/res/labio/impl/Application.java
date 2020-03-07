@@ -138,7 +138,7 @@ public class Application implements IApplication
 	void storeQuote(Quote quote, String filename) throws IOException
 	{
 		final String SEP = File.separator;
-		String dir = WORKSPACE_DIRECTORY + SEP + String.join(SEP, quote.getQuote());
+		String dir = WORKSPACE_DIRECTORY + SEP + String.join(SEP, quote.getTags());
 		try {
 			File       f  = new File(dir, filename);
 			boolean    b  = f.getParentFile().mkdirs();
