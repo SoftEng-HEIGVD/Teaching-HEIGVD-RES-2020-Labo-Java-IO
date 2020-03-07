@@ -18,6 +18,9 @@ import java.util.logging.Logger;
 public class FileNumberingFilterWriter extends FilterWriter {
 
   private static final Logger LOG = Logger.getLogger(FileNumberingFilterWriter.class.getName());
+  private boolean isFirstChar = true;
+  private int lineCounter = 0;
+  private char lastChar = '\0'; // Used to work on mac and windows
 
   public FileNumberingFilterWriter(Writer out) {
     super(out);
@@ -25,17 +28,45 @@ public class FileNumberingFilterWriter extends FilterWriter {
 
   @Override
   public void write(String str, int off, int len) throws IOException {
-    throw new UnsupportedOperationException("The student has not implemented this method yet.");
+//    throw new UnsupportedOperationException("The student has not implemented this method yet.");
+
+    for (int i = off; i < off + len; i++) {
+      write(str.charAt(i));
+    }
   }
 
   @Override
   public void write(char[] cbuf, int off, int len) throws IOException {
-    throw new UnsupportedOperationException("The student has not implemented this method yet.");
+//    throw new UnsupportedOperationException("The student has not implemented this method yet.");
+
+    for (int i = off; i < off + len; i++) {
+      write(cbuf[i]);
+    }
   }
 
   @Override
   public void write(int c) throws IOException {
-    throw new UnsupportedOperationException("The student has not implemented this method yet.");
-  }
 
+    if (isFirstChar) {
+
+      out.write(Integer.toString(++lineCounter) + '\t');
+      isFirstChar = false;
+    }
+
+    // Windows has \r\n, Linux \n, Mac \r
+    // Function adds newline only with \n. Make sure to add a new line if \r appears without the \n.
+    if (lastChar == '\r' && c != '\n') {
+
+      out.write(Integer.toString(++lineCounter) + '\t');
+    }
+
+    out.write((char)c);
+
+    if (c == '\n') {
+
+      out.write(Integer.toString(++lineCounter) + '\t');
+    }
+
+    lastChar = (char) c;
+  }
 }
