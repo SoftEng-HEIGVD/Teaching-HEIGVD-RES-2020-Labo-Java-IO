@@ -1,5 +1,7 @@
 package ch.heigvd.res.labio.impl;
 
+import org.apache.commons.io.input.ClosedInputStream;
+
 import java.util.Arrays;
 import java.util.logging.Logger;
 
@@ -22,15 +24,24 @@ public class Utils {
    */
   public static String[] getNextLine(String lines) {
 
-    // get the system-dependent line separator
-    // https://www.geeksforgeeks.org/system-lineseparator-method-in-java-with-examples/
-    int indexOfLineSep = lines.indexOf(System.lineSeparator());
+    // The usage of System.LineSeparator is useful but can't validate all the test (on my OS),
+    // here is a homemade solution
+
+    String[] lineSeparators = new String[]{"\r\n","\n","\r"};
+    int indexOfLineSep = 0;
 
     // we check if there is/isn't a line separator
+    for (String lineSeparator : lineSeparators) {
+      indexOfLineSep = lines.indexOf(lineSeparator);
+
+      if (indexOfLineSep != -1){
+        indexOfLineSep += lineSeparator.length(); //to include the line separator in the substring
+        break;
+      }
+    }
+
     if (indexOfLineSep == -1)
       indexOfLineSep = 0;
-    else
-      indexOfLineSep += System.lineSeparator().length(); //to include the line separator in the substring
 
     return new String[] {
       lines.substring(0, indexOfLineSep),
