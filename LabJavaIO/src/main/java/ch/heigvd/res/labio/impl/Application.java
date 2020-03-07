@@ -7,10 +7,9 @@ import ch.heigvd.res.labio.interfaces.IFileExplorer;
 import ch.heigvd.res.labio.interfaces.IFileVisitor;
 import ch.heigvd.res.labio.quotes.QuoteClient;
 import ch.heigvd.res.labio.quotes.Quote;
-import java.io.File;
-import java.io.IOException;
-import java.io.StringWriter;
-import java.io.Writer;
+
+import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -95,6 +94,7 @@ public class Application implements IApplication {
       for (String tag : quote.getTags()) {
         LOG.info("> " + tag);
       }
+      storeQuote(quote, String.format("quote-%d", i));
     }
   }
   
@@ -124,9 +124,17 @@ public class Application implements IApplication {
    * @throws IOException 
    */
   void storeQuote(Quote quote, String filename) throws IOException {
+    String path = WORKSPACE_DIRECTORY;
     for(String s: quote.getTags()){
-
+      path += '/' + s;
     }
+
+    new File(path).mkdirs(); // arborescence
+
+    path += '/' + filename + ".utf8";
+    File file = new File(path);
+    OutputStreamWriter outputStreamWriter = new OutputStreamWriter(new FileOutputStream(file),
+            StandardCharsets.UTF_8);
   }
   
   /**
