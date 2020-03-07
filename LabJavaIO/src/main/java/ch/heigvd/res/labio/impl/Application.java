@@ -139,13 +139,13 @@ public class Application implements IApplication
 	{
 		String dir =
 			WORKSPACE_DIRECTORY + File.separator + File.separator + quote.getTags();
-		File f = new File(dir, filename);
-		if (!f.getParentFile().mkdirs()) {
-			throw new IOException("Failed to created folder");
-		}
-		FileWriter fw = new FileWriter(f);
-		fw.write(quote.getQuote());
-		fw.close();
+		try {
+			File       f  = new File(dir, filename);
+			boolean    b  = f.getParentFile().mkdirs();
+			FileWriter fw = new FileWriter(f);
+			fw.write(quote.getQuote());
+			fw.close();
+		} catch (Exception e) {/*Whatever*/}
 	}
 
 	/**
