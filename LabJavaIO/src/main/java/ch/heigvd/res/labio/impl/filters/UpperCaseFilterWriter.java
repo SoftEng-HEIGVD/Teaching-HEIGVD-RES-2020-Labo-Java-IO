@@ -19,8 +19,8 @@ public class UpperCaseFilterWriter extends FilterWriter {
         for (int i = 0; i < str.length(); i++) {
             sb.append(Character.toUpperCase(str.charAt(i)));
         }
-        //we let super handle the off and len
-        super.write(sb.toString(), off, len);
+        //we let out handle the off and len
+        out.write(sb.toString(), off, len);
     }
 
     @Override
@@ -29,13 +29,13 @@ public class UpperCaseFilterWriter extends FilterWriter {
         for (int i = 0; i < cbuf.length; i++) {
             cString[i] = Character.toUpperCase(cbuf[i]);
         }
-        //we let super handle the off and len
-        super.write(cString, off, len);
+        //we let out handle the off and len
+        out.write(cString, off, len);
     }
 
     @Override
     public void write(int c) throws IOException {
-        super.write(Character.toUpperCase(c));
+        out.write(Character.toUpperCase(c));
     }
 
 
