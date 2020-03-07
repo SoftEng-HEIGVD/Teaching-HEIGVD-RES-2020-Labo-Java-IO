@@ -37,13 +37,30 @@ public class FileNumberingFilterWriter extends FilterWriter {
     while ("".compareTo(lines[0]) != 0){
       out.write(lines[0]);
       int n = lines[0].length();
-      if(lines[0].charAt(n - 1) == '\r' | lines[0].charAt(n - 1) == '\n'){
+      if(returnChar(n, 0, lines)){
         out.write(i + "\t");
         i++;
       }
       lines = Utils.getNextLine(lines[1]);
     }
 
+    out.write(lines[1]);
+    int n = lines[1].length();
+    if(returnChar(n, 1, lines)){
+      out.write(i + "\t");
+      i++;
+    }
+
+  }
+
+  /**
+   * @param n string length
+   * @param i which string of the array to parse
+   * @param lines the array of string
+   * @return true if the last character is '\r' or '\n'
+   */
+  private boolean returnChar(int n, int i, String[] lines) {
+    return n == 0 ? false : lines[i].charAt(n - 1) == '\r' | lines[i].charAt(n - 1) == '\n';
   }
 
   @Override
