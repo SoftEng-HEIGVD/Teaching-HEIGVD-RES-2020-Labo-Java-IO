@@ -15,27 +15,59 @@ import java.util.logging.Logger;
  *
  * @author Olivier Liechti
  */
+
 public class FileNumberingFilterWriter extends FilterWriter {
 
   private static final Logger LOG = Logger.getLogger(FileNumberingFilterWriter.class.getName());
+  private static boolean isFirstLine ;
+  private static int count ;
+  private static char previousChar;
 
   public FileNumberingFilterWriter(Writer out) {
     super(out);
+    count = 1;
+    isFirstLine = true;
   }
 
   @Override
   public void write(String str, int off, int len) throws IOException {
-    throw new UnsupportedOperationException("The student has not implemented this method yet.");
+    for(int i = off; i < off+len; i++){
+      write(str.charAt(i));
+    }
   }
 
   @Override
   public void write(char[] cbuf, int off, int len) throws IOException {
-    throw new UnsupportedOperationException("The student has not implemented this method yet.");
-  }
+    for(int i = off; i < off+len; i++){
+      write(cbuf[i]);
+    }
+   }
 
   @Override
   public void write(int c) throws IOException {
-    throw new UnsupportedOperationException("The student has not implemented this method yet.");
+      if(isFirstLine) {
+          out.write(count +"\t");
+          isFirstLine = false;
+          count++;
+
+      }
+      if(c == '\n'){
+          out.write(c);
+          out.write(count + "\t");
+          count++;
+      }
+      else if(c != '\n' && previousChar == '\r'){
+          out.write(count + "\t");
+          out.write(c);
+          count++;
+       }
+
+      else{
+          out.write(c);
+      }
+      previousChar = (char)c;
+
+
   }
 
 }
