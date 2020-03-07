@@ -21,21 +21,29 @@ public class FileNumberingFilterWriter extends FilterWriter {
 
   private static final Logger LOG = Logger.getLogger(FileNumberingFilterWriter.class.getName());
 
+  private int i = 1;
+
   public FileNumberingFilterWriter(Writer out) {
     super(out);
   }
 
   @Override
   public void write(String str, int off, int len) throws IOException {
-    int i = 1;
-    String[] lines = Utils.getNextLine(str);
-    while ("".compareTo(lines[0]) != 0){
-      out.write(i + "\t" + lines[0]);
-      lines = Utils.getNextLine(lines[1]);
+    if(i == 1){
+      out.write(i + "\t");
       i++;
     }
+    String[] lines = Utils.getNextLine(str.substring(off, off + len));
+    while ("".compareTo(lines[0]) != 0){
+      out.write(lines[0]);
+      int n = lines[0].length();
+      if(lines[0].charAt(n - 1) == '\r' | lines[0].charAt(n - 1) == '\n'){
+        out.write(i + "\t");
+        i++;
+      }
+      lines = Utils.getNextLine(lines[1]);
+    }
 
-    out.write(i + "\t" + lines[1]);
   }
 
   @Override
