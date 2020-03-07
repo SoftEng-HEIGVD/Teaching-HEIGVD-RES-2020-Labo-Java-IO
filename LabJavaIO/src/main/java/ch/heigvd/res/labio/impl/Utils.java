@@ -23,6 +23,8 @@ public class Utils {
     String[] sepStrings = {"\r\n", "\n", "\r"};
     
     int i = -1, j = 0;
+    // We suppose the new line word is the same in the whole
+    // file (seems quite reasonable)
     while (i == -1 && j < sepStrings.length) {
       i = lines.indexOf(sepStrings[j++]);
     }
