@@ -18,11 +18,12 @@ public class DFSFileExplorer implements IFileExplorer {
   @Override
   public void explore(File rootDirectory, IFileVisitor vistor) {
     if(!Objects.isNull(rootDirectory.listFiles())){
+      vistor.visit(rootDirectory);
+
       for(File file: rootDirectory.listFiles()){
         if(file.isDirectory()){
           explore(file, vistor);
         }
-        vistor.visit(file);
       }
     }
   }

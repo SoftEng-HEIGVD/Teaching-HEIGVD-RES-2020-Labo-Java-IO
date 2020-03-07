@@ -11,6 +11,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.io.Writer;
+import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.commons.io.FileUtils;
@@ -124,7 +125,7 @@ public class Application implements IApplication {
    */
   void storeQuote(Quote quote, String filename) throws IOException {
     for(String s: quote.getTags()){
-      
+
     }
   }
   
@@ -142,6 +143,10 @@ public class Application implements IApplication {
          * of the the IFileVisitor interface inline. You just have to add the body of the visit method, which should
          * be pretty easy (we want to write the filename, including the path, to the writer passed in argument).
          */
+        try {
+            assert (!Objects.isNull(file));
+            writer.write(file.getName());
+        } catch (IOException e){}
       }
     });
   }
