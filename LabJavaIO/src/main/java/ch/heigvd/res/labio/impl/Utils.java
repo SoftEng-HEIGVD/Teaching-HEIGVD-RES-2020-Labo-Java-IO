@@ -29,51 +29,23 @@ public class Utils {
     int posMacSeparator = lines.indexOf("\r");
     int posWindowsSeparator = lines.indexOf("\r\n");
 
-    // On windows
+    int splitPos = -1;
+
     if (posWindowsSeparator != -1) {
 
-      result[0] = lines.substring(0, posWindowsSeparator + 2); // +2 because delimiter length is 2
-
-      if (posWindowsSeparator + 3 <= lines.length()) {
-        result[1] = lines.substring(posWindowsSeparator + 2);  // Takes the rest of the string
-      }
-      else {
-        result[1] = "";
-      }
+      splitPos = posWindowsSeparator + 2;
     }
-
-    // On Linux
-    else if (posLinuxSeparator != -1) {
-
-      result[0] = lines.substring(0, posLinuxSeparator + 1);
-
-      if (posLinuxSeparator + 2 <= lines.length()) {
-        result[1] = lines.substring(posLinuxSeparator + 1);
-      }
-      else {
-        result[1] = "";
-      }
-    }
-
-    // On macOS
     else if (posMacSeparator != -1) {
 
-      result[0] = lines.substring(0, posMacSeparator + 1);
+      splitPos = posMacSeparator + 1;
+    }
+    else if (posLinuxSeparator != -1) {
 
-      if (posMacSeparator + 2 <= lines.length()) {
-        result[1] = lines.substring(posMacSeparator + 1);
-      }
-      else {
-        result[1] = "";
-      }
+      splitPos = posLinuxSeparator + 1;
     }
 
-    // Nothing found returns empty string
-    else {
-
-      result[0] = "";
-      result[1] = lines; // Unchanged string is the remaining part
-    }
+    result[0] = splitPos != -1 ? lines.substring(0, splitPos) : "";
+    result[1] = splitPos != -1 ? lines.substring(splitPos) : lines;
 
     return result;
   }
