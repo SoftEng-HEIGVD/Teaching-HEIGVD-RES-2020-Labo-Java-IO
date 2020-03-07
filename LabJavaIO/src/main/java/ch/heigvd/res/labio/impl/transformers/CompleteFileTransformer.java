@@ -25,7 +25,7 @@ public class CompleteFileTransformer extends FileTransformer {
      * input files. So, the input is first prefixed with line numbers, then transformed to uppercase, then sent to the output file.f
      */
     //writer = new FileNumberingFilterWriter(new UpperCaseFilterWriter(writer));
-    return writer; 
+    return writer;
   }
 
 }
