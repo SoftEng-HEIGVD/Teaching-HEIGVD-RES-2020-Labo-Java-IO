@@ -146,5 +146,4 @@ public class ApplicationTest {
     assertTrue(applicationReturnsValidFilePaths);
 
   }
-
 }
