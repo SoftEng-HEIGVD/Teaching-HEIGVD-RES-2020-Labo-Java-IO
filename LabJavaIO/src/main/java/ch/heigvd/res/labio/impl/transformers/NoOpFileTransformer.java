@@ -7,7 +7,7 @@ import java.io.Writer;
  * this class is passed to a file system explorer, it will simply duplicate
  * the content of the input file into the output file.
  * 
- * @author Olivier Liechti
+ * @author Olivier Liechti, Diluckshan Ravindranathan
  */
 public class NoOpFileTransformer extends FileTransformer {
 

@@ -11,7 +11,7 @@ import java.util.Arrays;
  * node (file and directory). When the explorer reaches a directory, it visits all
  * files in the directory and then moves into the subdirectories.
  * 
- * @author Olivier Liechti
+ * @author Olivier Liechti, Diluckshan Ravindranathan
  */
 public class DFSFileExplorer implements IFileExplorer {
 
