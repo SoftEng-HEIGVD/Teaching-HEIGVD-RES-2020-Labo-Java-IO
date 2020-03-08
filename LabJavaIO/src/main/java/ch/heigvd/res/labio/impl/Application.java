@@ -120,23 +120,19 @@ public class Application implements IApplication {
    */
   void storeQuote(Quote quote, String filename) throws IOException {
 
-    String path = WORKSPACE_DIRECTORY + File.separator;
+    String path = WORKSPACE_DIRECTORY + "/";
     File actualDir = new File(path);
 
     int tagNum = quote.getTags().size();
     if(tagNum != 0){
       for(String tag : quote.getTags()){
-
-        //creating the new directory with the tag
-        path += tag + File.separator;
+        //creating the new path
+        path += tag + "/";
         actualDir = new File(path);
-
-        //if there is already this directory, it is not necessary to create a new one
-        if(actualDir.isDirectory() == false){
-          actualDir.mkdirs();
-        }
       }
     }
+    //creating the directory with the new path
+    actualDir.mkdirs();
 
     //Adding the quote utf8 file
     File newFile = new File(actualDir, filename);
@@ -157,14 +153,8 @@ public class Application implements IApplication {
     explorer.explore(new File(WORKSPACE_DIRECTORY), new IFileVisitor() {
       @Override
       public void visit(File file) {
-        /*
-         * There is a missing piece here. Notice how we use an anonymous class here. We provide the implementation
-         * of the the IFileVisitor interface inline. You just have to add the body of the visit method, which should
-         * be pretty easy (we want to write the filename, including the path, to the writer passed in argument).
-         */
         try {
-          writer.write(file.getPath());
-          writer.write(System.lineSeparator());
+          writer.write(file.getPath() + '\n');
         } catch (IOException e) {
           e.printStackTrace();
         }
