@@ -28,7 +28,7 @@ public class FileNumberingFilterWriter extends FilterWriter {
   @Override
   public void write(String str, int off, int len) throws IOException {
 
-    for(int i = off; i < len; i++) {
+    for(int i = off; i < len + off; i++) {
 
       write(str.charAt(i));
     }
@@ -39,7 +39,7 @@ public class FileNumberingFilterWriter extends FilterWriter {
   @Override
   public void write(char[] cbuf, int off, int len) throws IOException {
 
-    for(int i = off; i < len; i++) {
+    for(int i = off; i < len + off; i++) {
       write(cbuf[i]);
     }
 
@@ -54,18 +54,18 @@ public class FileNumberingFilterWriter extends FilterWriter {
       out.write(Integer.toString(++linecpt) + '\t');
     }
 
+
+    if(lastChar == '\r' && c != '\n') {
+
+      out.write(Integer.toString(++linecpt) + '\t');
+
+    }
+
     super.write(c);
 
     if(c == '\n') {
 
       out.write(Integer.toString(++linecpt) + '\t');
-
-    } else {
-
-      if(lastChar == '\r') {
-
-        out.write(Integer.toString(++linecpt) + '\t');
-      }
     }
 
     this.lastChar = c;
