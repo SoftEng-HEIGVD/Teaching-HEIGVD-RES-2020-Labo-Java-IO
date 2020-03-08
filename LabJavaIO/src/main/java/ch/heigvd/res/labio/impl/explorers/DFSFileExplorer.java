@@ -13,7 +13,6 @@ import java.io.File;
  * @author Olivier Liechti
  */
 public class DFSFileExplorer implements IFileExplorer {
-//TODO
 @Override
 public void explore(File rootDirectory, IFileVisitor visitor) { //TODO cleanup
   visitor.visit(rootDirectory);
@@ -21,9 +20,9 @@ public void explore(File rootDirectory, IFileVisitor visitor) { //TODO cleanup
   if (childFiles == null) {
     return;
   }
-  for (File childFile : childFiles) {
-    if (!childFile.isDirectory()) {
-      explore(childFile, visitor);
+  for (File childFile : childFiles) { // 2 boucles for pour respecter la consigne
+    if (!childFile.isDirectory()) {   // visits all files in the directory and then moves into the subdirectories.
+      visitor.visit(rootDirectory);
     }
   }
   for (File childFile : childFiles) {
