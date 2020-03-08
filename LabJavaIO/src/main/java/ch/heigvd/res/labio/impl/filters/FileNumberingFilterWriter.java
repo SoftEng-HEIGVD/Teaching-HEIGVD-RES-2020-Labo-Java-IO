@@ -18,24 +18,50 @@ import java.util.logging.Logger;
 public class FileNumberingFilterWriter extends FilterWriter {
 
   private static final Logger LOG = Logger.getLogger(FileNumberingFilterWriter.class.getName());
+  private Integer lineC           = 0;
+  private boolean endWordR        = false;
 
   public FileNumberingFilterWriter(Writer out) {
     super(out);
   }
 
+  private void addLine() throws IOException
+  {
+    String toSend = String.valueOf(++lineC) + '\t';
+    super.write(toSend, 0, toSend.length());
+  }
+
   @Override
   public void write(String str, int off, int len) throws IOException {
-    throw new UnsupportedOperationException("The student has not implemented this method yet.");
+    for (int pos = off; pos < off + len;pos++) {
+      this.write(str.charAt(pos));
+    }
   }
 
   @Override
   public void write(char[] cbuf, int off, int len) throws IOException {
-    throw new UnsupportedOperationException("The student has not implemented this method yet.");
+    this.write(new String(cbuf), off, len);
   }
 
   @Override
   public void write(int c) throws IOException {
-    throw new UnsupportedOperationException("The student has not implemented this method yet.");
+    if (lineC == 0 || lineC == null) {
+      this.addLine();
+    }
+
+    if (c == '\n') {
+      super.write(c);
+      this.addLine();
+    } else {
+      if (endWordR)
+        this.addLine();
+      super.write(c);
+    }
+    if (c == '\r') {
+      endWordR = true;
+    }else {
+      endWordR = false;
+    }
   }
 
 }
