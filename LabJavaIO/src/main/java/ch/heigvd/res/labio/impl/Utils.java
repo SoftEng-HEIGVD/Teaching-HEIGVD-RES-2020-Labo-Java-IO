@@ -21,7 +21,9 @@ public class Utils {
    */
   public static String[] getNextLine(String lines) {
     String newLine;
-    String[] stringsToReturn = lines.split("\r|\n|\r\n",2);
+    //it's vital to verify \r\n before the two other
+    String[] stringsToReturn = lines.split("\r\n|\r|\n",2);
+
     if(lines.contains("\r\n")){
       newLine="\r\n";
     } else if(lines.contains("\r")){
