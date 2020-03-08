@@ -1,20 +1,22 @@
 package ch.heigvd.res.labio.impl;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.StringWriter;
+import java.io.Writer;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import org.apache.commons.io.FileUtils;
+
 import ch.heigvd.res.labio.impl.explorers.DFSFileExplorer;
 import ch.heigvd.res.labio.impl.transformers.CompleteFileTransformer;
 import ch.heigvd.res.labio.interfaces.IApplication;
 import ch.heigvd.res.labio.interfaces.IFileExplorer;
 import ch.heigvd.res.labio.interfaces.IFileVisitor;
-import ch.heigvd.res.labio.quotes.QuoteClient;
 import ch.heigvd.res.labio.quotes.Quote;
-import java.io.File;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.StringWriter;
-import java.io.Writer;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import org.apache.commons.io.FileUtils;
+import ch.heigvd.res.labio.quotes.QuoteClient;
 
 /**
  *
@@ -156,8 +158,8 @@ public class Application implements IApplication {
     // check bool errors
 
     // write the quote to disk
-    PrintWriter writer = new PrintWriter(quoteFile, "UTF-8");
-    writer.print(quote.getQuote());
+    FileWriter writer = new FileWriter(quoteFile);
+    writer.write(quote.getQuote());
     writer.close();
   }
 
@@ -178,7 +180,7 @@ public class Application implements IApplication {
          * argument).
          */
         try {
-          writer.write(file.getCanonicalPath() + "\n");
+          writer.write(file.getPath() + "\n");
         } catch (IOException ex) {
           LOG.log(Level.SEVERE, "Error while printing filename during DFS");
         }
