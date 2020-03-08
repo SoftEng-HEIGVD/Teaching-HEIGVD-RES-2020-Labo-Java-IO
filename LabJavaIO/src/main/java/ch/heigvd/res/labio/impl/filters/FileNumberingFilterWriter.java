@@ -3,6 +3,7 @@ package ch.heigvd.res.labio.impl.filters;
 import java.io.FilterWriter;
 import java.io.IOException;
 import java.io.Writer;
+import java.util.Arrays;
 import java.util.logging.Logger;
 
 /**
@@ -10,14 +11,15 @@ import java.util.logging.Logger;
  * When filter encounters a line separator, it sends it to the decorated writer.
  * It then sends the line number and a tab character, before resuming the write
  * process.
+ * <p>
+ * Hello\n\tWorld -> 1\Hello\n2\tWorld
  *
- * Hello\n\World -> 1\Hello\n2\tWorld
- *
- * @author Olivier Liechti
+ * @author Olivier Liechti & Moïn DANAI
  */
 public class FileNumberingFilterWriter extends FilterWriter {
 
   private static final Logger LOG = Logger.getLogger(FileNumberingFilterWriter.class.getName());
+  private static final char[] NEWLINES = new char[]{'\r', '\n'};
 
   public FileNumberingFilterWriter(Writer out) {
     super(out);
@@ -25,17 +27,28 @@ public class FileNumberingFilterWriter extends FilterWriter {
 
   @Override
   public void write(String str, int off, int len) throws IOException {
-    throw new UnsupportedOperationException("The student has not implemented this method yet.");
+    write(str.toCharArray(), off, len);
   }
 
   @Override
   public void write(char[] cbuf, int off, int len) throws IOException {
-    throw new UnsupportedOperationException("The student has not implemented this method yet.");
+    Integer ctr = 1;
+    write(ctr);
+
+    for (int i = off; i < off + len; ++i) {
+      if (i != off + len - 1) {
+        if (Arrays.binarySearch(NEWLINES, cbuf[i]) < 0 && !(cbuf[i+1] == NEWLINES[0] || cbuf[i+1] == NEWLINES[1])) {
+          write(++ctr);
+          write('\t');
+        }
+      }
+      write(cbuf[i]);
+    }
   }
 
   @Override
   public void write(int c) throws IOException {
-    throw new UnsupportedOperationException("The student has not implemented this method yet.");
+    this.out.write(c);
   }
 
 }
