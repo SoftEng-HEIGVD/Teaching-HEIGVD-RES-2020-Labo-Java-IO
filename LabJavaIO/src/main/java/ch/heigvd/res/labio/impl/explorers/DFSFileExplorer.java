@@ -32,7 +32,6 @@ public void explore(File rootDirectory, IFileVisitor visitor) { //TODO cleanup
       visitor.visit(childFile);
     }
   }
-  //throw new UnsupportedOperationException("The student has not implemented this method yet.");
 }
 
 }

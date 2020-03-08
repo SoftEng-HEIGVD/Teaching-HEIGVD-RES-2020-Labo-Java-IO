@@ -9,6 +9,9 @@ import java.util.logging.Logger;
 public class Utils {
 
   private static final Logger LOG = Logger.getLogger(Utils.class.getName());
+  private static final String WINDOWS_ENDLINE = "\r\n";
+  private static final String MAC_ENDLINE = "\r";
+  private static final String LINUX_ENDLINE = "\n";
 
   /**
    * This method looks for the next new line separators (\r, \n, \r\n) to extract
@@ -20,33 +23,39 @@ public class Utils {
    * contain any line separator, then the first element is an empty string.
    */
   public static String[] getNextLine(String lines) {
+    int nextLineIndex = getNextLineIndex(lines);
     String[] division = new String[2];
-    division[1] = "";
-    int offset;
 
-    int posWindowsEndLine = lines.indexOf("\r\n");
-    int posLinuxEndLine = lines.indexOf("\n");
-    int posMacEndLine = lines.indexOf("\r");
-    int posEndLine;
-
-    if(posWindowsEndLine >= 0){  //TODO methode auxiliaire
-      posEndLine = posWindowsEndLine;
-      offset = 2;
-    }else if(posMacEndLine >= 0){
-      posEndLine = posMacEndLine;
-      offset = 1;
-    }else if(posLinuxEndLine>= 0){
-      posEndLine = posLinuxEndLine;
-      offset = 1;
-    }else{
-      division[0] = "";
-      posEndLine = 0;
-      offset = 0;
-    }
-    division[0] = lines.substring(0, posEndLine + offset);
-    division[1] = lines.substring(posEndLine + offset);
+    division[0] = lines.substring(0, nextLineIndex);
+    division[1] = lines.substring(nextLineIndex);
 
     return division;
   }
+
+  /**
+   * This method looks for the next new line separators (\r, \n, \r\n) to get the index
+   * of the next line.
+   *
+   * @param lines lines a string that may contain 0, 1 or more lines
+   * @return the index at which the next line starts
+   */
+  private static int getNextLineIndex(String lines){
+    int posWindowsEndLine = lines.indexOf(WINDOWS_ENDLINE);
+    int posLinuxEndLine = lines.indexOf(LINUX_ENDLINE);
+    int posMacEndLine = lines.indexOf(MAC_ENDLINE);
+
+    if(posWindowsEndLine >= 0){
+      return posWindowsEndLine + WINDOWS_ENDLINE.length();
+    }
+    if(posMacEndLine >= 0){
+      return posMacEndLine + MAC_ENDLINE.length();
+    }
+    if(posLinuxEndLine>= 0){
+      return posLinuxEndLine + LINUX_ENDLINE.length();
+    }
+    return  0;
+  }
+
+
 
 }
