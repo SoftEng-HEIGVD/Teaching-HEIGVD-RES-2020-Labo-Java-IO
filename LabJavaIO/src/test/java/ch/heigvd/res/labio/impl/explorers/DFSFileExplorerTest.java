@@ -22,7 +22,7 @@ public class DFSFileExplorerTest {
   private static final Logger LOG = Logger.getLogger(DFSFileExplorerTest.class.getName());
 
   @Test
-  public void dfsExplorerShouldWork() {
+  public void dfsExplorerShouldWork() throws IOException {
     List<String> dfsNodes = generateTestTree(5, 5, 5);
 
     final List<String> directories = new ArrayList<>();
@@ -38,7 +38,7 @@ public class DFSFileExplorerTest {
   }
 
   @Test
-  public void dfsExplorerShouldWorkWhenThereIsNoFile() {
+  public void dfsExplorerShouldWorkWhenThereIsNoFile() throws IOException {
     List<String> dfsNodes = generateTestTree(0, 0, 0);
 
     final List<String> directories = new ArrayList<>();

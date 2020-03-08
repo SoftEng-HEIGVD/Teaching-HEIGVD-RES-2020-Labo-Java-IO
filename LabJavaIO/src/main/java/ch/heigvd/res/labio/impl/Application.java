@@ -7,10 +7,8 @@ import ch.heigvd.res.labio.interfaces.IFileExplorer;
 import ch.heigvd.res.labio.interfaces.IFileVisitor;
 import ch.heigvd.res.labio.quotes.QuoteClient;
 import ch.heigvd.res.labio.quotes.Quote;
-import java.io.File;
-import java.io.IOException;
-import java.io.StringWriter;
-import java.io.Writer;
+
+import java.io.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.commons.io.FileUtils;
@@ -80,16 +78,21 @@ public class Application implements IApplication {
 
   @Override
   public void fetchAndStoreQuotes(int numberOfQuotes) throws IOException {
-    clearOutputDirectory();
+
+    this.clearOutputDirectory();
+
     QuoteClient client = new QuoteClient();
     for (int i = 0; i < numberOfQuotes; i++) {
+
       Quote quote = client.fetchQuote();
+      storeQuote(quote, "quote-"+(i + 1)+".utf8");
       /* There is a missing piece here!
        * As you can see, this method handles the first part of the lab. It uses the web service
        * client to fetch quotes. We have removed a single line from this method. It is a call to
        * one method provided by this class, which is responsible for storing the content of the
        * quote in a text file (and for generating the directories based on the tags).
        */
+
       LOG.info("Received a new joke with " + quote.getTags().size() + " tags.");
       for (String tag : quote.getTags()) {
         LOG.info("> " + tag);
@@ -123,16 +126,29 @@ public class Application implements IApplication {
    * @throws IOException 
    */
   void storeQuote(Quote quote, String filename) throws IOException {
-    throw new UnsupportedOperationException("The student has not implemented this method yet.");
+    //throw new UnsupportedOperationException("The student has not implemented this method yet.");
+
+    String tagsPath = String.join("/", quote.getTags());
+
+    File file = new File(WORKSPACE_DIRECTORY+"/"+tagsPath+"/"+filename);
+    file.getParentFile().mkdirs();
+    file.createNewFile();
+
+    FileWriter quoteWriter = new FileWriter(WORKSPACE_DIRECTORY+"/"+tagsPath+"/"+filename);
+    quoteWriter.write(quote.getQuote());
+    quoteWriter.close();
   }
   
   /**
    * This method uses a IFileExplorer to explore the file system and prints the name of each
    * encountered file and directory.
    */
-  void printFileNames(final Writer writer) {
+  void printFileNames(final Writer writer) throws IOException {
+
     IFileExplorer explorer = new DFSFileExplorer();
+
     explorer.explore(new File(WORKSPACE_DIRECTORY), new IFileVisitor() {
+
       @Override
       public void visit(File file) {
         /*
@@ -140,12 +156,21 @@ public class Application implements IApplication {
          * of the the IFileVisitor interface inline. You just have to add the body of the visit method, which should
          * be pretty easy (we want to write the filename, including the path, to the writer passed in argument).
          */
+        try {
+
+          writer.write(file.getPath() + '\n');
+
+        } catch (IOException e){
+            e.printStackTrace();
+        }
+
       }
     });
   }
 
   @Override
   public void processQuoteFiles() throws IOException {
+
     IFileExplorer explorer = new DFSFileExplorer();
     explorer.explore(new File(WORKSPACE_DIRECTORY), new CompleteFileTransformer());    
   }
