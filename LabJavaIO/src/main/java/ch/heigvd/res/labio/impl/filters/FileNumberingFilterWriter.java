@@ -3,7 +3,6 @@ package ch.heigvd.res.labio.impl.filters;
 import java.io.FilterWriter;
 import java.io.IOException;
 import java.io.Writer;
-import java.util.Arrays;
 import java.util.logging.Logger;
 
 /**
@@ -19,7 +18,10 @@ import java.util.logging.Logger;
 public class FileNumberingFilterWriter extends FilterWriter {
 
   private static final Logger LOG = Logger.getLogger(FileNumberingFilterWriter.class.getName());
-  private static final char[] NEWLINES = new char[]{'\r', '\n'};
+  private static final char[] NEWLINES = new char[] { '\r', '\n' };
+
+  private int ctr = 1;
+  private boolean newlineR = false;
 
   public FileNumberingFilterWriter(Writer out) {
     super(out);
@@ -27,28 +29,39 @@ public class FileNumberingFilterWriter extends FilterWriter {
 
   @Override
   public void write(String str, int off, int len) throws IOException {
-    write(str.toCharArray(), off, len);
+    for (int i = off; i < off + len; ++i) {
+      this.write(str.charAt(i));
+    }
   }
 
   @Override
   public void write(char[] cbuf, int off, int len) throws IOException {
-    Integer ctr = 1;
-    write(ctr);
-
     for (int i = off; i < off + len; ++i) {
-      if (i != off + len - 1) {
-        if (Arrays.binarySearch(NEWLINES, cbuf[i]) < 0 && !(cbuf[i+1] == NEWLINES[0] || cbuf[i+1] == NEWLINES[1])) {
-          write(++ctr);
-          write('\t');
-        }
-      }
-      write(cbuf[i]);
+      this.write(cbuf[i]);
     }
   }
 
   @Override
   public void write(int c) throws IOException {
-    this.out.write(c);
+    if (ctr == 1) { // first line
+      this.out.write(String.valueOf(ctr++));
+      this.out.write('\t');
+      this.out.write(c);
+    } else if (c == NEWLINES[1]) { // \n detected
+      newlineR = false; // reset \r flag
+      this.out.write(c);
+      this.out.write(String.valueOf(ctr++));
+      this.out.write('\t');
+    } else if (c == NEWLINES[0]) { // \r detected
+      newlineR = true; // set flag for \n
+      this.out.write(c);
+    } else if (newlineR) { // text after \r
+      newlineR = false;
+      this.out.write(String.valueOf(ctr++));
+      this.out.write('\t');
+      this.out.write(c);
+    } else { // normal text
+      this.out.write(c);
+    }
   }
-
 }
