@@ -26,7 +26,6 @@ public class Utils {
 
     for (int i = 0; i < lines.length(); i++) {
       str += lines.charAt(i);
-      LOG.info(str);
       if (lines.charAt(i) == '\r' && ((i + 1) != lines.length()) && lines.charAt(i + 1) == '\n') {
         continue;
       } else if (lines.charAt(i) == '\r' || lines.charAt(i) == '\n') {
