@@ -48,21 +48,21 @@ public class FileNumberingFilterWriter extends FilterWriter {
     if(lastChar == '\0'){
       result += ++lineCount + "\t";
       result +=((char) c);
-    }else if (c == '\n'){
-      result += ((char) c);
-      result += ++lineCount + "\t";
     }else if (c == '\r'){
       lastChar = (char) c;
       return;
     }else if( lastChar == '\r'){
-      result +=lastChar;
+      result += lastChar;
       if( c == '\n'){
-        result +=((char) c) ;
-        result +=++lineCount + "\t";
+        result +=(char) c ;
+        result += ++lineCount + "\t";
       }else{
         result += ++lineCount + "\t";
-        result +=  ((char) c);
+        result +=  (char) c;
       }
+    }else if (c == '\n'){
+      result += ((char) c);
+      result += ++lineCount + "\t";
     }else {
       result +=((char) c);
     }
