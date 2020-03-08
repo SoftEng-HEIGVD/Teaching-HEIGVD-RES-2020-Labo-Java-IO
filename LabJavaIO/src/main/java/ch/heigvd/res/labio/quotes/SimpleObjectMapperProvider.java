@@ -17,6 +17,7 @@ import javax.ws.rs.ext.Provider;
 @Provider
 public class SimpleObjectMapperProvider implements ContextResolver<ObjectMapper> {
 
+  @SuppressWarnings("unused")
   private static final Logger LOG = Logger.getLogger(SimpleObjectMapperProvider.class.getName());
 
   final ObjectMapper defaultObjectMapper;
