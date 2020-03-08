@@ -23,19 +23,25 @@ public class Utils {
     String[] result = new String[2];
     result[0] = "";
     result[1] = "";
+    boolean isWindowsNewLine = false;
     boolean nextLineOk = false;
-    for(char c : lines.toCharArray()){
+    for(int i = 0; i < lines.length();i++){
       if(nextLineOk) {
-        result[1] += c;
-      }
-      else{
-        result[0] +=c;
-        if(c == '\r' || c == '\n'){
+        result[1] += lines.charAt(i);
+      }else{
+        result[0] += lines.charAt(i);
+        if(lines.charAt(i) == '\n'){
+          nextLineOk = true;
+        }
+        if(lines.charAt(i) == '\r' && ((i+1 < lines.length())&&(lines.charAt(i+1)!= '\n')||(i == lines.length()-1))){
           nextLineOk = true;
         }
       }
     }
-
+    if(nextLineOk == false){
+      result[1] = result[0];
+      result[0] = "";
+    }
     return result;
   }
 }
