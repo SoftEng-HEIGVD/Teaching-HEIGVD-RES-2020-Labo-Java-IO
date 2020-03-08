@@ -1,5 +1,8 @@
 package ch.heigvd.res.labio.impl.transformers;
 
+import ch.heigvd.res.labio.impl.filters.FileNumberingFilterWriter;
+import ch.heigvd.res.labio.impl.filters.UpperCaseFilterWriter;
+
 import java.io.Writer;
 
 /**
@@ -21,7 +24,7 @@ public class CompleteFileTransformer extends FileTransformer {
      * decorate with a FileNumberingFilterWriter. The resulting writer is used by the abstract class to write the characters read from the
      * input files. So, the input is first prefixed with line numbers, then transformed to uppercase, then sent to the output file.f
      */
-    //writer = new FileNumberingFilterWriter(new UpperCaseFilterWriter(writer));
+    writer = new FileNumberingFilterWriter(new UpperCaseFilterWriter(writer));
     return writer; 
   }
 
