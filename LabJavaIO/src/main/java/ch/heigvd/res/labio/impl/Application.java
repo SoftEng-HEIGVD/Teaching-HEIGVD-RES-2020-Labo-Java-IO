@@ -27,19 +27,18 @@ public class Application implements IApplication {
    * to where the Java application is invoked.
    */
   public static String WORKSPACE_DIRECTORY = "./workspace/quotes";
-  
+
   private static final Logger LOG = Logger.getLogger(Application.class.getName());
-  
+
   public static void main(String[] args) {
-    
+
     /*
      * I prefer to have LOG output on a single line, it's easier to read. Being able
      * to change the formatting of console outputs is one of the reasons why it is
      * better to use a Logger rather than using System.out.println
      */
     System.setProperty("java.util.logging.SimpleFormatter.format", "%4$s: %5$s%6$s%n");
-    
-       
+
     int numberOfQuotes = 0;
     try {
       numberOfQuotes = Integer.parseInt(args[0]);
@@ -47,32 +46,37 @@ public class Application implements IApplication {
       System.err.println("The command accepts a single numeric argument (number of quotes to fetch)");
       System.exit(-1);
     }
-        
+    if (numberOfQuotes <= 0) {
+      System.err.println("At least one quote must be requested.");
+      System.exit(-1);
+    }
+
     Application app = new Application();
     try {
       /*
        * Step 1 : clear the output directory
        */
       app.clearOutputDirectory();
-      
+
       /*
        * Step 2 : use the QuotesClient to fetch quotes; store each quote in a file
        */
       app.fetchAndStoreQuotes(numberOfQuotes);
-      
+
       /*
-       * Step 3 : use a file explorer to traverse the file system; print the name of each directory and file
+       * Step 3 : use a file explorer to traverse the file system; print the name of
+       * each directory and file
        */
       Writer writer = new StringWriter(); // we create a special writer that will send characters into a string (memory)
-      app.printFileNames(writer);         // we hand over this writer to the printFileNames method
-      LOG.info(writer.toString());       // we dump the whole result on the console
-      
+      app.printFileNames(writer); // we hand over this writer to the printFileNames method
+      LOG.info(writer.toString()); // we dump the whole result on the console
+
       /*
-       * Step 4 : process the quote files, by applying 2 transformations to their content
-       *          (convert to uppercase and add line numbers)
+       * Step 4 : process the quote files, by applying 2 transformations to their
+       * content (convert to uppercase and add line numbers)
        */
       app.processQuoteFiles();
-      
+
     } catch (IOException ex) {
       LOG.log(Level.SEVERE, "Could not fetch quotes. {0}", ex.getMessage());
       ex.printStackTrace();
@@ -81,7 +85,7 @@ public class Application implements IApplication {
 
   /**
    * Gets {@code numberOfQuotes} quotes from {@link QuoteClient}'s
-   * {@code WEB_SERVICE_ENDPOINT} endpoint and stores them (in UTF-8 encoding)
+   * {@see QuoteClient#WEB_SERVICE_ENDPOINT} and stores them (in UTF-8 encoding)
    * according to their respective tags.
    * <p>
    * Clears the {@code WORKSPACE_DIRECTORY} each time it is run.
@@ -112,12 +116,7 @@ public class Application implements IApplication {
       }
 
       // construct filename and store as a file
-      storeQuote(quote, String.format(
-        "%s/%s%s.utf-8",
-        WORKSPACE_DIRECTORY,
-        tagPath,
-        String.format("quote-%d", i)
-      ));
+      storeQuote(quote, String.format("%s/%s%s.utf-8", WORKSPACE_DIRECTORY, tagPath, String.format("quote-%d", i)));
     }
   }
 
@@ -172,10 +171,17 @@ public class Application implements IApplication {
       @Override
       public void visit(File file) {
         /*
-         * There is a missing piece here. Notice how we use an anonymous class here. We provide the implementation
-         * of the the IFileVisitor interface inline. You just have to add the body of the visit method, which should
-         * be pretty easy (we want to write the filename, including the path, to the writer passed in argument).
+         * There is a missing piece here. Notice how we use an anonymous class here. We
+         * provide the implementation of the the IFileVisitor interface inline. You just
+         * have to add the body of the visit method, which should be pretty easy (we
+         * want to write the filename, including the path, to the writer passed in
+         * argument).
          */
+        try {
+          writer.write(file.getCanonicalPath() + "\n");
+        } catch (IOException ex) {
+          LOG.log(Level.SEVERE, "Error while printing filename during DFS");
+        }
       }
     });
   }
