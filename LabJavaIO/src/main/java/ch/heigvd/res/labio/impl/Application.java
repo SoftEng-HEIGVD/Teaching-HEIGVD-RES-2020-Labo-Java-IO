@@ -126,10 +126,11 @@ public class Application implements IApplication {
     List<String> tags = quote.getTags();
     String text = quote.getQuote();
     String name = filename;
+    name +=  "/quotes";
     for (String tag: tags) {
       name+= '/'+ tag;
     }
-    name+="/quote-" + quote.getValue().getId() + ".utf8";
+    name+= "/quote-" +  quote.getValue().getId() + ".utf8";
     File f = new File(name);
     if (!f.getParentFile().exists()) {
       f.getParentFile().mkdirs();
@@ -137,7 +138,7 @@ public class Application implements IApplication {
     if (!f.exists()) {
       f.createNewFile();
     }
-    PrintWriter writer = new PrintWriter("test", "UTF-8");
+    PrintWriter writer = new PrintWriter( name, "UTF-8");
     writer.println(text);
     //writer.flush();
     writer.close();
@@ -152,6 +153,12 @@ public class Application implements IApplication {
     explorer.explore(new File(WORKSPACE_DIRECTORY), new IFileVisitor() {
       @Override
       public void visit(File file) {
+
+        try {
+          writer.write(file.getPath());
+        } catch (IOException e) {
+          e.printStackTrace();
+        }
         /*
          * There is a missing piece here. Notice how we use an anonymous class here. We provide the implementation
          * of the the IFileVisitor interface inline. You just have to add the body of the visit method, which should
