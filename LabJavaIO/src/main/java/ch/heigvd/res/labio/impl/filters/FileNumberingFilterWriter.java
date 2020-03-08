@@ -1,5 +1,7 @@
 package ch.heigvd.res.labio.impl.filters;
 
+import ch.heigvd.res.labio.impl.Utils;
+
 import java.io.FilterWriter;
 import java.io.IOException;
 import java.io.Writer;
@@ -16,8 +18,9 @@ import java.util.logging.Logger;
  * @author Olivier Liechti
  */
 public class FileNumberingFilterWriter extends FilterWriter {
-
   private static final Logger LOG = Logger.getLogger(FileNumberingFilterWriter.class.getName());
+  private int lineCount = 0;
+  private int prevChar = -1;
 
   public FileNumberingFilterWriter(Writer out) {
     super(out);
@@ -25,17 +28,30 @@ public class FileNumberingFilterWriter extends FilterWriter {
 
   @Override
   public void write(String str, int off, int len) throws IOException {
-    throw new UnsupportedOperationException("The student has not implemented this method yet.");
+    for(int i = off; i < off + len; ++i){
+      this.write(str.charAt(i));
+    }
   }
 
   @Override
   public void write(char[] cbuf, int off, int len) throws IOException {
-    throw new UnsupportedOperationException("The student has not implemented this method yet.");
+    for(int i = off; i < off + len; ++i){
+      this.write(cbuf[i]);
+    }
   }
 
   @Override
   public void write(int c) throws IOException {
-    throw new UnsupportedOperationException("The student has not implemented this method yet.");
+    if(lineCount == 0 || (prevChar == '\r' && c != '\n')){  //début du doc ou après séparation Mac
+      out.write(Integer.toString(++lineCount) + '\t');
+    }
+
+    out.write(c);
+
+    this.prevChar = c;
+    if(prevChar == '\n') { //après séparation Windows ou Unix
+      out.write(Integer.toString(++lineCount) + '\t');
+    }
   }
 
 }
