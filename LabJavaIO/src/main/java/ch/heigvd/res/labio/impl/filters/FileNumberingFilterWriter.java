@@ -22,70 +22,52 @@ public class FileNumberingFilterWriter extends FilterWriter {
   private static final Logger LOG = Logger
           .getLogger(FileNumberingFilterWriter.class.getName());
 
-  private int counter;
-  boolean firstLine;
+  private int counter = 1;
+  boolean lastR;
 
   public FileNumberingFilterWriter(Writer out) {
     super(out);
-    this.counter = 1;
-    firstLine = true;
   }
 
   @Override public void write(String str, int off, int len) throws IOException {
-
-
-    StringBuilder sb = new StringBuilder();
-
-    String[] nextLine = Utils.getNextLine(str.substring(off, off + len));
-
-    if (firstLine) {
-      firstLine = false;
-      sb.append(counter + "\t");
-      ++counter;
-    }
-    //line alone
-    if (nextLine[0].isEmpty()) {
-      sb.append(str.substring(off,off+len));
-    }
-    while (!nextLine[0].isEmpty()) {
-      sb.append(nextLine[0]);
-      if(nextLine[0].indexOf('\r') != -1 || nextLine[0].indexOf('\n') != -1) {
-        sb.append(counter + "\t");
-        ++counter;
-      }
-
-        nextLine = Utils.getNextLine(nextLine[1]);
-        if(nextLine[0].isEmpty()) {
-          sb.append(nextLine[1]);
-        }
-    }
-
-    out.write(sb.toString());
+   for(int i = off;i < off + len; ++i) {
+     //call char by char method
+     this.write(str.charAt(i));
+   }
   }
 
-  // TODO not tested method
+
   @Override public void write(char[] cbuf, int off, int len)
           throws IOException {
-    throw new UnsupportedOperationException(
-            "The student has not implemented this method yet.");
+    //call char by char method
+    this.write(new String(cbuf),off,len);
   }
 
-  // TODO pass test but will fail if tested with OSX
+
   @Override public void write(int c) throws IOException {
-    if(firstLine) {
-      firstLine = false;
-      addLineNumber();
+    //first line
+    if(counter == 1) {
+      this.addLineNumber();
     }
-    out.write(c);
 
     if(c == '\n') {
-      addLineNumber();
+      super.write(c);
+      this.addLineNumber();
+    } else {
+      if (lastR) {
+        this.addLineNumber();
+      }
+      super.write(c);
     }
+    lastR = (c == '\r');
 
   }
+
   void addLineNumber() throws IOException {
-    out.write(counter + "\t");
+    String toSend = counter + "\t";
+    super.write(toSend,0,toSend.length());
     ++counter;
+
   }
 }
 
