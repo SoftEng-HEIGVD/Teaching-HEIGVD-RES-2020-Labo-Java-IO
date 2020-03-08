@@ -153,7 +153,7 @@ public class Application implements IApplication {
          * be pretty easy (we want to write the filename, including the path, to the writer passed in argument).
          */
         try {
-          writer.append(file.toString()).append("\n ");
+          writer.append(file.toString()).append("\n");
         } catch (IOException ex){
           ex.printStackTrace();
 
