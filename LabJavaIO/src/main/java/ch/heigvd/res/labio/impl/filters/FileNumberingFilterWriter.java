@@ -18,6 +18,8 @@ import java.util.logging.Logger;
 public class FileNumberingFilterWriter extends FilterWriter {
 
   private static final Logger LOG = Logger.getLogger(FileNumberingFilterWriter.class.getName());
+  private int linecpt = 0;
+  private int lastChar = -1;
 
   public FileNumberingFilterWriter(Writer out) {
     super(out);
@@ -25,17 +27,50 @@ public class FileNumberingFilterWriter extends FilterWriter {
 
   @Override
   public void write(String str, int off, int len) throws IOException {
-    throw new UnsupportedOperationException("The student has not implemented this method yet.");
+
+    for(int i = off; i < len; i++) {
+
+      write(str.charAt(i));
+    }
+
+//    throw new UnsupportedOperationException("The student has not implemented this method yet.");
   }
 
   @Override
   public void write(char[] cbuf, int off, int len) throws IOException {
-    throw new UnsupportedOperationException("The student has not implemented this method yet.");
+
+    for(int i = off; i < len; i++) {
+      write(cbuf[i]);
+    }
+
+//    throw new UnsupportedOperationException("The student has not implemented this method yet.");
   }
 
   @Override
   public void write(int c) throws IOException {
-    throw new UnsupportedOperationException("The student has not implemented this method yet.");
+
+
+    if(linecpt == 0){
+      out.write(Integer.toString(++linecpt) + '\t');
+    }
+
+    super.write(c);
+
+    if(c == '\n') {
+
+      out.write(Integer.toString(++linecpt) + '\t');
+
+    } else {
+
+      if(lastChar == '\r') {
+
+        out.write(Integer.toString(++linecpt) + '\t');
+      }
+    }
+
+    this.lastChar = c;
+
+//    throw new UnsupportedOperationException("The student has not implemented this method yet.");
   }
 
 }
