@@ -11,6 +11,7 @@ import java.util.logging.Logger;
 
 
 public class Utils {
+  public static final char  TAB='\t';
   public static final char UNIX_SEP = '\n';/*unix seperator*/
   public static final char MAC_SEP = '\r';/*mac os seperator*/
   public static final String WIN_SEP = "\r\n";/*windows seperator*/
