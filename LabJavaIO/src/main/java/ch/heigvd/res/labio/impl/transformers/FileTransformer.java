@@ -55,7 +55,11 @@ public abstract class FileTransformer implements IFileVisitor {
 
 
       for (int i=0; i<file.length(); ++i) {
-        writer.write(reader.read());
+        int value = reader.read();
+        if (value == -1) {
+          break;
+        }
+        writer.write(value);
       }
       /*
        * There is a missing piece here: you have an input reader and an ouput writer (notice how the 
