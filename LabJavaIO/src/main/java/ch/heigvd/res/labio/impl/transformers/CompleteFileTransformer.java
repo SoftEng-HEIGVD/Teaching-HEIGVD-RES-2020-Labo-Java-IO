@@ -9,7 +9,7 @@ import java.io.Writer;
  * generate an output file with 1) uppercase letters and 2) line numbers at the
  * beginning of each line.
  * 
- * @author Olivier Liechti
+ * @author Olivier Liechti,Dupont Maxime
  */
 public class CompleteFileTransformer extends FileTransformer {
 
@@ -19,7 +19,7 @@ public class CompleteFileTransformer extends FileTransformer {
       throw new UnsupportedOperationException("The student has not implemented this method yet.");
     }
     /*
-     * If you uncomment the following line (and get rid of th 3 previous lines...), you will restore the decoration 
+     * If you uncomment the following line (and get rid of th 3 previous lines...), you will restore the decoration
      * of the writer (connected to the file. You can see that you first decorate the writer with an UpperCaseFilterWriter, which you then
      * decorate with a FileNumberingFilterWriter. The resulting writer is used by the abstract class to write the characters read from the
      * input files. So, the input is first prefixed with line numbers, then transformed to uppercase, then sent to the output file.f
