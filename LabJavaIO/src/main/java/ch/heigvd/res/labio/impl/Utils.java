@@ -21,28 +21,23 @@ public class Utils {
    */
   public static String[] getNextLine(String lines) {
     String[] result = new String[2];
-    String temp = "";
-    int offset = 0;
-    int i;
-    for (i = 0; i < lines.length() - 1 && offset == 0; ++i) {
-      if (lines.charAt(i) == '\\') {
-        if (i + 3 < lines.length()) {
-          if (lines.substring(i, i + 4).equals("\\r\\n")) {
-            temp = lines.substring(0, i + 4);
-            offset = 4;
-          }
-        } else if (lines.substring(i, i + 2).equals("\\r") || lines.substring(i, i + 2).equals("\\n")) {
-          temp = lines.substring(0, i + 2);
-          offset = 2;
-        }
-      }
-    }
-    result[0] = temp;
-    if (offset==0) {
+    int i1 = lines.indexOf("\n");
+    int i2 = lines.indexOf("\r");
+    int i3 = lines.indexOf("\r\n");
+    if (i1 == -1 && i2==-1 && i3==-1) { //Aucune occurence
+      result[0] = "";
       result[1] = lines;
     }
-    else {
-      result[1] = lines.substring(i+offset);
+    else if(i3>i1 && i3 >=i2) { // pour \r\n
+      result[0] = lines.substring(0, i3 + 3);
+      result[1] = lines.substring(i3 + 3);
+    }
+    else if (i2>i1) { // pour \r
+      result[0] = lines.substring(0, i2+1);
+      result[1] = lines.substring(i2+1);
+    } else { // pour \n
+      result[0] = lines.substring(0, i1+1);
+      result[1] = lines.substring(i1+1);
     }
     return result;
   }
