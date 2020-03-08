@@ -4,7 +4,7 @@ import java.io.FilterWriter;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.logging.Logger;
-
+import ch.heigvd.res.labio.impl.Utils;
 /**
  * This class transforms the streams of character sent to the decorated writer.
  * When filter encounters a line separator, it sends it to the decorated writer.
@@ -18,76 +18,74 @@ import java.util.logging.Logger;
 public class FileNumberingFilterWriter extends FilterWriter {
 
   private static final Logger LOG = Logger.getLogger(FileNumberingFilterWriter.class.getName());
-  private static boolean isFirst = true;
-  private static int lCounter = 0;
-  private static int cCounter = 0;
+  private  boolean isFirst = true;
+  private  int lCounter = 0;
+  //private static int cCounter = 0;
+  private  int lastC = -1;
+
 
 
   public FileNumberingFilterWriter(Writer out) {
     super(out);
   }
 
+  public void writeLnTab() throws IOException{
+    String str = Integer.toString(++lCounter);
+    super.write(str, 0 , str.length());
+    super.write('\t');
+
+  }
   @Override
   public void write(String str, int off, int len) throws IOException {
 
-    char[] cbuf = str.toCharArray();
-    this.write(cbuf,off,len); //we will transfor to use the other write, to implements once for all
+
+    if(isFirst) {
+      writeLnTab();
+      isFirst = false;
+    }
+
+    str = str.substring(off,len + off);
+    String[] lines;
+
+    while(!(lines = Utils.getNextLine(str))[0].isEmpty()){
+      super.write(lines[0],0,lines[0].length());
+      writeLnTab();
+
+      str = lines[1];
+    }
+
+    super.write(str, 0 , str.length());
+
   }
 
 
   @Override
   public void write(char[] cbuf, int off, int len) throws IOException {
-    cCounter = 0;
 
-    if(isFirst){
-      isFirst = false;
-      lCounter++;
-      out.write(lCounter +'\t');
-    }
-    for (int i = 0; i <len ; i++) {
-      cCounter++;
-      if((cbuf[off + i] == '\r') && (cbuf[off + i + 1] == '\n') && (i <= len-2) ){
-        lCounter++;
 
-        out.write(cbuf, (off + i - cCounter + 1), cCounter + 1);
-        out.write(lCounter + '\t');
-
-        cCounter = 0;
-        i++;
-      } else if(cbuf[i + off] == '\r' || cbuf[i + off] == '\n'){
-        out.write(cbuf, (off + i - cCounter + 1), cCounter);
-        out.write(lCounter + '\t');
-
-        cCounter = 0;
-      } else if(i - 1 == len) {
-        out.write(cbuf, (i + off - cCounter + 1), cCounter);
-      }
-
-    }
-
+    String str = new String(cbuf,off,len);
+    this.write(str,0,len);
 
   }
-/**
-  public void firstLine(){
-    isFirst = false;
-    lCounter++;
-    out.write(lCounter +'\t');
-  }
-**/
+
   @Override
   public void write(int c) throws IOException {
 
-    if (isFirst){
+    if (isFirst) {
+      writeLnTab();
       isFirst = false;
-      lCounter++;
-      out.write(lCounter +'\t');
     }
 
-    if ((char) c == '\n'){
-      lCounter++;
-      out.write(c);
-      out.write(lCounter + '\t');
-    } else {out.write(c);}
-  }
+    if (c != '\n' && lastC == '\r') {
+      writeLnTab();
+    }
 
+    super.write(c);
+
+    if (c == '\n') {
+      writeLnTab();
+    }
+
+    lastC = c;
+  }
 }

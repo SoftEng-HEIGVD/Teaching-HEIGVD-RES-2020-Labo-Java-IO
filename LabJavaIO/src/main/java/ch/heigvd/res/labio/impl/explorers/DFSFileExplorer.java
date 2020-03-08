@@ -32,6 +32,7 @@ public void exploreDFS(File rD, IFileVisitor visitor){
     if(files == null){
       return;
     } else {
+        Arrays.sort(files);
       for (File f:
            files) {
         visitor.visit(f);
