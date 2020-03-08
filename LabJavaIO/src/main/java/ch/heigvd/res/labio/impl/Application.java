@@ -118,14 +118,13 @@ public class Application implements IApplication {
    */
   void storeQuote(Quote quote, String filename) throws IOException {
       List<String> tags = quote.getTags();
-      String directory = Application.WORKSPACE_DIRECTORY + '/';
+      StringBuilder directory = new StringBuilder(Application.WORKSPACE_DIRECTORY + '/');
 
         for(String tag : tags){
-          directory += tag + '/';
+          directory.append(tag).append('/');
         }
 
-
-      new File(directory).mkdirs();
+      new File(directory.toString()).mkdirs();
       String filepath = directory + filename + ".utf8";
 
       Writer writer = new OutputStreamWriter(new FileOutputStream(filepath), "UTF-8");
@@ -142,12 +141,11 @@ public class Application implements IApplication {
     explorer.explore(new File(WORKSPACE_DIRECTORY), new IFileVisitor() {
       @Override
       public void visit(File file) {
-
         try{
           writer.write(file.getPath() + '\n');
         }
         catch (java.io.IOException e){
-          System.out.println(e.getCause());
+          System.out.println(e.getMessage());
         }
       }
     });

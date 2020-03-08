@@ -14,22 +14,13 @@ import java.io.File;
  */
 public class DFSFileExplorer implements IFileExplorer {
 @Override
-public void explore(File rootDirectory, IFileVisitor visitor) { //TODO cleanup
+public void explore(File rootDirectory, IFileVisitor visitor) {
   visitor.visit(rootDirectory);
   File[] childFiles = rootDirectory.listFiles();
-  if (childFiles == null) {
-    return;
-  }
 
-  for (File childFile : childFiles) {
-    if (childFile.isDirectory()) {
+  if (childFiles != null) {
+    for (File childFile : childFiles) {
       explore(childFile, visitor);
-    }
-  }
-
-  for (File childFile : childFiles) { // 2 boucles for pour respecter la consigne
-    if (!childFile.isDirectory()) {   // visits all files in the directory and then moves into the subdirectories.
-      visitor.visit(childFile);
     }
   }
 }
