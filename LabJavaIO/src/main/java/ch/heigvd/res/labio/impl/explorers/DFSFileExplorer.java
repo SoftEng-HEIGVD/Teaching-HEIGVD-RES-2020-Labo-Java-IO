@@ -31,14 +31,15 @@ public class DFSFileExplorer implements IFileExplorer {
 
     Arrays.sort(fileList);
 
-    if(fileList != null){
+    for(File f : fileList){
 
-      for(int i = 0; i < fileList.length; i++){
+      if(f.isDirectory()){
 
-        if(fileList[i].isDirectory()){
+        this.explore(f, vistor);
 
-          this.explore(fileList[i], vistor);
-        }
+      } else {
+
+        vistor.visit(f);
       }
     }
 

@@ -78,11 +78,14 @@ public class Application implements IApplication {
 
   @Override
   public void fetchAndStoreQuotes(int numberOfQuotes) throws IOException {
-    clearOutputDirectory();
+
+    this.clearOutputDirectory();
+
     QuoteClient client = new QuoteClient();
     for (int i = 0; i < numberOfQuotes; i++) {
+
       Quote quote = client.fetchQuote();
-      storeQuote(quote, "quote-"+i+".utf8");
+      storeQuote(quote, "quote-"+(i + 1)+".utf8");
       /* There is a missing piece here!
        * As you can see, this method handles the first part of the lab. It uses the web service
        * client to fetch quotes. We have removed a single line from this method. It is a call to
@@ -154,6 +157,7 @@ public class Application implements IApplication {
          * be pretty easy (we want to write the filename, including the path, to the writer passed in argument).
          */
         try {
+
           writer.write(file.getPath() + '\n');
 
         } catch (IOException e){

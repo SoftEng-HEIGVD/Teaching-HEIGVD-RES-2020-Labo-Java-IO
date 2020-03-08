@@ -30,7 +30,7 @@ public class FileNumberingFilterWriter extends FilterWriter {
 
     for(int i = off; i < len + off; i++) {
 
-      write(str.charAt(i));
+      this.write(str.charAt(i));
     }
 
 //    throw new UnsupportedOperationException("The student has not implemented this method yet.");
@@ -40,7 +40,7 @@ public class FileNumberingFilterWriter extends FilterWriter {
   public void write(char[] cbuf, int off, int len) throws IOException {
 
     for(int i = off; i < len + off; i++) {
-      write(cbuf[i]);
+      this.write(cbuf[i]);
     }
 
 //    throw new UnsupportedOperationException("The student has not implemented this method yet.");
@@ -61,7 +61,7 @@ public class FileNumberingFilterWriter extends FilterWriter {
 
     }
 
-    super.write(c);
+    out.write(c);
 
     if(c == '\n') {
 
