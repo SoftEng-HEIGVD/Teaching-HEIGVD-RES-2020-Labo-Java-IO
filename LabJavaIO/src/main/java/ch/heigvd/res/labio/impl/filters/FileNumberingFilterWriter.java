@@ -18,24 +18,44 @@ import java.util.logging.Logger;
 public class FileNumberingFilterWriter extends FilterWriter {
 
   private static final Logger LOG = Logger.getLogger(FileNumberingFilterWriter.class.getName());
-
+  int nbLine = 1;
+  boolean isNewLine = true;
+  boolean isWindowsNewLine = false;
   public FileNumberingFilterWriter(Writer out) {
     super(out);
   }
 
   @Override
   public void write(String str, int off, int len) throws IOException {
-    throw new UnsupportedOperationException("The student has not implemented this method yet.");
+    write(str.toCharArray(),off,len);
   }
 
   @Override
   public void write(char[] cbuf, int off, int len) throws IOException {
-    throw new UnsupportedOperationException("The student has not implemented this method yet.");
+    for(int i = 0; i<len;i++){
+      write(cbuf[off + i]);
+    }
   }
 
   @Override
   public void write(int c) throws IOException {
-    throw new UnsupportedOperationException("The student has not implemented this method yet.");
+    boolean alreadyWrite = false;
+    if(isWindowsNewLine && c != '\n')
+      isWindowsNewLine =false;
+    if(c == '\n' || c== '\r'){
+      alreadyWrite = true;
+      super.write(c);
+      isNewLine = true;
+      if(c == '\r')
+        isWindowsNewLine = true;
+    }
+    if(isNewLine && !isWindowsNewLine){
+      for (char charNbLine : String.valueOf(nbLine++).toCharArray())
+        super.write(charNbLine);
+      super.write('\t');
+      isNewLine = false;
+    }
+  if(!alreadyWrite)
+    super.write(c);
   }
-
 }
