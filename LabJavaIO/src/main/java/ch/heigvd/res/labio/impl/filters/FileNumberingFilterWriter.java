@@ -25,6 +25,7 @@ public class FileNumberingFilterWriter extends FilterWriter {
     super(out);
   }
 
+  /* Méthodes non fonctionelles */
   @Override
   public void write(String str, int off, int len) throws IOException {
     String str_f = str.substring(off, off+len);
