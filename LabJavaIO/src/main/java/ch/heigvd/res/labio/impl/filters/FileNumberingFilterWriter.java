@@ -47,6 +47,14 @@ public class FileNumberingFilterWriter extends FilterWriter {
     write(0);
   }
 
+  /**
+   * Écrit un numéro de ligne suivi d'un tab à chaque nouvelle ligne
+   * @throws IOException si erreur à l'écriture sur le flux
+   */
+  public void newline() throws IOException {
+    out.write(++lineNumber + "\t");
+  }
+
   @Override
   public void write(int c) throws IOException {
     // throw new UnsupportedOperationException("The student has not implemented this method yet.");
@@ -54,7 +62,7 @@ public class FileNumberingFilterWriter extends FilterWriter {
     // classe vient d'être instanciée
     if (beginning) {
       beginning = false; // on change le flag de début de fichier
-      out.write(++lineNumber + "\t"); // insertion d'un numéro de ligne + tab
+      newline(); // ajout nouvelle ligne
       out.write(c);
     } else {
       // si notre char est une nouvelle ligne ou retour chariot
@@ -66,7 +74,7 @@ public class FileNumberingFilterWriter extends FilterWriter {
       } else {
         // si on a une nouvelle ligne
         if (newline)
-          out.write(++lineNumber + "\t"); // ajout d'un numéro de ligne + tab
+          newline(); // ajout nouvelle ligne
         newline = false; // on change le flag de nouvelle ligne
         // comme on doit rajouter une nouvelle ligne en fin de ligne, on
         // vérifie si le dernier char est le char NUL
