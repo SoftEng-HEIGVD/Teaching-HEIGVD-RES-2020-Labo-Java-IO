@@ -32,13 +32,11 @@ public class FileNumberingFilterWriter extends FilterWriter {
     String result = "1\t";
     next = Utils.getNextLine(str_f);
     result += next[0];
-    next = Utils.getNextLine(next[1]);
-    int i = 2;
-    while(next[0].indexOf("\r") != -1 || next[0].indexOf("\n") != -1 || next[0].indexOf("\r\n") != -1)  {
+    int i =2;
+    while (next[0].indexOf("\r") != -1 || next[0].indexOf("\n") != -1) {
+      next = Utils.getNextLine(next[1]);
       result += (i+"\t");
       result += next[0];
-      next = Utils.getNextLine(next[1]);
-      ++i;
     }
     super.out.write(result);
   }
@@ -50,13 +48,11 @@ public class FileNumberingFilterWriter extends FilterWriter {
     String result = "1\t";
     next = Utils.getNextLine(str_f);
     result += next[0];
-    next = Utils.getNextLine(next[1]);
-    int i = 2;
-    while(next[0].indexOf("\r") != -1 || next[0].indexOf("\n") != -1 || next[0].indexOf("\r\n") != -1)  {
+    int i =2;
+    while (next[0].indexOf("\r") != -1 || next[0].indexOf("\n") != -1) {
+      next = Utils.getNextLine(next[1]);
       result += (i+"\t");
       result += next[0];
-      next = Utils.getNextLine(next[1]);
-      ++i;
     }
     super.out.write(result);
   }
