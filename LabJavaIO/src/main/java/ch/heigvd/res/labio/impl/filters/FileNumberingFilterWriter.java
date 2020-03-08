@@ -18,24 +18,62 @@ import java.util.logging.Logger;
 public class FileNumberingFilterWriter extends FilterWriter {
 
   private static final Logger LOG = Logger.getLogger(FileNumberingFilterWriter.class.getName());
+  private int lineNumber;
+  private boolean beginning;
+  private boolean newline;
 
   public FileNumberingFilterWriter(Writer out) {
     super(out);
+    lineNumber = 0;
+    beginning = true;
+    newline = false;
   }
 
   @Override
   public void write(String str, int off, int len) throws IOException {
-    throw new UnsupportedOperationException("The student has not implemented this method yet.");
+    // throw new UnsupportedOperationException("The student has not implemented this method yet.");
+    // fait appel au write char par char
+    write(str.toCharArray(), off, len);
   }
 
   @Override
   public void write(char[] cbuf, int off, int len) throws IOException {
-    throw new UnsupportedOperationException("The student has not implemented this method yet.");
+    // throw new UnsupportedOperationException("The student has not implemented this method yet.");
+    // fait appel au write de char
+    for (int i = 0; i < len; ++i) {
+      write(cbuf[off + i]);
+    }
+    // ajout de la dernière ligne (assez artificiel)
+    write(0);
   }
 
   @Override
   public void write(int c) throws IOException {
-    throw new UnsupportedOperationException("The student has not implemented this method yet.");
+    // throw new UnsupportedOperationException("The student has not implemented this method yet.");
+    // commence par indiquer si on est au début du fichier (donc quand la
+    // classe vient d'être instanciée
+    if (beginning) {
+      beginning = false; // on change le flag de début de fichier
+      out.write(++lineNumber + "\t"); // insertion d'un numéro de ligne + tab
+      out.write(c);
+    } else {
+      // si notre char est une nouvelle ligne ou retour chariot
+      if (c == '\r' || c == '\n') {
+        // on indique qu'on a une nouvelle ligne
+        if (!newline)
+          newline = true;
+        out.write(c);
+      } else {
+        // si on a une nouvelle ligne
+        if (newline)
+          out.write(++lineNumber + "\t"); // ajout d'un numéro de ligne + tab
+        newline = false; // on change le flag de nouvelle ligne
+        // comme on doit rajouter une nouvelle ligne en fin de ligne, on
+        // vérifie si le dernier char est le char NUL
+        if (c != 0)
+          out.write(c);
+      }
+    }
   }
 
 }
