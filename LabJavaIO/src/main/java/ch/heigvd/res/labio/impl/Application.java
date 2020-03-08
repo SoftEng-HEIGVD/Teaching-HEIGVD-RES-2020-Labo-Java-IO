@@ -8,6 +8,7 @@ import ch.heigvd.res.labio.interfaces.IFileVisitor;
 import ch.heigvd.res.labio.quotes.QuoteClient;
 import ch.heigvd.res.labio.quotes.Quote;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.io.Writer;
@@ -123,7 +124,21 @@ public class Application implements IApplication {
    * @throws IOException 
    */
   void storeQuote(Quote quote, String filename) throws IOException {
-    throw new UnsupportedOperationException("The student has not implemented this method yet.");
+
+    StringBuilder sb = new StringBuilder(WORKSPACE_DIRECTORY);
+
+    for (String tag : quote.getTags()) {
+      sb.append("/").append(tag);
+    }
+
+    new File(sb.toString()).mkdirs();
+
+    sb.append("/").append(filename);
+
+    FileWriter fileWriter = new FileWriter(new File(sb.toString()));
+    fileWriter.write(quote.getQuote());
+    fileWriter.flush();
+    fileWriter.close();
   }
   
   /**
