@@ -16,15 +16,15 @@ import java.util.Arrays;
 public class DFSFileExplorer implements IFileExplorer {
 
   /**
-   * Explores the given {@code rootDirectory} in DFS, browsing its child directories
-   * first and then its child files, in ascending alphabetical order.
+   * Explores the given {@code rootDirectory} in DFS, browsing its child
+   * directories first and then its child files, in ascending alphabetical order.
    * <p>
    * Each leaf file is eventually visited by the {@code visitor}.
    *
    * @author Moïn DANAI
    *
    * @param rootDirectory root node
-   * @param visitor method to call upon node visit
+   * @param visitor       method to call upon node visitO
    */
   @Override
   public void explore(File rootDirectory, IFileVisitor vistor) {

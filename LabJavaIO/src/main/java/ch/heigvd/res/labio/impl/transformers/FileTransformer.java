@@ -1,5 +1,7 @@
 package ch.heigvd.res.labio.impl.transformers;
 
+import ch.heigvd.res.labio.impl.filters.FileNumberingFilterWriter;
+import ch.heigvd.res.labio.impl.filters.UpperCaseFilterWriter;
 import ch.heigvd.res.labio.interfaces.IFileVisitor;
 import java.io.File;
 import java.io.FileInputStream;
@@ -44,6 +46,13 @@ public abstract class FileTransformer implements IFileVisitor {
    */
   public abstract Writer decorateWithFilters(Writer writer);
 
+  /**
+   * Visits the given file, reading it and then writing its content to a file with
+   * the same name but with a {@code .out} extension as suffix.
+   * <p>
+   * The writer is decorated (see {@link FileNumberingFilterWriter} and
+   * {@link UpperCaseFilterWriter}).
+   */
   @Override
   public void visit(File file) {
     if (!file.isFile()) {

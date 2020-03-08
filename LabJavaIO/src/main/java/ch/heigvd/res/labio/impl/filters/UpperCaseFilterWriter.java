@@ -16,7 +16,7 @@ public class UpperCaseFilterWriter extends FilterWriter {
   }
 
   /**
-   * Write a string upper case
+   * Write a string in upper case
    *
    * @param str string
    * @param off offset in {@code str}
@@ -28,7 +28,7 @@ public class UpperCaseFilterWriter extends FilterWriter {
   }
 
   /**
-   * Write a char array upper case
+   * Write a char array in upper case
    *
    * @param cbuf char array
    * @param off  offset in {@code cbuf}
@@ -42,7 +42,7 @@ public class UpperCaseFilterWriter extends FilterWriter {
   }
 
   /**
-   * Write a single character upper case
+   * Write a single character in upper case
    *
    * @param c character as int
    */

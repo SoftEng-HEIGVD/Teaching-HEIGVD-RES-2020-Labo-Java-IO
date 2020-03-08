@@ -27,6 +27,14 @@ public class FileNumberingFilterWriter extends FilterWriter {
     super(out);
   }
 
+  /**
+   * Writes the given string from {@code off} to {@code off+len}, with line number at
+   * the beginning of each line.
+   *
+   * @param cbuf string to write
+   * @param off  index offset
+   * @param len  how many characters to write
+   */
   @Override
   public void write(String str, int off, int len) throws IOException {
     for (int i = off; i < off + len; ++i) {
@@ -34,6 +42,14 @@ public class FileNumberingFilterWriter extends FilterWriter {
     }
   }
 
+  /**
+   * Writes the given char array from {@code off} to {@code off+len}, with line number
+   * at the beginning of each line.
+   *
+   * @param cbuf char array to write
+   * @param off  index offset
+   * @param len  how many characters to write
+   */
   @Override
   public void write(char[] cbuf, int off, int len) throws IOException {
     for (int i = off; i < off + len; ++i) {
@@ -41,6 +57,14 @@ public class FileNumberingFilterWriter extends FilterWriter {
     }
   }
 
+  /**
+   * Writes the given character (as {@code int}) with line number
+   * at the beginning of each line.
+   * <p>
+   * This method actually contains the line numbering logic.
+   *
+   * @param c character to write
+   */
   @Override
   public void write(int c) throws IOException {
     if (ctr == 1) { // first line
