@@ -60,7 +60,7 @@ public abstract class FileTransformer implements IFileVisitor {
        */
       int c = reader.read();
       while(c != -1){
-        writer.write(c);
+        writer.write((char) c);
         c = reader.read();
       }
       

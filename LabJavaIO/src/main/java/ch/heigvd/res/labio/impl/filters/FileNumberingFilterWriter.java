@@ -35,11 +35,14 @@ public class FileNumberingFilterWriter extends FilterWriter {
       writeLineNumber();
     }
     String[] lines = Utils.getNextLine(str.substring(off, off + len));
-    if(care && lines[0].charAt(0) == '\n'){
+    if(care && lines[0].length() > 0 && lines[0].charAt(0) == '\n'){
       care = false; tmp = false;
       out.write('\n');
       writeLineNumber();
       lines[0] = lines[0].length() == 1 ? "" : lines[0].substring(1, lines.length);
+    } else if(care) {
+      care = false;
+      writeLineNumber();
     }
     while ("".compareTo(lines[0]) != 0){
       out.write(lines[0]);
