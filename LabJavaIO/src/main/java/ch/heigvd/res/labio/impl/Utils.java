@@ -5,6 +5,7 @@ import java.util.logging.Logger;
 /**
  *
  * @author Olivier Liechti
+ * @author Tiffany Bonzon
  */
 public class Utils {
 
@@ -32,7 +33,7 @@ public class Utils {
       separatorIndex = lines.indexOf(oldMacSeparator) + oldMacSeparator.length();
     } else if(lines.contains(unixSeparator)) {
       separatorIndex = lines.indexOf(unixSeparator) + unixSeparator.length();
-    } else {
+    } else { //No separator
       separatorIndex = 0;
     }
 
