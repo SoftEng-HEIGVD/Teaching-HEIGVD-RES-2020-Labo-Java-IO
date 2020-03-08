@@ -8,6 +8,7 @@ import java.util.logging.Logger;
  */
 public class Utils {
 
+  @SuppressWarnings("unused")
   private static final Logger LOG = Logger.getLogger(Utils.class.getName());
 
   /**

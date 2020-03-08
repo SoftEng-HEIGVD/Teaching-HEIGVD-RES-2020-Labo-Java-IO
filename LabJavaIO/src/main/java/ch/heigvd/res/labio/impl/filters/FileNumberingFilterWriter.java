@@ -19,6 +19,7 @@ import ch.heigvd.res.labio.impl.Utils;
  */
 public class FileNumberingFilterWriter extends FilterWriter {
 
+  @SuppressWarnings("unused")
   private static final Logger LOG = Logger.getLogger(FileNumberingFilterWriter.class.getName());
 
   private int numberOfLines = 0;
