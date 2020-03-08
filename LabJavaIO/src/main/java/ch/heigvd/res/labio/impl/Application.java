@@ -116,7 +116,7 @@ public class Application implements IApplication {
       }
 
       // construct filename and store as a file
-      storeQuote(quote, String.format("%s/%s%s.utf-8", WORKSPACE_DIRECTORY, tagPath, String.format("quote-%d", i)));
+      storeQuote(quote, String.format("%s/%s%s.utf8", WORKSPACE_DIRECTORY, tagPath, String.format("quote-%d", i+1)));
     }
   }
 
