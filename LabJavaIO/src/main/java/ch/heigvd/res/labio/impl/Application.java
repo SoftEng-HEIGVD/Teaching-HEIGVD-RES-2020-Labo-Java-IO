@@ -86,8 +86,8 @@ public class Application implements IApplication {
       LOG.info("Received a new joke with " + quote.getTags().size() + " tags.");
       for (String tag : quote.getTags()) {
         LOG.info("> " + tag);
-        storeQuote(quote, "quote-" + i);
       }
+      storeQuote(quote, "quote-" + i);
     }
   }
   
@@ -116,22 +116,17 @@ public class Application implements IApplication {
    * @param filename the name of the file to create and where to store the quote text
    * @throws IOException 
    */
-  void storeQuote(Quote quote, String filename) throws IOException {  //TODO pb 0 tags
+  void storeQuote(Quote quote, String filename) throws IOException {
       List<String> tags = quote.getTags();
       String directory = Application.WORKSPACE_DIRECTORY + '/';
 
-      //if(tags.size() != 0){
         for(String tag : tags){
           directory += tag + '/';
         }
-      //}
 
 
       new File(directory).mkdirs();
       String filepath = directory + filename + ".utf8";
-
-      //new File(Application.WORKSPACE_DIRECTORY).mkdirs();
-      //String filepath = Application.WORKSPACE_DIRECTORY + "/" + filename + ".utf8";
 
       Writer writer = new OutputStreamWriter(new FileOutputStream(filepath), "UTF-8");
       writer.write(quote.getQuote());
