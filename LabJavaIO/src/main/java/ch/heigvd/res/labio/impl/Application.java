@@ -1,20 +1,23 @@
 package ch.heigvd.res.labio.impl;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.StringWriter;
+import java.io.Writer;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import org.apache.commons.io.FileUtils;
+
 import ch.heigvd.res.labio.impl.explorers.DFSFileExplorer;
 import ch.heigvd.res.labio.impl.transformers.CompleteFileTransformer;
 import ch.heigvd.res.labio.interfaces.IApplication;
 import ch.heigvd.res.labio.interfaces.IFileExplorer;
 import ch.heigvd.res.labio.interfaces.IFileVisitor;
-import ch.heigvd.res.labio.quotes.QuoteClient;
 import ch.heigvd.res.labio.quotes.Quote;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.StringWriter;
-import java.io.Writer;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import org.apache.commons.io.FileUtils;
+import ch.heigvd.res.labio.quotes.QuoteClient;
 
 /**
  *
@@ -85,12 +88,16 @@ public class Application implements IApplication {
     QuoteClient client = new QuoteClient();
     for (int i = 0; i < numberOfQuotes; i++) {
       Quote quote = client.fetchQuote();
-      /* There is a missing piece here!
-       * As you can see, this method handles the first part of the lab. It uses the web service
-       * client to fetch quotes. We have removed a single line from this method. It is a call to
-       * one method provided by this class, which is responsible for storing the content of the
-       * quote in a text file (and for generating the directories based on the tags).
+      /*
+       * There is a missing piece here! As you can see, this method handles the first
+       * part of the lab. It uses the web service client to fetch quotes. We have
+       * removed a single line from this method. It is a call to one method provided
+       * by this class, which is responsible for storing the content of the quote in a
+       * text file (and for generating the directories based on the tags).
        */
+      // OK added missing piece.
+      storeQuote(quote, String.format("quote-%d", i));
+
       LOG.info("Received a new joke with " + quote.getTags().size() + " tags.");
       for (String tag : quote.getTags()) {
         LOG.info("> " + tag);
@@ -125,20 +132,22 @@ public class Application implements IApplication {
    */
   void storeQuote(Quote quote, String filename) throws IOException {
 
-    StringBuilder sb = new StringBuilder(WORKSPACE_DIRECTORY);
+    StringBuilder sb = new StringBuilder();
+    sb.append(WORKSPACE_DIRECTORY).append(File.separator);
 
     for (String tag : quote.getTags()) {
-      sb.append("/").append(tag);
+      sb.append(tag).append(File.separator);
     }
 
-    new File(sb.toString()).mkdirs();
+    String path = sb.toString();
 
-    sb.append("/").append(filename);
+    new File(path).mkdirs();
 
-    FileWriter fileWriter = new FileWriter(new File(sb.toString()));
-    fileWriter.write(quote.getQuote());
-    fileWriter.flush();
-    fileWriter.close();
+    OutputStreamWriter oswriter = new OutputStreamWriter(new FileOutputStream(path + filename + ".utf8"), "UTF-8");
+
+    oswriter.write(quote.getQuote());
+    oswriter.flush();
+    oswriter.close();
   }
   
   /**
@@ -151,10 +160,22 @@ public class Application implements IApplication {
       @Override
       public void visit(File file) {
         /*
-         * There is a missing piece here. Notice how we use an anonymous class here. We provide the implementation
-         * of the the IFileVisitor interface inline. You just have to add the body of the visit method, which should
-         * be pretty easy (we want to write the filename, including the path, to the writer passed in argument).
+         * There is a missing piece here. Notice how we use an anonymous class here. We
+         * provide the implementation of the the IFileVisitor interface inline. You just
+         * have to add the body of the visit method, which should be pretty easy (we
+         * want to write the filename, including the path, to the writer passed in
+         * argument).
          */
+        // OK added missing piece.
+        if (file == null)
+          return;
+
+        try {
+          writer.write(file.getPath());
+          writer.write(System.lineSeparator());
+        } catch (IOException e) {
+          throw new RuntimeException(e);
+        }
       }
     });
   }
