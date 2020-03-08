@@ -53,11 +53,12 @@ public abstract class FileTransformer implements IFileVisitor {
       Writer writer = new OutputStreamWriter(new FileOutputStream(file.getPath()+ ".out"), "UTF-8"); // the bug fix by teacher
       writer = decorateWithFilters(writer);
 
-      /*
-       * There is a missing piece here: you have an input reader and an ouput writer (notice how the 
-       * writer has been decorated by the concrete subclass!). You need to write a loop to read the
-       * characters and write them to the writer.
-       */
+      int buffSize = 4096;
+      char[] buff = new char[buffSize];
+      int length;
+      while((length = reader.read(buff,0,buffSize)) != -1){
+        writer.write(buff,0,length);
+      }
       
       reader.close();
       writer.flush();

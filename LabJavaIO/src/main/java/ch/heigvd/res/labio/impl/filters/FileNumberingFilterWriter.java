@@ -13,29 +13,61 @@ import java.util.logging.Logger;
  *
  * Hello\n\World -> 1\Hello\n2\tWorld
  *
- * @author Olivier Liechti
+ * @author Olivier Liechti, Dupont Maxime
  */
 public class FileNumberingFilterWriter extends FilterWriter {
 
   private static final Logger LOG = Logger.getLogger(FileNumberingFilterWriter.class.getName());
-
+  private int lineCount = 0;
+  private char lastChar = '\0';
   public FileNumberingFilterWriter(Writer out) {
     super(out);
   }
 
   @Override
   public void write(String str, int off, int len) throws IOException {
-    throw new UnsupportedOperationException("The student has not implemented this method yet.");
+    //throw new UnsupportedOperationException("The student has not implemented this method yet.");
+    this.write(str.toCharArray(), off , len);
   }
 
   @Override
   public void write(char[] cbuf, int off, int len) throws IOException {
-    throw new UnsupportedOperationException("The student has not implemented this method yet.");
+    //throw new UnsupportedOperationException("The student has not implemented this method yet.");
+    for(int i = off; i < len + off; ++i){
+      write(cbuf[i]);
+    }
   }
 
   @Override
   public void write(int c) throws IOException {
-    throw new UnsupportedOperationException("The student has not implemented this method yet.");
+    //throw new UnsupportedOperationException("The student has not implemented this method yet.");
+    //Tout le traitement se fait ici, les deux autres méthodes se contentent de rediriger
+    String result = "";
+
+    //On commence :
+    if(lastChar == '\0'){
+      result += ++lineCount + "\t";
+      result +=((char) c);
+    }else if (c == '\r'){
+      lastChar = (char) c;
+      return;
+    }else if( lastChar == '\r'){
+      result += lastChar;
+      if( c == '\n'){
+        result +=(char) c ;
+        result += ++lineCount + "\t";
+      }else{
+        result += ++lineCount + "\t";
+        result +=  (char) c;
+      }
+    }else if (c == '\n'){
+      result += ((char) c);
+      result += ++lineCount + "\t";
+    }else {
+      result +=((char) c);
+    }
+    out.write(result);
+    lastChar = (char) c;
   }
 
 }
