@@ -27,12 +27,17 @@ public class FileNumberingFilterWriter extends FilterWriter {
     this.lastCharWasAReturn = false;
   }
 
+  /*
+  indicates whether the character and the next one form a line ender.
+  @returns 1 if the first char only is a line ender,
+          2 if the first and the second chars form a windows line ender ( \r\n )
+          0 if the first char cannot be a line ender.
+   */
   private int isSeparator(char c, char c2){
     if(c == '\r'){
       if(c2 == '\n')
         return 2;
       else {
-        lastCharWasAReturn = true;
         return 1;
       }
     }
@@ -71,12 +76,21 @@ public class FileNumberingFilterWriter extends FilterWriter {
   @Override
   public void write(int c) throws IOException {
     //throw new UnsupportedOperationException("The student has not implemented this method yet.");
-    if(lastCharWasAReturn && c == '\n'){
-      super.write("\n", 0, 1);
+    String s;
+    int len = 1;
+    if(c == '\r'){
+      lastCharWasAReturn = true;
+    }else{
+      if(lastCharWasAReturn){
+        s = "\r" + Character.toString((char)c);
+        len = 2;
+      }else{
+        s = Character.toString((char)c);
+      }
+      this.write(s, 0, len);
       lastCharWasAReturn = false;
     }
-    else
-      this.write(Character.toString((char)c), 0, 1);
-  }
+
+    }
 
 }
