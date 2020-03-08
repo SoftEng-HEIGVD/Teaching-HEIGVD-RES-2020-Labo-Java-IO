@@ -7,10 +7,8 @@ import ch.heigvd.res.labio.interfaces.IFileExplorer;
 import ch.heigvd.res.labio.interfaces.IFileVisitor;
 import ch.heigvd.res.labio.quotes.QuoteClient;
 import ch.heigvd.res.labio.quotes.Quote;
-import java.io.File;
-import java.io.IOException;
-import java.io.StringWriter;
-import java.io.Writer;
+
+import java.io.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.commons.io.FileUtils;
@@ -90,6 +88,9 @@ public class Application implements IApplication {
        * one method provided by this class, which is responsible for storing the content of the
        * quote in a text file (and for generating the directories based on the tags).
        */
+
+      storeQuote(quote, String.format("quote-%d", i));
+
       LOG.info("Received a new joke with " + quote.getTags().size() + " tags.");
       for (String tag : quote.getTags()) {
         LOG.info("> " + tag);
@@ -123,7 +124,26 @@ public class Application implements IApplication {
    * @throws IOException 
    */
   void storeQuote(Quote quote, String filename) throws IOException {
-    throw new UnsupportedOperationException("The student has not implemented this method yet.");
+    // throw new UnsupportedOperationException("The student has not implemented this method yet.");
+    StringBuilder sbpath = new StringBuilder();
+    sbpath.append(WORKSPACE_DIRECTORY).append("/");
+
+    for (String tag : quote.getTags())
+      sbpath.append(tag).append("/");
+
+    String path = sbpath.toString();
+
+    File f = new File(path);
+    f.mkdirs();
+
+    OutputStreamWriter oswriter = new OutputStreamWriter(
+            new FileOutputStream(path + filename + ".utf8"),
+            "UTF-8"
+    );
+
+    oswriter.write(quote.getQuote());
+    oswriter.flush();
+    oswriter.close();
   }
   
   /**
@@ -140,6 +160,15 @@ public class Application implements IApplication {
          * of the the IFileVisitor interface inline. You just have to add the body of the visit method, which should
          * be pretty easy (we want to write the filename, including the path, to the writer passed in argument).
          */
+        if (file == null)
+          return;
+
+        try {
+          writer.write(file.getPath());
+          writer.write(System.lineSeparator());
+        } catch (IOException e) {
+          throw new RuntimeException(e);
+        }
       }
     });
   }
