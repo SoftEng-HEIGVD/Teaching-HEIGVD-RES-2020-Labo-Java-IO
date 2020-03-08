@@ -15,9 +15,10 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.commons.io.FileUtils;
 
+
 /**
  *
- * @author Olivier Liechti
+ * @author Olivier Liechti, Florian Mulhauser
  */
 public class Application implements IApplication {
 
@@ -90,6 +91,7 @@ public class Application implements IApplication {
        * one method provided by this class, which is responsible for storing the content of the
        * quote in a text file (and for generating the directories based on the tags).
        */
+      storeQuote(quote, "quote-" + i + ".utf8" );
       LOG.info("Received a new joke with " + quote.getTags().size() + " tags.");
       for (String tag : quote.getTags()) {
         LOG.info("> " + tag);
@@ -123,7 +125,17 @@ public class Application implements IApplication {
    * @throws IOException 
    */
   void storeQuote(Quote quote, String filename) throws IOException {
-    throw new UnsupportedOperationException("The student has not implemented this method yet.");
+    StringBuilder sb_path = new StringBuilder(WORKSPACE_DIRECTORY);
+
+    for (String tag: quote.getTags()){
+
+      sb_path.append(File.separator).append(tag);
+    }
+    
+    sb_path.append(File.separator).append(filename);
+    File f = new File(sb_path.toString());
+    FileUtils.writeStringToFile(f, quote.getQuote());
+    //throw new UnsupportedOperationException("The student has not implemented this method yet.");
   }
   
   /**
@@ -140,6 +152,12 @@ public class Application implements IApplication {
          * of the the IFileVisitor interface inline. You just have to add the body of the visit method, which should
          * be pretty easy (we want to write the filename, including the path, to the writer passed in argument).
          */
+        try {
+          writer.append(file.toString()).append("\n");
+        } catch (IOException ex){
+          ex.printStackTrace();
+
+        }
       }
     });
   }
