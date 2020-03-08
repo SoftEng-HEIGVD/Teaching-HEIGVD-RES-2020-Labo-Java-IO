@@ -1,5 +1,7 @@
 package ch.heigvd.res.labio.impl.filters;
 
+import ch.heigvd.res.labio.impl.Utils;
+
 import java.io.FilterWriter;
 import java.io.IOException;
 import java.io.Writer;
@@ -23,19 +25,42 @@ public class FileNumberingFilterWriter extends FilterWriter {
     super(out);
   }
 
+  /* Méthodes non fonctionelles */
   @Override
   public void write(String str, int off, int len) throws IOException {
-    throw new UnsupportedOperationException("The student has not implemented this method yet.");
+    String str_f = str.substring(off, off+len);
+    String[] next;
+    String result = "1\t";
+    next = Utils.getNextLine(str_f);
+    result += next[0];
+    int i =2;
+    while (next[0].indexOf("\r") != -1 || next[0].indexOf("\n") != -1) {
+      next = Utils.getNextLine(next[1]);
+      result += (i+"\t");
+      result += next[0];
+    }
+    super.out.write(result);
   }
 
   @Override
   public void write(char[] cbuf, int off, int len) throws IOException {
-    throw new UnsupportedOperationException("The student has not implemented this method yet.");
+    String str_f = cbuf.toString().substring(off, off+len);
+    String[] next;
+    String result = "1\t";
+    next = Utils.getNextLine(str_f);
+    result += next[0];
+    int i =2;
+    while (next[0].indexOf("\r") != -1 || next[0].indexOf("\n") != -1) {
+      next = Utils.getNextLine(next[1]);
+      result += (i+"\t");
+      result += next[0];
+    }
+    super.out.write(result);
   }
 
   @Override
   public void write(int c) throws IOException {
-    throw new UnsupportedOperationException("The student has not implemented this method yet.");
+    super.out.write(c);
   }
 
 }
