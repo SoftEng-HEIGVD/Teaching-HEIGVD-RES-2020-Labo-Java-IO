@@ -47,7 +47,6 @@ public class Utils {
     division[1] = lines.substring(posEndLine + offset);
 
     return division;
-   // throw new UnsupportedOperationException("The student has not implemented this method yet.");
   }
 
 }
