@@ -14,6 +14,9 @@ import java.io.Writer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.commons.io.FileUtils;
+import java.util.List;
+import java.io.FileWriter;
+import java.io.BufferedWriter;
 
 /**
  *
@@ -84,9 +87,13 @@ public class Application implements IApplication {
     QuoteClient client = new QuoteClient();
     for (int i = 0; i < numberOfQuotes; i++) {
       Quote quote = client.fetchQuote();
-      /* There is a missing piece here!
+      storeQuote(quote, "quote-" + quote.getValue().getId() + ".utf8");
+
+
+
+      /* There is no missing piece here!
        * As you can see, this method handles the first part of the lab. It uses the web service
-       * client to fetch quotes. We have removed a single line from this method. It is a call to
+       * client to fetch quotes. We have not removed a single line from this method. It is a call to
        * one method provided by this class, which is responsible for storing the content of the
        * quote in a text file (and for generating the directories based on the tags).
        */
@@ -123,7 +130,25 @@ public class Application implements IApplication {
    * @throws IOException 
    */
   void storeQuote(Quote quote, String filename) throws IOException {
-    throw new UnsupportedOperationException("The student has not implemented this method yet.");
+    List<String> tags = quote.getTags();
+
+    String directoryName = WORKSPACE_DIRECTORY;
+
+    for (int i = 0; i < tags.size(); i++){
+      directoryName += "\\" + tags.get(i);
+    }
+
+    File directory = new File(directoryName);
+    directory.mkdirs();
+
+    File name = new File(directoryName + "\\" + filename);
+    name.createNewFile();
+
+    FileWriter fw = new FileWriter(name.getAbsoluteFile());
+    BufferedWriter bw = new BufferedWriter(fw);
+    bw.write(quote.getQuote());
+    bw.close();
+
   }
   
   /**
@@ -134,7 +159,10 @@ public class Application implements IApplication {
     IFileExplorer explorer = new DFSFileExplorer();
     explorer.explore(new File(WORKSPACE_DIRECTORY), new IFileVisitor() {
       @Override
-      public void visit(File file) {
+      public void visit(File file) throws IOException {
+
+        writer.write(file.getPath());
+
         /*
          * There is a missing piece here. Notice how we use an anonymous class here. We provide the implementation
          * of the the IFileVisitor interface inline. You just have to add the body of the visit method, which should
@@ -147,7 +175,7 @@ public class Application implements IApplication {
   @Override
   public void processQuoteFiles() throws IOException {
     IFileExplorer explorer = new DFSFileExplorer();
-    explorer.explore(new File(WORKSPACE_DIRECTORY), new CompleteFileTransformer());    
+    explorer.explore(new File(WORKSPACE_DIRECTORY), new CompleteFileTransformer());
   }
 
 }
