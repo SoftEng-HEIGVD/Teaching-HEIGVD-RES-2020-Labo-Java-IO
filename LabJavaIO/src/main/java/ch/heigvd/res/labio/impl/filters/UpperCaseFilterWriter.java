@@ -12,21 +12,26 @@ public class UpperCaseFilterWriter extends FilterWriter {
   
   public UpperCaseFilterWriter(Writer wrappedWriter) {
     super(wrappedWriter);
+    
   }
 
   @Override
   public void write(String str, int off, int len) throws IOException {
-    throw new UnsupportedOperationException("The student has not implemented this method yet.");
+    super.write(str.toUpperCase(), off, len);
   }
 
   @Override
   public void write(char[] cbuf, int off, int len) throws IOException {
-    throw new UnsupportedOperationException("The student has not implemented this method yet.");
+    char[] upperBuf = new char[cbuf.length];
+    for(int i = 0; i < len; ++i){
+      upperBuf[i + off] = Character.toUpperCase(cbuf[i + off]);
+    }
+    super.write(upperBuf, off, len);
   }
 
   @Override
   public void write(int c) throws IOException {
-    throw new UnsupportedOperationException("The student has not implemented this method yet.");
+    super.write(Character.toUpperCase(c));
   }
 
 }
