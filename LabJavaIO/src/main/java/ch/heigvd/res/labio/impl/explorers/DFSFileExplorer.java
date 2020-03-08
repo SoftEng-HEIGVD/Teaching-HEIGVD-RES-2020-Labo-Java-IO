@@ -23,14 +23,14 @@ public class DFSFileExplorer implements IFileExplorer {
         java.util.Arrays.sort(fileAndDirectoryList);
         for(File file : fileAndDirectoryList)
         {
-            if(!file.isDirectory())
+            if(file.isDirectory())
             {
                 explore(file, visitor);
             }
         }
         for(File file : fileAndDirectoryList)
         {
-            if(file.isDirectory())
+            if(!file.isDirectory())
             {
                 explore(file, visitor);
             }
