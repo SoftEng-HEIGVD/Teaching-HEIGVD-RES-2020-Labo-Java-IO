@@ -7,10 +7,10 @@ import ch.heigvd.res.labio.interfaces.IFileExplorer;
 import ch.heigvd.res.labio.interfaces.IFileVisitor;
 import ch.heigvd.res.labio.quotes.QuoteClient;
 import ch.heigvd.res.labio.quotes.Quote;
-import java.io.File;
-import java.io.IOException;
-import java.io.StringWriter;
-import java.io.Writer;
+
+import java.io.*;
+import java.nio.charset.StandardCharsets;
+import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.commons.io.FileUtils;
@@ -94,6 +94,7 @@ public class Application implements IApplication {
       for (String tag : quote.getTags()) {
         LOG.info("> " + tag);
       }
+      storeQuote(quote, String.format("quote-%d", i));
     }
   }
   
@@ -123,7 +124,19 @@ public class Application implements IApplication {
    * @throws IOException 
    */
   void storeQuote(Quote quote, String filename) throws IOException {
-    throw new UnsupportedOperationException("The student has not implemented this method yet.");
+    String path = WORKSPACE_DIRECTORY;
+    for(String s: quote.getTags()){
+      path += '/' + s;
+    }
+
+    new File(path).mkdirs(); // arborescence
+
+    path += '/' + filename + ".utf8";
+    File file = new File(path);
+    OutputStreamWriter outputStreamWriter = new OutputStreamWriter(new FileOutputStream(file),
+            StandardCharsets.UTF_8);
+    outputStreamWriter.write(quote.getQuote());
+    outputStreamWriter.close();
   }
   
   /**
@@ -140,6 +153,10 @@ public class Application implements IApplication {
          * of the the IFileVisitor interface inline. You just have to add the body of the visit method, which should
          * be pretty easy (we want to write the filename, including the path, to the writer passed in argument).
          */
+        try {
+            assert (!Objects.isNull(file));
+            writer.write(file.getPath()+'\n');
+        } catch (IOException e){}
       }
     });
   }
