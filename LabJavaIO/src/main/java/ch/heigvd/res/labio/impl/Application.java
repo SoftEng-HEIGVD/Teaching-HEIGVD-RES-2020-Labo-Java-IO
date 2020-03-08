@@ -7,13 +7,23 @@ import ch.heigvd.res.labio.interfaces.IFileExplorer;
 import ch.heigvd.res.labio.interfaces.IFileVisitor;
 import ch.heigvd.res.labio.quotes.QuoteClient;
 import ch.heigvd.res.labio.quotes.Quote;
-import java.io.File;
-import java.io.IOException;
-import java.io.StringWriter;
-import java.io.Writer;
+
+import java.io.*;
+import java.lang.reflect.Array;
+import java.nio.Buffer;
+import java.nio.BufferOverflowException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.commons.io.FileUtils;
+
+
+
+import javax.swing.text.html.HTML;
 
 /**
  *
@@ -42,6 +52,7 @@ public class Application implements IApplication {
     int numberOfQuotes = 0;
     try {
       numberOfQuotes = Integer.parseInt(args[0]);
+
     } catch (Exception e) {
       System.err.println("The command accepts a single numeric argument (number of quotes to fetch)");
       System.exit(-1);
@@ -49,9 +60,10 @@ public class Application implements IApplication {
         
     Application app = new Application();
     try {
-      /*
+      /* Some changes for first pull request
        * Step 1 : clear the output directory
        */
+
       app.clearOutputDirectory();
       
       /*
@@ -90,6 +102,9 @@ public class Application implements IApplication {
        * one method provided by this class, which is responsible for storing the content of the
        * quote in a text file (and for generating the directories based on the tags).
        */
+      // missing line, storing quotes :
+      // storeQuote(quote, WORKSPACE_DIRECTORY); faux
+      storeQuote(quote, "quote-" + i + ".utf8");
       LOG.info("Received a new joke with " + quote.getTags().size() + " tags.");
       for (String tag : quote.getTags()) {
         LOG.info("> " + tag);
@@ -123,7 +138,29 @@ public class Application implements IApplication {
    * @throws IOException 
    */
   void storeQuote(Quote quote, String filename) throws IOException {
-    throw new UnsupportedOperationException("The student has not implemented this method yet.");
+
+    List<String> tagList = quote.getTags();
+
+    String folderName = WORKSPACE_DIRECTORY;
+    Path path = Paths.get(folderName);
+
+    // Iterates over the list of tags and creates a directory if necessary
+    for(int i = 0; i <  tagList.size(); ++i){
+      path = Paths.get(folderName, tagList.get(i)); // add tag number i to  the path
+      folderName += "\\" + tagList.get(i);
+      if (!Files.exists(path)) {
+        File file = new File(folderName);
+        file.mkdirs();
+      }
+    }
+
+    // Creates a file named quote-n.utf8 in the right directory created above
+    File file = new File(folderName + "\\" + filename);
+
+    // Store the string returned by quote.getQuote() in this file
+    BufferedWriter writer = new BufferedWriter(new FileWriter(file));
+    writer.write(quote.getQuote());
+    writer.close();
   }
   
   /**
@@ -140,6 +177,11 @@ public class Application implements IApplication {
          * of the the IFileVisitor interface inline. You just have to add the body of the visit method, which should
          * be pretty easy (we want to write the filename, including the path, to the writer passed in argument).
          */
+        try{
+          writer.write(file.getName());
+        } catch (IOException e){
+          System.out.println(e);
+        }
       }
     });
   }
