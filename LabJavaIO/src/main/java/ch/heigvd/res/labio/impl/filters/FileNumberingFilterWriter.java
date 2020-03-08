@@ -14,28 +14,62 @@ import java.util.logging.Logger;
  * Hello\n\World -> 1\Hello\n2\tWorld
  *
  * @author Olivier Liechti
+ * @author Tiffany Bonzon
  */
 public class FileNumberingFilterWriter extends FilterWriter {
 
   private static final Logger LOG = Logger.getLogger(FileNumberingFilterWriter.class.getName());
 
+  private int lineNumber;
+  private boolean isFirstChar;
+  private char lastChar;
+
+  private void SBMultipleAppend(StringBuilder sb, String... strings) {
+    for (String string : strings) {
+      sb.append(string);
+    }
+  }
+
   public FileNumberingFilterWriter(Writer out) {
     super(out);
+    lineNumber = 0;
+    isFirstChar = true;
+    lastChar = '\0';
   }
 
   @Override
   public void write(String str, int off, int len) throws IOException {
-    throw new UnsupportedOperationException("The student has not implemented this method yet.");
+    write(str.toCharArray(), off, len);
   }
 
   @Override
   public void write(char[] cbuf, int off, int len) throws IOException {
-    throw new UnsupportedOperationException("The student has not implemented this method yet.");
+    for(int i = off; i < off + len; ++i) {
+      write(cbuf[i]);
+    }
   }
 
   @Override
   public void write(int c) throws IOException {
-    throw new UnsupportedOperationException("The student has not implemented this method yet.");
-  }
+    StringBuilder sb = new StringBuilder();
 
+    if(isFirstChar) {
+      SBMultipleAppend(sb, String.valueOf(++lineNumber), "\t");
+      isFirstChar = false;
+    }
+
+    if((char) c == '\n') {
+      SBMultipleAppend(sb, "\n", String.valueOf(++lineNumber), "\t");
+    } else {
+      if(lastChar == '\r') {
+        SBMultipleAppend(sb, String.valueOf(++lineNumber), "\t");
+      }
+
+      sb.append((char) c);
+    }
+
+    lastChar = (char) c;
+
+    super.write(sb.toString(), 0, sb.length());
+  }
 }
