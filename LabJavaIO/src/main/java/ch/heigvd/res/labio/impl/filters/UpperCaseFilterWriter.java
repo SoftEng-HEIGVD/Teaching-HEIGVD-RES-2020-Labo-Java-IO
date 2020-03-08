@@ -9,7 +9,7 @@ import java.io.Writer;
  * @author Olivier Liechti
  */
 public class UpperCaseFilterWriter extends FilterWriter {
-  
+  //TODO
   public UpperCaseFilterWriter(Writer wrappedWriter) {
     super(wrappedWriter);
   }

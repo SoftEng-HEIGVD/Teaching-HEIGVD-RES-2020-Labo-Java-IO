@@ -15,7 +15,7 @@ public class CompleteFileTransformer extends FileTransformer {
 
   @Override
   public Writer decorateWithFilters(Writer writer) {
-    if (true) {
+    if (true) { //TODO
       throw new UnsupportedOperationException("The student has not implemented this method yet.");
     }
     /*
