@@ -19,8 +19,26 @@ public class Utils {
    * the line separator, the second element is the remaining text. If the argument does not
    * contain any line separator, then the first element is an empty string.
    */
-  public static String[] getNextLine(String lines) {
-    throw new UnsupportedOperationException("The student has not implemented this method yet.");
-  }
+  // carriage_return,  line_feed and end_of_line
+  private static final String[] SEPARATORS = {"\r", "\n", "\r\n"};
+  private static final int ARRAY_SIZE =   2;
 
+  public static String[] getNextLine(String lines) {
+
+    String[] nextline = new String[ARRAY_SIZE];
+
+    // Abscence of separator
+    nextline[0] = "";
+    nextline[1] = lines;
+
+    // for all the differnt separators
+    for (String element : SEPARATORS) {
+      if (lines.contains(element)) {
+      nextline = lines.split(element, ARRAY_SIZE);
+      nextline[0] += element;
+      }
+    }
+    
+    return nextline;
+  }
 }

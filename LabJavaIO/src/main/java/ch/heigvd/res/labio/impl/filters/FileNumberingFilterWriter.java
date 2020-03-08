@@ -19,23 +19,43 @@ public class FileNumberingFilterWriter extends FilterWriter {
 
   private static final Logger LOG = Logger.getLogger(FileNumberingFilterWriter.class.getName());
 
+  private static final char CARRIAGE_RETURN = '\r';
+  private static final char LINE_FEED = '\n';
+  private static final char TAB = '\t';
+  private int previous = 0;
+  private int line = 1;
+
   public FileNumberingFilterWriter(Writer out) {
     super(out);
   }
 
   @Override
   public void write(String str, int off, int len) throws IOException {
-    throw new UnsupportedOperationException("The student has not implemented this method yet.");
+    write(str.toCharArray(), off, len);
   }
 
   @Override
   public void write(char[] cbuf, int off, int len) throws IOException {
-    throw new UnsupportedOperationException("The student has not implemented this method yet.");
+    for(int i = off; i < off + len; ++i){
+      write(cbuf[i]);
+    }
   }
 
   @Override
   public void write(int c) throws IOException {
-    throw new UnsupportedOperationException("The student has not implemented this method yet.");
+    final String LINE_CONVERTED = String.valueOf(line);
+
+    // Mac carriage or first line
+    if( (c!= LINE_FEED && previous == CARRIAGE_RETURN) || (line == 1)){
+      super.write(LINE_CONVERTED, 0, String.valueOf(line++).length());
+      super.write(TAB);
+    }
+    super.write(c);
+    if(c == LINE_FEED){
+      super.write(LINE_CONVERTED, 0 , String.valueOf(line++).length());
+      super.write(TAB);
+    }
+    previous = c;
   }
 
 }
