@@ -19,23 +19,64 @@ public class FileNumberingFilterWriter extends FilterWriter {
 
   private static final Logger LOG = Logger.getLogger(FileNumberingFilterWriter.class.getName());
 
+  private final int EMPTY = -1;
+  private final int NORMAL = 0;
+  private final int RET_N = 1;
+  private final int RET_R = 2;
+
+  private int previousChar = EMPTY;
+  private int line = 1;
+
   public FileNumberingFilterWriter(Writer out) {
     super(out);
   }
 
   @Override
   public void write(String str, int off, int len) throws IOException {
-    throw new UnsupportedOperationException("The student has not implemented this method yet.");
+    for(int i = off; i < off + len; i++){
+      write(str.charAt(i));
+    }
   }
 
   @Override
   public void write(char[] cbuf, int off, int len) throws IOException {
-    throw new UnsupportedOperationException("The student has not implemented this method yet.");
+    for(int i = off; i < off + len; i++){
+      write(cbuf[i]);
+    }
   }
 
   @Override
   public void write(int c) throws IOException {
-    throw new UnsupportedOperationException("The student has not implemented this method yet.");
+    if (previousChar == EMPTY) {
+      decorate();
+    } else if (previousChar == RET_R && c != '\n') {
+      decorate();
+    }
+
+    out.write(c);
+    updatePreviousChar(c);
+
+    if (previousChar == RET_N) {
+      decorate();
+    }
+
   }
 
+  private void updatePreviousChar(int c) {
+    switch(c) {
+      case '\n':
+        previousChar = RET_N;
+        break;
+      case '\r':
+        previousChar = RET_R;
+        break;
+      default:
+        previousChar = NORMAL;
+        break;
+    }
+  }
+
+  private void decorate() throws IOException {
+    out.write(line++ + "\t");
+  }
 }
