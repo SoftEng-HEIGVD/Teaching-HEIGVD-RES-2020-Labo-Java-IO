@@ -8,8 +8,6 @@ import java.util.logging.Logger;
  */
 public class Utils {
 
-  private static final Logger LOG = Logger.getLogger(Utils.class.getName());
-
   /**
    * This method looks for the next new line separators (\r, \n, \r\n) to extract
    * the next line in the string passed in arguments. 
@@ -20,7 +18,30 @@ public class Utils {
    * contain any line separator, then the first element is an empty string.
    */
   public static String[] getNextLine(String lines) {
-    throw new UnsupportedOperationException("The student has not implemented this method yet.");
+
+    // The usage of System.LineSeparator is useful but can't validate all the test (on my OS),
+    // here is a homemade solution
+
+    String[] lineSeparators = new String[]{"\r\n","\n","\r"};
+    int indexOfLineSep = 0;
+
+    // we check if there is/isn't a line separator
+    for (String lineSeparator : lineSeparators) {
+      indexOfLineSep = lines.indexOf(lineSeparator);
+
+      if (indexOfLineSep != -1){
+        indexOfLineSep += lineSeparator.length(); //to include the line separator in the substring
+        break;
+      }
+    }
+
+    if (indexOfLineSep == -1)
+      indexOfLineSep = 0;
+
+    return new String[] {
+      lines.substring(0, indexOfLineSep),
+      lines.substring(indexOfLineSep)
+    };
   }
 
 }

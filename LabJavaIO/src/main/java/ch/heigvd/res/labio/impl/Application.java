@@ -7,10 +7,8 @@ import ch.heigvd.res.labio.interfaces.IFileExplorer;
 import ch.heigvd.res.labio.interfaces.IFileVisitor;
 import ch.heigvd.res.labio.quotes.QuoteClient;
 import ch.heigvd.res.labio.quotes.Quote;
-import java.io.File;
-import java.io.IOException;
-import java.io.StringWriter;
-import java.io.Writer;
+
+import java.io.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.commons.io.FileUtils;
@@ -90,6 +88,9 @@ public class Application implements IApplication {
        * one method provided by this class, which is responsible for storing the content of the
        * quote in a text file (and for generating the directories based on the tags).
        */
+      //here we add the storage of the quote
+      this.storeQuote(quote,"quote-" + i);
+
       LOG.info("Received a new joke with " + quote.getTags().size() + " tags.");
       for (String tag : quote.getTags()) {
         LOG.info("> " + tag);
@@ -123,7 +124,34 @@ public class Application implements IApplication {
    * @throws IOException 
    */
   void storeQuote(Quote quote, String filename) throws IOException {
-    throw new UnsupportedOperationException("The student has not implemented this method yet.");
+
+    //generate the path of the file
+    StringBuilder pathName = new StringBuilder(WORKSPACE_DIRECTORY + "/");
+
+    for (String tag : quote.getTags())
+      pathName.append(tag).append("/");
+
+    //generate the folder
+    File path = new File(pathName.toString());
+    path.mkdirs();
+
+    File QuoteFile = new File(path,filename + ".utf8");
+
+    //open the Streams
+    ByteArrayInputStream bis = new ByteArrayInputStream(quote.getQuote().getBytes());
+    FileOutputStream os = new FileOutputStream(QuoteFile);
+
+    //write operation
+
+    int b;
+    // we read and write bytes after bytes
+    while ((b = bis.read()) != -1){
+      os.write(b);
+    }
+
+    //we close our streams
+    bis.close();
+    os.close();
   }
   
   /**
@@ -133,6 +161,7 @@ public class Application implements IApplication {
   void printFileNames(final Writer writer) {
     IFileExplorer explorer = new DFSFileExplorer();
     explorer.explore(new File(WORKSPACE_DIRECTORY), new IFileVisitor() {
+
       @Override
       public void visit(File file) {
         /*
@@ -140,6 +169,12 @@ public class Application implements IApplication {
          * of the the IFileVisitor interface inline. You just have to add the body of the visit method, which should
          * be pretty easy (we want to write the filename, including the path, to the writer passed in argument).
          */
+        try {
+          writer.write(file.getPath() + "\n");
+        }catch (IOException ex){
+          LOG.log(Level.SEVERE,null,ex);
+        }
+
       }
     });
   }
@@ -147,7 +182,7 @@ public class Application implements IApplication {
   @Override
   public void processQuoteFiles() throws IOException {
     IFileExplorer explorer = new DFSFileExplorer();
-    explorer.explore(new File(WORKSPACE_DIRECTORY), new CompleteFileTransformer());    
+    explorer.explore(new File(WORKSPACE_DIRECTORY), new CompleteFileTransformer());
   }
 
 }
