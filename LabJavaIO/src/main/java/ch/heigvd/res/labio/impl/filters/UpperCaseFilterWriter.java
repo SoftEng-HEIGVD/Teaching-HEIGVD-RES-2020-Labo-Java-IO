@@ -7,6 +7,7 @@ import java.io.Writer;
 /**
  *
  * @author Olivier Liechti
+ * Modified by Julien Béguin on 08.03.2020
  */
 public class UpperCaseFilterWriter extends FilterWriter {
   
@@ -16,17 +17,20 @@ public class UpperCaseFilterWriter extends FilterWriter {
 
   @Override
   public void write(String str, int off, int len) throws IOException {
-    throw new UnsupportedOperationException("The student has not implemented this method yet.");
+    if (off < 0 || len < 1 || off + len > str.length()) {
+      throw new IOException("Invalid arguments. Offset or length not in range.");
+    }
+    out.write(str.toUpperCase(), off, len);
   }
 
   @Override
   public void write(char[] cbuf, int off, int len) throws IOException {
-    throw new UnsupportedOperationException("The student has not implemented this method yet.");
+    write(new String(cbuf), off, len);
   }
 
   @Override
   public void write(int c) throws IOException {
-    throw new UnsupportedOperationException("The student has not implemented this method yet.");
+    out.write(Character.toUpperCase(c));
   }
 
 }
