@@ -1,4 +1,2 @@
 language: java
-script:
-  - cd LabJavaIO
-  - mvn clean test
+script: cd LabJavaIO/ && mvn clean test
